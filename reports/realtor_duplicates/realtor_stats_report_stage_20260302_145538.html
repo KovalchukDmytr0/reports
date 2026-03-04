@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Realtor Comprehensive Stats — STAGE — 20260302_145538</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-hdr:   #1a2538;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --footer-clr: #475569;
+      --h1-clr:     #f8fafc;
+      --badge-bg:   #1e293b;
+      --badge-brd:  #334155;
+      --badge-txt:  #7dd3fc;
+      --bar-bg:     #2d3f55;
+      --code-bg:    #0f1117;
+      --code-clr:   #7dd3fc;
+      --term-clr:   #6366f1;
+      --shadow:     rgba(0,0,0,0.4);
+      --strong-clr: #e2e8f0;
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-hdr:   #f8fafc;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --footer-clr: #94a3b8;
+      --h1-clr:     #0f172a;
+      --badge-bg:   #e2e8f0;
+      --badge-brd:  #cbd5e1;
+      --badge-txt:  #2563eb;
+      --bar-bg:     #e2e8f0;
+      --code-bg:    #f1f5f9;
+      --code-clr:   #2563eb;
+      --term-clr:   #4f46e5;
+      --shadow:     rgba(0,0,0,0.08);
+      --strong-clr: #0f172a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.25s, color 0.25s;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--h1-clr);
+    }
+    header .meta {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--meta-clr);
+    }
+    header .badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      margin-top: 10px;
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      user-select: none;
+    }
+    .theme-toggle:hover { opacity: 0.75; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: background 0.25s, box-shadow 0.25s;
+    }
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+      transition: background 0.25s;
+    }
+    .block-header .icon { font-size: 1.4rem; }
+    .block-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    .glossary {
+      max-width: 1200px;
+      margin: 0 auto 36px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: background 0.25s;
+    }
+    .glossary-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+      border-left: 5px solid #6366f1;
+      transition: background 0.25s;
+    }
+    .glossary-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0;
+    }
+    .glossary-card {
+      padding: 20px 24px;
+      border-right: 1px solid var(--card-sep);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .glossary-card:last-child { border-right: none; }
+    .glossary-card .emoji { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .glossary-card .term {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--term-clr);
+      margin-bottom: 6px;
+    }
+    .glossary-card .definition {
+      font-size: 0.88rem;
+      color: var(--label-clr);
+      line-height: 1.55;
+    }
+    .glossary-card .definition strong { color: var(--strong-clr); }
+    table { width: 100%; border-collapse: collapse; }
+    tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); width: 55%; }
+    td.value {
+      color: var(--value-clr);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      width: 20%;
+      text-align: right;
+    }
+    td.value.red-value { color: #ef4444; }
+    td.pct-cell { width: 25%; padding-right: 16px; }
+    .pct { font-size: 0.78rem; color: var(--pct-clr); display: block; text-align: right; }
+    .bar-wrap { height: 4px; background: var(--bar-bg); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .bar { height: 100%; border-radius: 2px; opacity: 0.8; transition: width 0.4s ease; }
+    .row-note {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--pct-clr);
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .block-desc {
+      padding: 14px 20px 10px;
+      font-size: 0.86rem;
+      color: var(--label-clr);
+      line-height: 1.65;
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .block-desc p { margin-bottom: 8px; }
+    .block-desc p:last-child { margin-bottom: 0; }
+    .block-desc ul { margin: 6px 0 8px 18px; }
+    .block-desc li { margin-bottom: 5px; }
+    .block-desc strong { color: var(--strong-clr); }
+    .block-desc code {
+      background: var(--code-bg);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.82rem;
+      color: var(--code-clr);
+    }
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.78rem;
+      color: var(--footer-clr);
+    }
+    .header-logo-wrap {
+      display: inline-block;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 8px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .header-logo {
+      display: block;
+      height: 38px;
+      object-fit: contain;
+    }
+    .lang-btns {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      gap: 6px;
+    }
+    .lang-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .lang-btn:hover { opacity: 0.8; }
+    .lang-btn.active {
+      background: var(--badge-txt);
+      color: var(--card-bg);
+      border-color: var(--badge-txt);
+      font-weight: 700;
+    }
+  </style>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <div class="lang-btns">
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="lang-uk" onclick="setLang('uk')">UK</button>
+      <button class="lang-btn" id="lang-ru" onclick="setLang('ru')">RU</button>
+    </div>
+    <button class="theme-toggle" id="themeToggle">☀️ Light</button>
+    
+    <h1>Realtor Comprehensive Statistics</h1>
+    <div class="meta">Generated on 2026-03-02 14:55:38</div>
+    <div class="badge">ENV: STAGE</div>
+  </header>
+
+  <div class="glossary">
+    <div class="glossary-header">
+      <span style="font-size:1.4rem">📖</span>
+      <h2 data-i18n="glossary-title">Quick Glossary — what do these words mean?</h2>
+    </div>
+    <div class="glossary-grid">
+      <div class="glossary-card">
+        <span class="emoji">🧑‍💼</span>
+        <div class="term" data-i18n="card1-term">Original Realtor</div>
+        <div class="definition" data-i18n="card1-def">The <strong>real, main record</strong> for a realtor that we trust and show to users. Think of it like the "official profile" — there is only <strong>one original</strong> per real person.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">👯</span>
+        <div class="term" data-i18n="card2-term">Duplicate</div>
+        <div class="definition" data-i18n="card2-def">A <strong>copy of the same realtor</strong> that came from a different data source or was imported twice. It has the same person behind it but we <strong>hide it</strong> so users only see the original.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">🗂️</span>
+        <div class="term" data-i18n="card3-term">Duplicate Group</div>
+        <div class="definition" data-i18n="card3-def">A <strong>family of records</strong> that all represent the same real-world person — one original plus all its duplicates. Like a folder that groups all the copies together.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">🔑</span>
+        <div class="term" data-i18n="card4-term">duplicate_uid</div>
+        <div class="definition" data-i18n="card4-def">A <strong>shared ID tag</strong> (like a group badge) placed on every record in the same duplicate group — both the original and all its duplicates carry this tag so the system knows they belong together. Records <strong>without</strong> this tag have never been linked to any group.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #4F86C6">
+      <span class="icon">📊</span>
+      <h2>Block 1 — Overview</h2>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Total Realtors</td>
+          <td class="value">5,007,619</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Originals</td>
+          <td class="value">2,156,938</td>
+          <td class="pct-cell"><span class="pct">(43.07%)</span><div class="bar-wrap"><div class="bar" style="width:43.07%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Duplicates</td>
+          <td class="value">2,850,681</td>
+          <td class="pct-cell"><span class="pct">(56.93%)</span><div class="bar-wrap"><div class="bar" style="width:56.93%; background:#4F86C6"></div></div></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #7B68EE">
+      <span class="icon">🔍</span>
+      <h2>Block 2 — By Source</h2>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Originals — CoreLogic</td>
+          <td class="value">1,045,219</td>
+          <td class="pct-cell"><span class="pct">(48.46%)</span><div class="bar-wrap"><div class="bar" style="width:48.46%; background:#7B68EE"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Originals — Zebra</td>
+          <td class="value">1,111,719</td>
+          <td class="pct-cell"><span class="pct">(51.54%)</span><div class="bar-wrap"><div class="bar" style="width:51.54%; background:#7B68EE"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Duplicates — CoreLogic</td>
+          <td class="value">2,392,697</td>
+          <td class="pct-cell"><span class="pct">(83.93%)</span><div class="bar-wrap"><div class="bar" style="width:83.93%; background:#7B68EE"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Duplicates — Zebra</td>
+          <td class="value">457,984</td>
+          <td class="pct-cell"><span class="pct">(16.07%)</span><div class="bar-wrap"><div class="bar" style="width:16.07%; background:#7B68EE"></div></div></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #E8894A">
+      <span class="icon">🗂️</span>
+      <h2>Block 3 — Duplicate Groups</h2>
+    </div>
+    <div class="block-desc"><p>A normal group has exactly <strong>2 records</strong>: one original + one duplicate. Groups larger than 2 mean the same realtor has <strong>multiple duplicates</strong> — the bigger the group, the more unusual and worth reviewing.</p></div>
+    <table>
+        <tr>
+          <td class="label">Total Groups</td>
+          <td class="value">2,121,144</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Avg Group Size</td>
+          <td class="value">2.34</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Max Group Size</td>
+          <td class="value red-value">3,738</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Groups Without Original</td>
+          <td class="value red-value">16,668</td>
+          <td class="pct-cell"><span class="pct">(0.79%)</span><div class="bar-wrap"><div class="bar" style="width:0.79%; background:#E8894A"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Groups w/ Multiple Originals</td>
+          <td class="value red-value">33</td>
+          <td class="pct-cell"><span class="pct">(0.00%)</span><div class="bar-wrap"><div class="bar" style="width:0.00%; background:#E8894A"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Groups Size 2<span class="row-note">1 original + 1 duplicate — standard</span></td>
+          <td class="value">690,541</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Groups Size 3<span class="row-note">3 records in one group — uncommon, worth a spot-check</span></td>
+          <td class="value">297,551</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Groups Size 4<span class="row-note">4 records in one group — rare, review recommended</span></td>
+          <td class="value">148,902</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Groups Size 5+<span class="row-note">5+ records in one group — investigate, may signal a merge error</span></td>
+          <td class="value">183,974</td>
+          <td class="pct-cell"></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #50B86C">
+      <span class="icon">🔗</span>
+      <h2>Block 4 — Originals: Standalone vs. In-Group</h2>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Standalone (no duplicate_uid)</td>
+          <td class="value red-value">52,429</td>
+          <td class="pct-cell"><span class="pct">(2.43%)</span><div class="bar-wrap"><div class="bar" style="width:2.43%; background:#50B86C"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">In-Group (has duplicate_uid)</td>
+          <td class="value">2,104,509</td>
+          <td class="pct-cell"><span class="pct">(97.57%)</span><div class="bar-wrap"><div class="bar" style="width:97.57%; background:#50B86C"></div></div></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #C45E5E">
+      <span class="icon">👁️</span>
+      <h2>Block 5 — Hidden Records</h2>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Total Hidden</td>
+          <td class="value">61,532</td>
+          <td class="pct-cell"><span class="pct">(1.23%)</span><div class="bar-wrap"><div class="bar" style="width:1.23%; background:#C45E5E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Hidden Originals</td>
+          <td class="value">56,620</td>
+          <td class="pct-cell"><span class="pct">(2.62%)</span><div class="bar-wrap"><div class="bar" style="width:2.62%; background:#C45E5E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Hidden Duplicates</td>
+          <td class="value">4,912</td>
+          <td class="pct-cell"><span class="pct">(0.17%)</span><div class="bar-wrap"><div class="bar" style="width:0.17%; background:#C45E5E"></div></div></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #D4AC0D">
+      <span class="icon">✅</span>
+      <h2>Block 6 — Data Completeness (Originals Only)</h2>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Null latest_state</td>
+          <td class="value">43,644</td>
+          <td class="pct-cell"><span class="pct">(2.02%)</span><div class="bar-wrap"><div class="bar" style="width:2.02%; background:#D4AC0D"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Null name</td>
+          <td class="value">49,142</td>
+          <td class="pct-cell"><span class="pct">(2.28%)</span><div class="bar-wrap"><div class="bar" style="width:2.28%; background:#D4AC0D"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Null company_name</td>
+          <td class="value">68,288</td>
+          <td class="pct-cell"><span class="pct">(3.17%)</span><div class="bar-wrap"><div class="bar" style="width:3.17%; background:#D4AC0D"></div></div></td>
+        </tr>
+    </table>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #20B2AA">
+      <span class="icon">🧬</span>
+      <h2>Block 7 — Name-Dedup 95% (Pair Analysis)</h2>
+    </div>
+    <div class="block-desc">
+      <p>
+        <strong>What is this?</strong> Imagine going through a huge phone book and spotting two entries
+        that look almost identical — same name, same state — and asking: <em>"Are these really the same person listed twice?"</em>
+        That is exactly what this analysis does. It finds pairs of realtor profiles whose names are
+        <strong>at least 95% similar</strong> and who work in the <strong>same state</strong>, then
+        checks whether our system has already figured out they are the same person or not.
+      </p>
+      <p>Every pair falls into one of four buckets:</p>
+      <ul>
+        <li>
+          <strong>Same Group</strong> — the system already knows these two profiles belong to the same person.
+          Think of it as two entries already stapled together in our filing cabinet.
+          <em>Nothing needs to be done.</em> ✅
+        </li>
+        <li>
+          <strong>Cross-Group</strong> — each profile is already in its own separate folder, but the two
+          folders may actually belong to the same person. These are candidates for <em>merging two existing
+          folders into one</em>.
+        </li>
+        <li>
+          <strong>Both Without Group</strong> — neither profile has ever been put into any folder.
+          The system has never spotted this potential match before.
+          These are <em>brand-new discoveries</em> that need attention.
+        </li>
+        <li>
+          <strong>Mixed</strong> — one profile is already in a folder, the other is a lone entry sitting
+          outside. The lone entry may simply need to be <em>moved into the existing folder</em>.
+        </li>
+      </ul>
+      <p>
+        The bottom three buckets together make up the <strong>NEW Merge Pairs</strong> — matches the system
+        has <em>not yet acted on</em>. The percentage shown is calculated against the
+        <strong>total number of realtor profiles in the database</strong> (not just the pairs found here),
+        so it tells you: <em>"Out of all realtors we have, what share could potentially be affected by
+        unresolved duplicates?"</em>
+      </p>
+    </div>
+    <table>
+        <tr>
+          <td class="label">Total Matched Pairs</td>
+          <td class="value">204,731</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">  Same duplicate_uid Group</td>
+          <td class="value">0</td>
+          <td class="pct-cell"><span class="pct">(0.00%)</span><div class="bar-wrap"><div class="bar" style="width:0.00%; background:#20B2AA"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">  Cross-Group</td>
+          <td class="value">204,575</td>
+          <td class="pct-cell"><span class="pct">(99.92%)</span><div class="bar-wrap"><div class="bar" style="width:99.92%; background:#20B2AA"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">  Both Without duplicate_uid</td>
+          <td class="value red-value">7</td>
+          <td class="pct-cell"><span class="pct">(0.00%)</span><div class="bar-wrap"><div class="bar" style="width:0.00%; background:#20B2AA"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">  Mixed (one has uid)</td>
+          <td class="value red-value">149</td>
+          <td class="pct-cell"><span class="pct">(0.07%)</span><div class="bar-wrap"><div class="bar" style="width:0.07%; background:#20B2AA"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">NEW Merge Pairs (% of originals)</td>
+          <td class="value">204,731</td>
+          <td class="pct-cell"><span class="pct">(9.49%)</span><div class="bar-wrap"><div class="bar" style="width:9.49%; background:#20B2AA"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Avg Similarity Score</td>
+          <td class="value">99.6763</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Min Similarity Score</td>
+          <td class="value">95.0000</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Max Similarity Score</td>
+          <td class="value">100.0000</td>
+          <td class="pct-cell"></td>
+        </tr>
+    </table>
+  </div>
+  </div>
+  <footer>homeIQ Intelligence · query_executor · realtor_comprehensive_stats</footer>
+  <script>
+    (function () {
+      // ── Theme ──────────────────────────────────────────────────────────────
+      var btn = document.getElementById('themeToggle');
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          document.documentElement.classList.add('light');
+          btn.textContent = '☀️ Light';
+        } else {
+          document.documentElement.classList.remove('light');
+          btn.textContent = '🌙 Dark';
+        }
+        localStorage.setItem('theme', theme);
+      }
+      applyTheme(localStorage.getItem('theme') || 'dark');
+      btn.addEventListener('click', function () {
+        applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+      });
+
+      // ── Glossary translations ───────────────────────────────────────────────
+      var T = {
+        en: {
+          'glossary-title': 'Quick Glossary — what do these words mean?',
+          'card1-term': 'Original Realtor',
+          'card1-def':  'The <strong>real, main record</strong> for a realtor that we trust and show to users. Think of it like the “official profile” — there is only <strong>one original</strong> per real person.',
+          'card2-term': 'Duplicate',
+          'card2-def':  'A <strong>copy of the same realtor</strong> that came from a different data source or was imported twice. It has the same person behind it but we <strong>hide it</strong> so users only see the original.',
+          'card3-term': 'Duplicate Group',
+          'card3-def':  'A <strong>family of records</strong> that all represent the same real-world person — one original plus all its duplicates. Like a folder that groups all the copies together.',
+          'card4-term': 'duplicate_uid',
+          'card4-def':  'A <strong>shared ID tag</strong> (like a group badge) placed on every record in the same duplicate group — both the original and all its duplicates carry this tag so the system knows they belong together. Records <strong>without</strong> this tag have never been linked to any group.',
+        },
+        uk: {
+          'glossary-title': 'Короткий словник — що означають ці слова?',
+          'card1-term': 'Оригінальний рієлтор',
+          'card1-def':  '<strong>Основний, справжній запис</strong> рієлтора, якому ми довіряємо і показуємо користувачам. Уявіть це як «oфіційний профіль» — для кожної реальної людини існує лише <strong>один оригінал</strong>.',
+          'card2-term': 'Дублікат',
+          'card2-def':  '<strong>Копія того самого рієлтора</strong>, яка надійшла з іншого джерела даних або була імпортована двічі. За нею стоїть та сама людина, але ми <strong>приховуємо</strong> дублікат, щоб користувачі бачили лише оригінал.',
+          'card3-term': 'Група дублікатів',
+          'card3-def':  '<strong>Набір записів</strong>, що представляють ту саму реальну людину — один оригінал та всі його дублікати. Як папка, яка групує всі копії разом.',
+          'card4-term': 'duplicate_uid',
+          'card4-def':  '<strong>Спільний ідентифікатор</strong> (як груповий значок), який присвоюється кожному запису в одній групі дублікатів — і оригінал, і всі дублікати несуть цей тег, щоб система знала, що вони пов’язані. Записи <strong>без</strong> цього тегу ніколи не були пов’язані з жодною групою.',
+        },
+        ru: {
+          'glossary-title': 'Краткий словарь — что означают эти слова?',
+          'card1-term': 'Оригинальный риелтор',
+          'card1-def':  '<strong>Основная, настоящая запись</strong> риелтора, которой мы доверяем и показываем пользователям. Представьте это как «официальный профиль» — для каждого реального человека существует только <strong>один оригинал</strong>.',
+          'card2-term': 'Дубликат',
+          'card2-def':  '<strong>Копия того же риелтора</strong>, поступившая из другого источника данных или импортированная дважды. За ней стоит тот же человек, но мы <strong>скрываем</strong> дубликат, чтобы пользователи видели только оригинал.',
+          'card3-term': 'Группа дубликатов',
+          'card3-def':  '<strong>Набор записей</strong>, представляющих одного и того же реального человека — один оригинал и все его дубликаты. Как папка, которая объединяет все копии вместе.',
+          'card4-term': 'duplicate_uid',
+          'card4-def':  '<strong>Общий идентификатор</strong> (как групповой бейдж), присваиваемый каждой записи в одной группе дубликатов — и оригинал, и все дубликаты несут этот тег, чтобы система знала, что они связаны. Записи <strong>без</strong> этого тега никогда не были привязаны к какой-либо группе.',
+        },
+      };
+
+      window.setLang = function (lang) {
+        var t = T[lang];
+        if (!t) return;
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        ['en', 'uk', 'ru'].forEach(function (l) {
+          document.getElementById('lang-' + l).classList.toggle('active', l === lang);
+        });
+        localStorage.setItem('glossary-lang', lang);
+      };
+
+      setLang(localStorage.getItem('glossary-lang') || 'en');
+    })();
+  </script>
+</body>
+</html>

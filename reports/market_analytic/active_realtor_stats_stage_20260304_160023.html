@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Active Realtor Stats — STAGE — 20260304_160023</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-hdr:   #1a2538;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --footer-clr: #475569;
+      --h1-clr:     #f8fafc;
+      --badge-bg:   #1e293b;
+      --badge-brd:  #334155;
+      --badge-txt:  #7dd3fc;
+      --bar-bg:     #2d3f55;
+      --code-bg:    #0f1117;
+      --code-clr:   #7dd3fc;
+      --term-clr:   #6366f1;
+      --shadow:     rgba(0,0,0,0.4);
+      --strong-clr: #e2e8f0;
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-hdr:   #f8fafc;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --footer-clr: #94a3b8;
+      --h1-clr:     #0f172a;
+      --badge-bg:   #e2e8f0;
+      --badge-brd:  #cbd5e1;
+      --badge-txt:  #2563eb;
+      --bar-bg:     #e2e8f0;
+      --code-bg:    #f1f5f9;
+      --code-clr:   #2563eb;
+      --term-clr:   #4f46e5;
+      --shadow:     rgba(0,0,0,0.08);
+      --strong-clr: #0f172a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.25s, color 0.25s;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--h1-clr);
+    }
+    header .meta {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--meta-clr);
+    }
+    header .badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      margin-top: 10px;
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      user-select: none;
+    }
+    .theme-toggle:hover { opacity: 0.75; }
+    .lang-btns {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      gap: 6px;
+    }
+    .lang-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .lang-btn:hover { opacity: 0.8; }
+    .lang-btn.active {
+      background: var(--term-clr);
+      color: #ffffff;
+      border-color: var(--term-clr);
+      font-weight: 700;
+    }
+    .header-logo-wrap {
+      display: inline-block;
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 8px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .header-logo {
+      display: block;
+      height: 38px;
+      object-fit: contain;
+    }
+    .glossary {
+      max-width: 1200px;
+      margin: 0 auto 36px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: background 0.25s;
+    }
+    .glossary-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+      border-left: 5px solid #6366f1;
+      transition: background 0.25s;
+    }
+    .glossary-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0;
+    }
+    .glossary-card {
+      padding: 20px 24px;
+      border-right: 1px solid var(--card-sep);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .glossary-card:last-child { border-right: none; }
+    .glossary-card .emoji { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .glossary-card .term {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--term-clr);
+      margin-bottom: 6px;
+    }
+    .glossary-card .definition {
+      font-size: 0.88rem;
+      color: var(--label-clr);
+      line-height: 1.55;
+    }
+    .glossary-card .definition strong { color: var(--strong-clr); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: background 0.25s, box-shadow 0.25s;
+    }
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+      transition: background 0.25s;
+    }
+    .block-header .icon { font-size: 1.4rem; }
+    .block-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); width: 55%; }
+    td.value {
+      color: var(--value-clr);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      width: 20%;
+      text-align: right;
+    }
+    td.value.red-value { color: #ef4444; }
+    td.pct-cell { width: 25%; padding-right: 16px; }
+    .pct { font-size: 0.78rem; color: var(--pct-clr); display: block; text-align: right; }
+    .bar-wrap { height: 4px; background: var(--bar-bg); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .bar { height: 100%; border-radius: 2px; opacity: 0.8; transition: width 0.4s ease; }
+    .row-note {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--pct-clr);
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .block-desc {
+      padding: 14px 20px 10px;
+      font-size: 0.86rem;
+      color: var(--label-clr);
+      line-height: 1.65;
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .block-desc p { margin-bottom: 8px; }
+    .block-desc p:last-child { margin-bottom: 0; }
+    .block-desc strong { color: var(--strong-clr); }
+    .block-desc code {
+      background: var(--code-bg);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.82rem;
+      color: var(--code-clr);
+    }
+    .view-toggle {
+      margin-left: auto;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .view-toggle:hover { opacity: 0.75; }
+    .chart-view canvas { width: 100% !important; }
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.78rem;
+      color: var(--footer-clr);
+    }
+    .block-full {
+      grid-column: 1 / -1;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #state-table thead th {
+      position: sticky;
+      top: 0;
+      background: var(--card-hdr);
+      color: var(--label-clr);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: right;
+      padding: 9px 14px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--card-sep);
+    }
+    #state-table thead th:first-child { text-align: left; }
+    #state-table thead th:hover { color: var(--badge-txt); }
+    #state-table td { padding: 7px 14px; font-size: 0.85rem; }
+    #state-table td.state-cell {
+      font-weight: 700;
+      color: var(--badge-txt);
+      text-align: left;
+    }
+    #state-table td.value { text-align: right; }
+    .pct-sub {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--pct-clr);
+      font-weight: 400;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <div class="lang-btns">
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="lang-uk" onclick="setLang('uk')">UK</button>
+      <button class="lang-btn" id="lang-ru" onclick="setLang('ru')">RU</button>
+    </div>
+    <button class="theme-toggle" id="themeToggle">&#9728;&#65039; Light</button>
+    
+    <h1>Active Realtor Activity Statistics</h1>
+    <div class="meta">Generated on 2026-03-04 16:00:23 &nbsp;|&nbsp; Scope: all USA &nbsp;|&nbsp; As of: Dec 31, 2025</div>
+    <div class="badge">ENV: STAGE</div>
+  </header>
+
+  <div class="glossary">
+    <div class="glossary-header">
+      <span style="font-size:1.4rem">&#128218;</span>
+      <h2 data-i18n="glossary-title">Quick Glossary — what do these words mean?</h2>
+    </div>
+    <div class="glossary-grid">
+      <div class="glossary-card">
+        <span class="emoji">&#128200;</span>
+        <div class="term" data-i18n="card1-term">Active Realtor</div>
+        <div class="definition" data-i18n="card1-def">A realtor who closed <strong>at least one valid sale</strong> within the selected time window (e.g. last 2 years). The same person is counted in every window that includes their most recent closing.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128683;</span>
+        <div class="term" data-i18n="card2-term">Potentially Inactive</div>
+        <div class="definition" data-i18n="card2-def">A realtor who <strong>had past sales</strong> but has <strong>not closed any transaction</strong> within the threshold period (1, 1.5, or 2 years). They may have left the industry.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128203;</span>
+        <div class="term" data-i18n="card3-term">Historical Transactions</div>
+        <div class="definition" data-i18n="card3-def">The <strong>total count of all valid sales</strong> (ever, across all years) where the realtor appeared as buyer agent, co-buyer agent, listing agent, or co-listing agent.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128203;</span>
+        <div class="term" data-i18n="card4-term">Valid Sale</div>
+        <div class="definition" data-i18n="card4-def">A sale record where <code>deleted = false</code> AND <code>duplicate = false</code>. These are the only records counted in all statistics on this page.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128200;</span>
+        <div class="term" data-i18n="card5-term">Business Trend</div>
+        <div class="definition" data-i18n="card5-def">Compares a realtor's <strong>last-12-month transactions</strong> to their <strong>historical annual average</strong>. Only realtors active in the last year with at least one prior year of history are included. Buckets show the population distribution at ±15%, ±30%, ±50%, and ±80% change thresholds.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#127968;</span>
+        <div class="term" data-i18n="card6-term">Homeowner Without Agent</div>
+        <div class="definition" data-i18n="card6-def">A property whose <strong>most recent valid sale</strong> was handled exclusively by realtors now classified as inactive. No newer transaction by any active agent has occurred on this property — the homeowner is currently <strong>unrepresented</strong> in the market.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128273;</span>
+        <div class="term" data-i18n="card7-term">Buyer-Side Homeowner Without Agent</div>
+        <div class="definition" data-i18n="card7-def">A property whose buyer was represented by a realtor who has since gone inactive. The homeowner was helped to <strong>buy</strong> by a now-inactive agent and — if no active agent appears on their most recent sale record — currently has <strong>no representation</strong> to help them sell.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #4F86C6">
+      <span class="icon">📈</span>
+      <h2>Block A — Active Realtors by Time Window</h2>
+      <button class="view-toggle" id="block-a-toggle" onclick="toggleView('block-a')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p>Counts <strong>original</strong> realtors (<code>duplicate=false, hidden=false</code>) who closed at least one valid sale within each rolling time window. The date range shown on each row is the exact window: from the cutoff date through today. Each row is independent — a realtor active in the last 1 year is also counted in all larger windows. Percentages are relative to <strong>Realtors with any historical sales</strong> (all time).</p></div>
+    <div class="table-view" id="block-a-table">
+    <table>
+        <tr>
+          <td class="label">Realtors with any historical sales<span class="row-note">all time — earliest available record through today</span></td>
+          <td class="value">2,071,717</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 1 year<span class="row-note">Dec 31, 2024 – Dec 31, 2025</span></td>
+          <td class="value">990,783</td>
+          <td class="pct-cell"><span class="pct">(47.82%)</span><div class="bar-wrap"><div class="bar" style="width:47.82%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 2 years<span class="row-note">Dec 31, 2023 – Dec 31, 2025</span></td>
+          <td class="value">1,222,065</td>
+          <td class="pct-cell"><span class="pct">(58.99%)</span><div class="bar-wrap"><div class="bar" style="width:58.99%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 3 years<span class="row-note">Dec 31, 2022 – Dec 31, 2025</span></td>
+          <td class="value">1,393,897</td>
+          <td class="pct-cell"><span class="pct">(67.28%)</span><div class="bar-wrap"><div class="bar" style="width:67.28%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 4 years<span class="row-note">Dec 31, 2021 – Dec 31, 2025</span></td>
+          <td class="value">1,562,856</td>
+          <td class="pct-cell"><span class="pct">(75.44%)</span><div class="bar-wrap"><div class="bar" style="width:75.44%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 5 years<span class="row-note">Dec 31, 2020 – Dec 31, 2025</span></td>
+          <td class="value">1,713,649</td>
+          <td class="pct-cell"><span class="pct">(82.72%)</span><div class="bar-wrap"><div class="bar" style="width:82.72%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 6 years<span class="row-note">Dec 31, 2019 – Dec 31, 2025</span></td>
+          <td class="value">1,809,542</td>
+          <td class="pct-cell"><span class="pct">(87.34%)</span><div class="bar-wrap"><div class="bar" style="width:87.34%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 7 years<span class="row-note">Dec 31, 2018 – Dec 31, 2025</span></td>
+          <td class="value">1,898,896</td>
+          <td class="pct-cell"><span class="pct">(91.66%)</span><div class="bar-wrap"><div class="bar" style="width:91.66%; background:#4F86C6"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Active — last 8 years<span class="row-note">Dec 31, 2017 – Dec 31, 2025</span></td>
+          <td class="value">1,985,364</td>
+          <td class="pct-cell"><span class="pct">(95.83%)</span><div class="bar-wrap"><div class="bar" style="width:95.83%; background:#4F86C6"></div></div></td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-a-chart" style="display:none;padding:20px;position:relative;height:350px"><canvas id="canvas-block-a"></canvas></div><script>window._charts=window._charts||{};window._charts['block-a']={"type": "hbar", "labels": ["1 year", "2 years", "3 years", "4 years", "5 years", "6 years", "7 years", "8 years"], "datasets": [{"label": "Active Realtors", "data": [990783, 1222065, 1393897, 1562856, 1713649, 1809542, 1898896, 1985364], "color": "#4F86C6"}], "denominator": 2071717, "height": 350};</script>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #E8894A">
+      <span class="icon">⚠️</span>
+      <h2>Block B — Potentially Inactive Realtors</h2>
+      <button class="view-toggle" id="block-b-toggle" onclick="toggleView('block-b')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p>A realtor is counted as <strong>potentially inactive</strong> when they have historical sales on record but their <em>most recent</em> valid transaction is older than the threshold. For example, <em>Inactive &gt; 1 year</em> means the realtor closed at least one deal ever, but their last closing was before <strong>Dec 31, 2024</strong> — they have not transacted in the past 12 months. These realtors may have left the business or paused activity. Percentages are relative to <strong>Realtors with any historical sales</strong> (all time).</p></div>
+    <div class="table-view" id="block-b-table">
+    <table>
+        <tr>
+          <td class="label">Inactive > 1 year<span class="row-note">had past sales, but no transaction since Dec 31, 2024</span></td>
+          <td class="value red-value">1,080,934</td>
+          <td class="pct-cell"><span class="pct">(52.18%)</span><div class="bar-wrap"><div class="bar" style="width:52.18%; background:#E8894A"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Inactive > 1.5 years (18 months)<span class="row-note">had past sales, but no transaction since Jun 30, 2024</span></td>
+          <td class="value red-value">949,267</td>
+          <td class="pct-cell"><span class="pct">(45.82%)</span><div class="bar-wrap"><div class="bar" style="width:45.82%; background:#E8894A"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Inactive > 2 years<span class="row-note">had past sales, but no transaction since Dec 31, 2023</span></td>
+          <td class="value red-value">849,652</td>
+          <td class="pct-cell"><span class="pct">(41.01%)</span><div class="bar-wrap"><div class="bar" style="width:41.01%; background:#E8894A"></div></div></td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-b-chart" style="display:none;padding:20px;position:relative;height:200px"><canvas id="canvas-block-b"></canvas></div><script>window._charts=window._charts||{};window._charts['block-b']={"type": "hbar", "labels": ["> 1 year", "> 1.5 years", "> 2 years"], "datasets": [{"label": "Inactive Realtors", "data": [1080934, 949267, 849652], "color": "#E8894A"}], "denominator": 2071717, "height": 200};</script>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #C45E5E">
+      <span class="icon">📉</span>
+      <h2>Block C — Transactions of Inactive Realtors</h2>
+      <button class="view-toggle" id="block-c-toggle" onclick="toggleView('block-c')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p>The total number of <strong>historical transactions</strong> (all time, across all years) that were ever closed by realtors who are now potentially inactive. A <em>transaction</em> here is any valid sale (<code>deleted=false, duplicate=false</code>) where the realtor appeared as buyer agent, co-buyer agent, listing agent, or co-listing agent. This measures how much business volume is tied to agents who may have left the market. Percentages are relative to <strong>all valid sales in the database</strong>.</p></div>
+    <div class="table-view" id="block-c-table">
+    <table>
+        <tr>
+          <td class="label">Total valid sales in DB (all time)</td>
+          <td class="value">39,065,639</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Transactions from realtors inactive > 1 year<span class="row-note">all-time transactions of realtors with no sale since Dec 31, 2024</span></td>
+          <td class="value">12,049,847</td>
+          <td class="pct-cell"><span class="pct">(30.85%)</span><div class="bar-wrap"><div class="bar" style="width:30.85%; background:#C45E5E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Transactions from realtors inactive > 1.5 years (18 months)<span class="row-note">all-time transactions of realtors with no sale since Jun 30, 2024</span></td>
+          <td class="value">9,475,804</td>
+          <td class="pct-cell"><span class="pct">(24.26%)</span><div class="bar-wrap"><div class="bar" style="width:24.26%; background:#C45E5E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Transactions from realtors inactive > 2 years<span class="row-note">all-time transactions of realtors with no sale since Dec 31, 2023</span></td>
+          <td class="value">7,813,743</td>
+          <td class="pct-cell"><span class="pct">(20.00%)</span><div class="bar-wrap"><div class="bar" style="width:20.00%; background:#C45E5E"></div></div></td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-c-chart" style="display:none;padding:20px;position:relative;height:200px"><canvas id="canvas-block-c"></canvas></div><script>window._charts=window._charts||{};window._charts['block-c']={"type": "hbar", "labels": ["> 1 year", "> 1.5 years", "> 2 years"], "datasets": [{"label": "Transactions of Inactive Realtors", "data": [12049847, 9475804, 7813743], "color": "#C45E5E"}], "denominator": 39065639, "height": 200};</script>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #2E7D9C">
+      <span class="icon">🛒</span>
+      <h2>Block C3 — Buyer-Role Transactions of Inactive Realtors</h2>
+      <button class="view-toggle" id="block-c3-toggle" onclick="toggleView('block-c3')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p><strong>How to read this block:</strong> These are the same inactive realtors from Block C, but here we count only the transactions where they appeared as <code>buyer_agent</code> or <code>buyer_co_agent</code> — the buyer&rsquo;s side of the deal. This matters because realtors typically begin their careers helping clients <em>buy</em> a home before transitioning to <em>listing</em> properties. Capturing buyer-side activity therefore reveals a fuller historical footprint for agents who may later have shifted focus or left the market.</p><p><strong>Inactivity definition</strong> is identical to Blocks B and C: <code>last_sale_date</code> is derived from all 4 agent roles combined, so the inactivity threshold is the same — only what is <em>counted</em> changes.</p><p><strong>Two denominators are shown for transparency:</strong></p><ul><li><strong>Primary % (bar)</strong> = buyer-role transactions &divide; Block C all-role transactions for the same threshold — shows the <em>buyer-side share</em> within inactive realtors&rsquo; total transaction history. The Block C basis row immediately above each arrow row is the denominator.</li><li><strong>Secondary % (row note)</strong> = buyer-role transactions &divide; total valid sales in DB — keeps figures comparable with Block C percentages.</li></ul></div>
+    <div class="table-view" id="block-c3-table">
+    <table>
+        <tr>
+          <td class="label">Total valid sales in DB (all time)<span class="row-note">secondary denominator — used for '% of all valid sales' figures in each row note</span></td>
+          <td class="value">39,065,639</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">Block C basis — all-role transactions of inactive realtors > 1yr<span class="row-note">primary denominator for buyer-share % below — realtors with no sale since Dec 31, 2024</span></td>
+          <td class="value">12,049,847</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">→ Buyer-role transactions (inactive > 1 year)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Dec 31, 2024; also 14.39% of all valid sales</span></td>
+          <td class="value red-value">5,623,220</td>
+          <td class="pct-cell"><span class="pct">(46.67%)</span><div class="bar-wrap"><div class="bar" style="width:46.67%; background:#2E7D9C"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Block C basis — all-role transactions of inactive realtors > 1.5yr<span class="row-note">primary denominator for buyer-share % below — realtors with no sale since Jun 30, 2024</span></td>
+          <td class="value">9,475,804</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">→ Buyer-role transactions (inactive > 1.5 years / 18 months)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Jun 30, 2024; also 11.30% of all valid sales</span></td>
+          <td class="value red-value">4,412,735</td>
+          <td class="pct-cell"><span class="pct">(46.57%)</span><div class="bar-wrap"><div class="bar" style="width:46.57%; background:#2E7D9C"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">Block C basis — all-role transactions of inactive realtors > 2yr<span class="row-note">primary denominator for buyer-share % below — realtors with no sale since Dec 31, 2023</span></td>
+          <td class="value">7,813,743</td>
+          <td class="pct-cell"></td>
+        </tr>
+        <tr>
+          <td class="label">→ Buyer-role transactions (inactive > 2 years)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Dec 31, 2023; also 9.30% of all valid sales</span></td>
+          <td class="value red-value">3,632,487</td>
+          <td class="pct-cell"><span class="pct">(46.49%)</span><div class="bar-wrap"><div class="bar" style="width:46.49%; background:#2E7D9C"></div></div></td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-c3-chart" style="display:none;padding:20px;position:relative;height:220px"><canvas id="canvas-block-c3"></canvas></div><script>window._charts=window._charts||{};window._charts['block-c3']={"type": "grouped_hbar", "labels": ["> 1 year", "> 1.5 years", "> 2 years"], "datasets": [{"label": "All-role transactions (Block C)", "data": [12049847, 9475804, 7813743], "color": "rgba(196, 94, 94, 0.55)"}, {"label": "Buyer-role transactions", "data": [5623220, 4412735, 3632487], "color": "#2E7D9C"}], "height": 220};</script>
+  </div>
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #0F766E">
+      <span class="icon">🏡</span>
+      <h2>Block C3H — Homeowners Without Active Buyer Agent</h2>
+      <button class="view-toggle" id="block-c3h-toggle" onclick="toggleView('block-c3h')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p><strong>How to read this block:</strong> Each number is a count of <em>unique properties</em> (one per <code>property_id</code>) whose most recent buyer-agent has been inactive for longer than the stated threshold. These represent homeowners who purchased their home through a buyer&rsquo;s agent that has since left the active market — and who have not had any subsequent transaction recorded (see <code>lost_deal = false</code> below).</p><p><strong>Buyer-only roles:</strong> Only <code>buyer_agent_id</code> and <code>buyer_co_agent_id</code> columns are considered. Listing-side agents are excluded because this block focuses on the <em>purchase</em> relationship between a homeowner and the agent who helped them buy.</p><p><strong><code>lost_deal = false</code> filter:</strong> Sales flagged as <code>lost_deal = true</code> indicate that a subsequent transaction already exists for that property — meaning the homeowner has re-engaged the market through another agent or sale. These properties are excluded so that only genuinely unrepresented homeowners are counted.</p><p><strong>Deduplication:</strong> Each <code>property_id</code> is counted once per threshold, regardless of how many buyer-agent sales are on record for that property. A property is included in the inactive pool if <em>any</em> of its buyer-agents has been inactive since the cutoff date.</p><p><strong>% base:</strong> All percentages are calculated as <code>homeowner count &divide; total unique properties &times; 100</code>. The denominator is <strong>32,408,743</strong> distinct <code>property_id</code> values across all valid transactions.</p></div>
+    <div class="table-view" id="block-c3h-table">
+    <table>
+        <tr>
+          <td class="label">→ Homeowner Without Agent (inactive > 1 year)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Dec 31, 2024; lost_deal = false; unique by property_id; 14.01% of all unique properties (32,408,743)</span></td>
+          <td class="value red-value">4,541,886</td>
+          <td class="pct-cell"><span class="pct">(14.01%)</span><div class="bar-wrap"><div class="bar" style="width:14.01%; background:#0F766E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">→ Homeowner Without Agent (inactive > 1.5 years / 18 months)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Jun 30, 2024; lost_deal = false; unique by property_id; 10.83% of all unique properties (32,408,743)</span></td>
+          <td class="value red-value">3,508,768</td>
+          <td class="pct-cell"><span class="pct">(10.83%)</span><div class="bar-wrap"><div class="bar" style="width:10.83%; background:#0F766E"></div></div></td>
+        </tr>
+        <tr>
+          <td class="label">→ Homeowner Without Agent (inactive > 2 years)<span class="row-note">buyer_agent + co_buyer_agent transactions only; realtors with no sale since Dec 31, 2023; lost_deal = false; unique by property_id; 8.80% of all unique properties (32,408,743)</span></td>
+          <td class="value red-value">2,850,463</td>
+          <td class="pct-cell"><span class="pct">(8.80%)</span><div class="bar-wrap"><div class="bar" style="width:8.80%; background:#0F766E"></div></div></td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-c3h-chart" style="display:none;padding:20px;position:relative;height:200px"><canvas id="canvas-block-c3h"></canvas></div><script>window._charts=window._charts||{};window._charts['block-c3h']={"type": "hbar", "labels": ["> 1 year", "> 1.5 years", "> 2 years"], "datasets": [{"label": "Homeowners Without Active Agent", "data": [4541886, 3508768, 2850463], "color": "#0F766E"}], "denominator": 32408743, "height": 200};</script>
+  </div>
+
+  <div class="block block-full" id="block-e">
+    <div class="block-header" style="border-left: 5px solid #8b5cf6">
+      <span class="icon">&#128200;</span>
+      <h2>Block E &mdash; Business Trend Analysis</h2>
+      <button class="view-toggle" id="block-e-toggle" onclick="toggleView('block-e')">&#128202; Chart</button>
+    </div>
+    <div class="block-desc"><p><strong>How % change is calculated:</strong> for each qualifying realtor we compute <code>avg_annual_tx&nbsp;=&nbsp;total_tx&nbsp;&divide;&nbsp;years_active</code> (where <code>years_active&nbsp;=&nbsp;year(as-of)&nbsp;&minus;&nbsp;year(first&nbsp;sale)</code>, minimum&nbsp;1), then <code>pct_change&nbsp;=&nbsp;(tx_last_1yr&nbsp;&minus;&nbsp;avg_annual_tx)&nbsp;&divide;&nbsp;avg_annual_tx&nbsp;&times;&nbsp;100</code>. <em>Example:</em> a realtor with 250 total transactions over 5&nbsp;years has <code>avg&nbsp;=&nbsp;50&nbsp;transactions/yr</code>. If they closed 42 deals in the last year: <code>(42&nbsp;&minus;&nbsp;50)&nbsp;&divide;&nbsp;50&nbsp;&times;&nbsp;100&nbsp;=&nbsp;&minus;16%</code> &rarr; they appear in <strong>Declining &gt; &minus;15%</strong>.</p><p><strong>Rows are cumulative</strong> — each threshold count includes all realtors who crossed it, regardless of how far beyond it they went. For example, a realtor with +90% growth is counted in <em>all four</em> growth rows (&gt;+15%, &gt;+30%, &gt;+50%, &gt;+80%). Counts therefore always decrease as the threshold gets stricter: <code>Growing &gt; +15% &ge; Growing &gt; +30% &ge; Growing &gt; +50% &ge; Growing &gt; +80%</code>. Only the Stable band is non-overlapping with the growth/decline rows.</p><p>Only realtors <strong>active in the last year</strong> AND with <strong>at least one prior year of history</strong> are included, ensuring the comparison is meaningful.</p></div>
+    <div class="table-view" id="block-e-table">
+    <table>
+        <tr>
+          <td class="label" colspan="3" style="padding:14px 20px 8px;font-size:0.83rem;color:var(--pct-clr);">
+            Market avg:
+            <strong style="color:var(--value-clr)">12.3 transactions/yr</strong> historically
+            &rarr; <strong style="color:var(--value-clr)">9.8 transactions</strong> in last 12 months
+            &nbsp;
+            <span style="background:#ef4444;color:#fff;border-radius:999px;padding:2px 10px;font-size:0.78rem;font-weight:700;">
+              avg change: -15.8%
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label" style="font-size:0.75rem;color:var(--pct-clr);padding:4px 20px 8px;" colspan="3">
+            % base:
+            <strong style="color:var(--value-clr)">865,744</strong>
+            qualifying realtors &mdash; active in the last year
+            <strong>and</strong> with at least one prior year of history.
+            All row percentages below are calculated as
+            <code style="background:var(--code-bg);color:var(--code-clr);border-radius:4px;padding:1px 5px;font-size:0.80rem;">
+              count&nbsp;&divide;&nbsp;865,744
+            </code>
+            &nbsp;&bull;&nbsp;<span style="color:var(--pct-clr)">Note: <strong style="color:var(--value-clr)">125,039</strong> realtors from Block&nbsp;A (<em>active&nbsp;last&nbsp;1&nbsp;yr</em>) are excluded here because their entire history falls within the last year &mdash; no prior baseline exists to compute a meaningful % change.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Growing &gt; +80%
+            <span class="row-note">transaction volume at least 80% above historical avg — includes the rows below</span>
+          </td>
+          <td class="value">48,784</td>
+          <td class="pct-cell">
+            <span class="pct">(5.63% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:5.63%;background:#15803d"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Growing &gt; +50%
+            <span class="row-note">transaction volume at least 50% above historical avg — includes &gt;80%</span>
+          </td>
+          <td class="value">87,398</td>
+          <td class="pct-cell">
+            <span class="pct">(10.10% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:10.10%;background:#22c55e"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Growing &gt; +30%
+            <span class="row-note">transaction volume at least 30% above historical avg — includes &gt;50%, &gt;80%</span>
+          </td>
+          <td class="value">133,535</td>
+          <td class="pct-cell">
+            <span class="pct">(15.42% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:15.42%;background:#86efac"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Growing &gt; +15%
+            <span class="row-note">transaction volume at least 15% above historical avg — includes &gt;30%, &gt;50%, &gt;80%</span>
+          </td>
+          <td class="value">179,522</td>
+          <td class="pct-cell">
+            <span class="pct">(20.74% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:20.74%;background:#bbf7d0"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Stable (&plusmn;15%)
+            <span class="row-note">within &plusmn;15% of historical avg — normal year-to-year variation</span>
+          </td>
+          <td class="value">158,681</td>
+          <td class="pct-cell">
+            <span class="pct">(18.33% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:18.33%;background:#64748b"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Declining &gt; &minus;15%
+            <span class="row-note">transaction volume at least 15% below historical avg — includes &gt;&minus;30%, &gt;&minus;50%, &gt;&minus;80%</span>
+          </td>
+          <td class="value">527,541</td>
+          <td class="pct-cell">
+            <span class="pct">(60.94% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:60.94%;background:#fecaca"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Declining &gt; &minus;30%
+            <span class="row-note">transaction volume at least 30% below historical avg — includes &gt;&minus;50%, &gt;&minus;80%</span>
+          </td>
+          <td class="value">414,140</td>
+          <td class="pct-cell">
+            <span class="pct">(47.84% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:47.84%;background:#f87171"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Declining &gt; &minus;50%
+            <span class="row-note">transaction volume at least 50% below historical avg — includes &gt;&minus;80%</span>
+          </td>
+          <td class="value">233,305</td>
+          <td class="pct-cell">
+            <span class="pct">(26.95% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:26.95%;background:#ef4444"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="label">
+            Declining &gt; &minus;80%
+            <span class="row-note">transaction volume more than 80% below historical avg — severe contraction</span>
+          </td>
+          <td class="value">41,897</td>
+          <td class="pct-cell">
+            <span class="pct">(4.84% of 865,744)</span>
+            <div class="bar-wrap">
+              <div class="bar" style="width:4.84%;background:#b91c1c"></div>
+            </div>
+          </td>
+        </tr>
+    </table>
+    </div>
+    <div class="chart-view" id="block-e-chart" style="display:none;padding:20px;position:relative;height:400px">
+      <canvas id="canvas-block-e"></canvas>
+    </div>
+    <script>window._charts=window._charts||{};window._charts['block-e']={"type": "hbar", "labels": ["Growing > +80%", "Growing > +50%", "Growing > +30%", "Growing > +15%", "Stable (\u00b115%)", "Declining > -15%", "Declining > -30%", "Declining > -50%", "Declining > -80%"], "datasets": [{"label": "Realtors", "data": [48784, 87398, 133535, 179522, 158681, 527541, 414140, 233305, 41897], "colors": ["#15803d", "#22c55e", "#86efac", "#bbf7d0", "#64748b", "#fecaca", "#f87171", "#ef4444", "#b91c1c"]}], "denominator": 865744, "height": 400};</script>
+  </div>
+
+  </div>
+  <footer>homeIQ Intelligence &middot; query_executor &middot; active_realtor_stats</footer>
+  <script>
+    (function () {
+      var btn = document.getElementById('themeToggle');
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          document.documentElement.classList.add('light');
+          btn.textContent = '🌙 Dark';
+        } else {
+          document.documentElement.classList.remove('light');
+          btn.textContent = '☀️ Light';
+        }
+        localStorage.setItem('theme', theme);
+      }
+      applyTheme(localStorage.getItem('theme') || 'dark');
+      btn.addEventListener('click', function () {
+        applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+      });
+
+      var T = {
+        en: {
+          'glossary-title': 'Quick Glossary — what do these words mean?',
+          'card1-term': 'Active Realtor',
+          'card1-def':  'A realtor who closed <strong>at least one valid sale</strong> within the selected time window (e.g. last 2 years). The same person is counted in every window that includes their most recent closing.',
+          'card2-term': 'Potentially Inactive',
+          'card2-def':  'A realtor who <strong>had past sales</strong> but has <strong>not closed any transaction</strong> within the threshold period (1, 1.5, or 2 years). They may have left the industry.',
+          'card3-term': 'Historical Transactions',
+          'card3-def':  'The <strong>total count of all valid sales</strong> (ever, across all years) where the realtor appeared as buyer agent, co-buyer agent, listing agent, or co-listing agent.',
+          'card4-term': 'Valid Sale',
+          'card4-def':  'A sale record where <code>deleted = false</code> AND <code>duplicate = false</code>. These are the only records counted in all statistics on this page.',
+          'card5-term': 'Business Trend',
+          'card5-def':  'Compares a realtor&#39;s <strong>last-12-month transactions</strong> to their <strong>historical annual average</strong>. Only realtors active in the last year with at least one prior year of history are included. Buckets show the population distribution at ±15%, ±30%, ±50%, and ±80% change thresholds.',
+          'card6-term': 'Homeowner Without Agent',
+          'card6-def':  'A property whose <strong>most recent valid sale</strong> was handled exclusively by realtors now classified as inactive. No newer transaction by any active agent has occurred on this property — the homeowner is currently <strong>unrepresented</strong> in the market.',
+          'card7-term': 'Buyer-Side Homeowner Without Agent',
+          'card7-def':  'A property whose buyer was represented by a realtor who has since gone inactive. The homeowner was helped to <strong>buy</strong> by a now-inactive agent and — if no active agent appears on their most recent sale record — currently has <strong>no representation</strong> to help them sell.',
+        },
+        uk: {
+          'glossary-title': 'Короткий словник — що означають ці слова?',
+          'card1-term': 'Активний рієлтор',
+          'card1-def':  'Рієлтор, який <strong>закрив принаймні одну дійсну угоду</strong> у межах обраного часового вікна (наприклад, за останні 2 роки). Одна й та сама особа рахується в кожному вікні, що охоплює її останнє закриття.',
+          'card2-term': 'Потенційно неактивний',
+          'card2-def':  'Рієлтор, який <strong>мав угоди в минулому</strong>, але <strong>не закрив жодної транзакції</strong> за пороговий період (1, 1.5 або 2 роки). Можливо, він залишив сферу нерухомості.',
+          'card3-term': 'Історичні транзакції',
+          'card3-def':  '<strong>Загальна кількість усіх дійсних угод</strong> (за весь час), у яких рієлтор брав участь як агент покупця, співагент покупця, агент продавця або співагент продавця.',
+          'card4-term': 'Дійсна угода',
+          'card4-def':  'Запис угоди, де <code>deleted = false</code> І <code>duplicate = false</code>. Лише такі записи враховуються в усій статистиці на цій сторінці.',
+          'card5-term': 'Бізнес-тренд',
+          'card5-def':  'Порівнює <strong>кількість транзакцій рієлтора за останні 12 місяців</strong> з його <strong>середнім річним показником</strong>. Враховуються лише рієлтори, активні протягом останнього року та з щонайменше одним попереднім роком історії. Відра показують розподіл популяції за порогами ±15%, ±30%, ±50% та ±80%.',
+          'card6-term': 'Власник без агента',
+          'card6-def':  'Нерухомість, <strong>остання дійсна угода</strong> щодо якої була укладена виключно рієлторами, що нині вважаються неактивними. Жодної нової транзакції з будь-яким активним агентом на цьому обʼєкті не відбулося — власник наразі <strong>не має представника</strong> на ринку.',
+          'card7-term': 'Власник (покупець) без агента',
+          'card7-def':  'Нерухомість, покупець якої був представлений рієлтором, що відтоді став неактивним. Власника допомогли <strong>купити</strong> житло агент, якого вже немає на ринку — і якщо на найновішому записі про угоду немає активного агента, власник наразі <strong>не має представника</strong> для продажу.',
+        },
+        ru: {
+          'glossary-title': 'Краткий словарь — что означают эти слова?',
+          'card1-term': 'Активный риелтор',
+          'card1-def':  'Риелтор, который <strong>закрыл хотя бы одну действительную сделку</strong> в рамках выбранного временного окна (например, за последние 2 года). Один и тот же человек учитывается в каждом окне, включающем его последнее закрытие.',
+          'card2-term': 'Потенциально неактивный',
+          'card2-def':  'Риелтор, который <strong>совершал сделки в прошлом</strong>, но <strong>не закрыл ни одной транзакции</strong> за пороговый период (1, 1.5 или 2 года). Возможно, он покинул отрасль.',
+          'card3-term': 'Исторические транзакции',
+          'card3-def':  '<strong>Общее количество всех действительных сделок</strong> (за всё время), в которых риелтор участвовал в роли агента покупателя, со-агента покупателя, агента продавца или со-агента продавца.',
+          'card4-term': 'Действительная сделка',
+          'card4-def':  'Запись сделки, где <code>deleted = false</code> И <code>duplicate = false</code>. Только такие записи учитываются во всей статистике на этой странице.',
+          'card5-term': 'Бизнес-тренд',
+          'card5-def':  'Сравнивает <strong>количество транзакций риелтора за последние 12 месяцев</strong> с его <strong>средним годовым показателем</strong>. Учитываются только риелторы, активные в прошлом году и имеющие хотя бы один год предшествующей истории. Категории показывают распределение по порогам ±15%, ±30%, ±50% и ±80%.',
+          'card6-term': 'Собственник без агента',
+          'card6-def':  'Объект недвижимости, <strong>последняя действительная сделка</strong> по которому была заключена исключительно риелторами, ныне считающимися неактивными. На этом объекте не было ни одной новой транзакции с участием активного агента — собственник в настоящее время <strong>не имеет представителя</strong> на рынке.',
+          'card7-term': 'Покупатель-собственник без агента',
+          'card7-def':  'Объект недвижимости, покупатель которого был представлен риелтором, ставшим впоследствии неактивным. Собственнику помогли <strong>купить</strong> жильё агент, которого больше нет на рынке — и если в последней записи о сделке нет активного агента, собственник в настоящее время <strong>не имеет представителя</strong> для продажи.',
+        },
+      };
+
+      window.setLang = function (lang) {
+        var t = T[lang];
+        if (!t) return;
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        ['en', 'uk', 'ru'].forEach(function (l) {
+          document.getElementById('lang-' + l).classList.toggle('active', l === lang);
+        });
+        localStorage.setItem('glossary-lang', lang);
+      };
+
+      setLang(localStorage.getItem('glossary-lang') || 'en');
+    })();
+
+    // Sortable state table
+    var _sortDir = {};
+    window.sortTable = function (colIdx) {
+      var tbl = document.getElementById('state-table');
+      if (!tbl) return;
+      var tbody = tbl.tBodies[0];
+      var rows  = Array.from(tbody.rows);
+      var asc   = !_sortDir[colIdx];
+      _sortDir  = {};
+      _sortDir[colIdx] = asc;
+      rows.sort(function (a, b) {
+        var av = a.cells[colIdx].getAttribute('data-val') || '';
+        var bv = b.cells[colIdx].getAttribute('data-val') || '';
+        var an = parseFloat(av);
+        var bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+        return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+      rows.forEach(function (r) { tbody.appendChild(r); });
+      var ths = tbl.tHead.rows[0].cells;
+      for (var i = 0; i < ths.length; i++) {
+        ths[i].textContent = ths[i].textContent.replace(/ [▲▼]$/, '');
+      }
+      ths[colIdx].textContent += asc ? ' ▲' : ' ▼';
+    };
+
+    // ── Chart toggle & rendering ────────────────────────────────────────
+    window._chartInstances = {};
+
+    window.toggleView = function(id) {
+      var tv = document.getElementById(id + '-table');
+      var cv = document.getElementById(id + '-chart');
+      var btn = document.getElementById(id + '-toggle');
+      if (!tv || !cv) return;
+      var showChart = tv.style.display !== 'none';
+      tv.style.display = showChart ? 'none' : '';
+      cv.style.display = showChart ? '' : 'none';
+      btn.innerHTML = showChart ? '&#128203; Table' : '&#128202; Chart';
+      if (showChart && !cv._chartInit) {
+        cv._chartInit = true;
+        window.initBlockChart(id);
+      }
+    };
+
+    window.initBlockChart = function(id) {
+      var d = (window._charts || {})[id];
+      if (!d) return;
+      var canvas = document.getElementById('canvas-' + id);
+      if (!canvas) return;
+      if (window._chartInstances[id]) {
+        window._chartInstances[id].destroy();
+        delete window._chartInstances[id];
+      }
+      var isLight = document.documentElement.classList.contains('light');
+      var txtClr  = isLight ? '#475569' : '#cbd5e1';
+      var gridClr = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
+
+      var datasets = d.datasets.map(function(ds) {
+        return {
+          label: ds.label,
+          data: ds.data,
+          backgroundColor: ds.colors || ds.color,
+          borderRadius: 4,
+          maxBarThickness: 36
+        };
+      });
+
+      var config = {
+        type: 'bar',
+        data: { labels: d.labels, datasets: datasets },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: d.datasets.length > 1,
+              labels: { color: txtClr, font: { size: 12 } }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  var v = ctx.parsed.x;
+                  var s = v.toLocaleString();
+                  if (d.denominator) {
+                    s += ' (' + (v / d.denominator * 100).toFixed(2) + '%)';
+                  }
+                  return (d.datasets.length > 1 ? ctx.dataset.label + ': ' : '') + s;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: txtClr,
+                callback: function(v) { return v.toLocaleString(); }
+              },
+              grid: { color: gridClr }
+            },
+            y: {
+              ticks: { color: txtClr, font: { size: 12 } },
+              grid: { display: false }
+            }
+          }
+        }
+      };
+
+      window._chartInstances[id] = new Chart(canvas, config);
+    };
+
+    window.refreshCharts = function() {
+      Object.keys(window._chartInstances).forEach(function(id) {
+        var cv = document.getElementById(id + '-chart');
+        if (cv && cv.style.display !== 'none') {
+          window.initBlockChart(id);
+        }
+      });
+    };
+
+    document.getElementById('themeToggle').addEventListener('click', function() {
+      if (window.refreshCharts) window.refreshCharts();
+    });
+  </script>
+</body>
+</html>

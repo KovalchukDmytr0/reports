@@ -400,35 +400,6 @@
       </div>
   </div>
 
-  <!-- Glossary -->
-  <div class="glossary">
-    <div class="glossary-header">
-      <span style="font-size:1.4rem">&#128218;</span>
-      <h2>Quick Glossary</h2>
-    </div>
-    <div class="glossary-grid">
-      <div class="glossary-card">
-        <span class="emoji">&#128203;</span>
-        <div class="term">CoreLogic (source = 0)</div>
-        <div class="definition">Tax &amp; deed-based transaction records. Realtors and sales are filtered with <code>source = 0</code> in both the <code>sales</code> and <code>realtors</code> tables.</div>
-      </div>
-      <div class="glossary-card">
-        <span class="emoji">&#128203;</span>
-        <div class="term">Zebra (source = 1)</div>
-        <div class="definition">MLS-based transaction records. Realtors and sales are filtered with <code>source = 1</code> in both the <code>sales</code> and <code>realtors</code> tables.</div>
-      </div>
-      <div class="glossary-card">
-        <span class="emoji">&#128101;</span>
-        <div class="term">All Realtors</div>
-        <div class="definition">Distinct realtors counted by <code>duplicate_uid</code> who appeared as buyer agent, co-buyer agent, listing agent, or co-listing agent on at least one sale in the state for the given source and date range.</div>
-      </div>
-      <div class="glossary-card">
-        <span class="emoji">&#128176;</span>
-        <div class="term">Transactions</div>
-        <div class="definition">Total sales records (grouped by <code>duplicate_uid</code>) for the state, source, and date window. <strong>Total</strong> columns are the arithmetic sum of CoreLogic + Zebra — agents or deals may appear in both sources.</div>
-      </div>
-    </div>
-  </div>
 
   <!-- State table -->
   <div class="block">

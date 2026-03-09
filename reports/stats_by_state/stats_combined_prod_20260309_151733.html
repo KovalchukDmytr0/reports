@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>State Stats — CoreLogic &amp; Zebra — 20260309_151733</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-hdr:   #1a2538;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --badge-bg:   #1e293b;
+      --badge-brd:  #334155;
+      --badge-txt:  #7dd3fc;
+      --bar-bg:     #2d3f55;
+      --code-bg:    #0f1117;
+      --code-clr:   #7dd3fc;
+      --term-clr:   #6366f1;
+      --shadow:     rgba(0,0,0,0.4);
+      --strong-clr: #e2e8f0;
+      --cl-clr:     #f59e0b;
+      --zb-clr:     #6366f1;
+      --tot-clr:    #10b981;
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-hdr:   #f8fafc;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --badge-bg:   #e2e8f0;
+      --badge-brd:  #cbd5e1;
+      --badge-txt:  #2563eb;
+      --bar-bg:     #e2e8f0;
+      --code-bg:    #f1f5f9;
+      --code-clr:   #2563eb;
+      --term-clr:   #4f46e5;
+      --shadow:     rgba(0,0,0,0.08);
+      --strong-clr: #0f172a;
+      --cl-clr:     #d97706;
+      --zb-clr:     #4f46e5;
+      --tot-clr:    #059669;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--h1-clr);
+    }
+    header .meta {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--meta-clr);
+    }
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-cl  { background: rgba(245,158,11,0.15); border: 1px solid #f59e0b; color: #f59e0b; }
+    .badge-zb  { background: rgba(99,102,241,0.15); border: 1px solid #6366f1; color: #a5b4fc; }
+    .badge-tot { background: rgba(16,185,129,0.15); border: 1px solid #10b981; color: #6ee7b7; }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      user-select: none;
+    }
+    .theme-toggle:hover { opacity: 0.75; }
+
+    /* ── Summary cards ──────────────────────────────────── */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 16px;
+      max-width: 1200px;
+      margin: 0 auto 32px;
+    }
+    .summary-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: background 0.25s, transform 0.15s;
+    }
+    .summary-card:hover { transform: translateY(-2px); }
+    .sc-icon  { font-size: 1.8rem; }
+    .sc-value {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--value-clr);
+      font-variant-numeric: tabular-nums;
+    }
+    .sc-label {
+      font-size: 0.78rem;
+      color: var(--label-clr);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      text-align: center;
+    }
+    .sc-sub {
+      font-size: 0.72rem;
+      color: var(--pct-clr);
+    }
+
+    /* ── Glossary ───────────────────────────────────────── */
+    .glossary {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    .glossary-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+      border-left: 5px solid #6366f1;
+    }
+    .glossary-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    .glossary-card {
+      padding: 18px 22px;
+      border-right: 1px solid var(--card-sep);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .glossary-card .emoji { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+    .glossary-card .term {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--term-clr);
+      margin-bottom: 5px;
+    }
+    .glossary-card .definition {
+      font-size: 0.86rem;
+      color: var(--label-clr);
+      line-height: 1.55;
+    }
+    .glossary-card .definition strong { color: var(--strong-clr); }
+    .glossary-card .definition code {
+      background: var(--code-bg);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 0.82rem;
+      color: var(--code-clr);
+    }
+
+    /* ── Main card ──────────────────────────────────────── */
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+      max-width: 1200px;
+      margin: 0 auto 32px;
+    }
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      background: var(--card-hdr);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .block-header .icon { font-size: 1.4rem; }
+    .block-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--h1-clr);
+    }
+    .block-desc {
+      padding: 12px 20px;
+      font-size: 0.86rem;
+      color: var(--label-clr);
+      line-height: 1.65;
+      border-bottom: 1px solid var(--card-sep);
+    }
+    .block-desc strong { color: var(--strong-clr); }
+    .denom-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .denom-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    .denom-cl  { background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.35); color: #fcd34d; }
+    .denom-zb  { background: rgba(99,102,241,0.10); border: 1px solid rgba(99,102,241,0.35); color: #a5b4fc; }
+    .denom-tot { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.35); color: #6ee7b7; }
+    :root.light .denom-cl  { color: #b45309; }
+    :root.light .denom-zb  { color: #4338ca; }
+    :root.light .denom-tot { color: #065f46; }
+    .view-toggle {
+      margin-left: auto;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-brd);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--badge-txt);
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .view-toggle:hover { opacity: 0.75; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* ── State table ────────────────────────────────────── */
+    #state-table { width: 100%; border-collapse: collapse; }
+    #state-table thead tr.group-hdr th {
+      padding: 6px 18px 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+      border-bottom: none;
+      cursor: default;
+      user-select: none;
+    }
+    #state-table thead tr.group-hdr th:first-child { text-align: left; }
+    #state-table thead tr.col-hdr th {
+      background: var(--card-hdr);
+      color: var(--label-clr);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: right;
+      padding: 8px 18px;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--card-sep);
+      position: sticky;
+      top: 0;
+    }
+    #state-table thead tr.col-hdr th:first-child { text-align: left; }
+    #state-table thead tr.col-hdr th:hover { color: var(--badge-txt); }
+    #state-table tbody tr:nth-child(even) { background: var(--row-alt); }
+    #state-table td {
+      padding: 8px 18px;
+      font-size: 0.86rem;
+      vertical-align: middle;
+    }
+    .state-cell {
+      font-weight: 700;
+      color: var(--badge-txt);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .value {
+      color: var(--value-clr);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .pct-sub {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--pct-clr);
+      font-weight: 400;
+    }
+    .col-cl  { border-left: 2px solid rgba(245,158,11,0.3); }
+    .col-zb  { border-left: 2px solid rgba(99,102,241,0.3); }
+    .col-tot { border-left: 2px solid rgba(16,185,129,0.3); }
+    .grp-cl  { background: rgba(245,158,11,0.08); color: #f59e0b; border-left: 2px solid rgba(245,158,11,0.3); }
+    .grp-zb  { background: rgba(99,102,241,0.08); color: #a5b4fc; border-left: 2px solid rgba(99,102,241,0.3); }
+    .grp-tot { background: rgba(16,185,129,0.08); color: #6ee7b7; border-left: 2px solid rgba(16,185,129,0.3); }
+
+    /* ── Chart ──────────────────────────────────────────── */
+    .chart-view canvas { width: 100% !important; }
+
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script>if(localStorage.getItem('theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button class="theme-toggle" id="themeToggle">&#9728;&#65039; Light</button>
+    <h1>State-Level Realtor &amp; Transaction Stats</h1>
+    <div class="meta">
+      Generated on 2026-03-09 15:17:33 &nbsp;|&nbsp; Period: 2018-01-01 &mdash; 2026-01-01
+    </div>
+    <div class="badges">
+      <span class="badge badge-cl">CoreLogic &mdash; source = 0</span>
+      <span class="badge badge-zb">Zebra &mdash; source = 1</span>
+      <span class="badge badge-tot">Combined Total</span>
+    </div>
+  </header>
+
+  <!-- Summary cards -->
+  <div class="summary-row">
+
+      <div class="summary-card" style="border-top:4px solid #f59e0b">
+        <span class="sc-icon">&#128101;</span>
+        <span class="sc-value">1,781,133</span>
+        <span class="sc-label">CoreLogic Realtors</span>
+        <span class="sc-sub">source = 0</span>
+      </div>
+      <div class="summary-card" style="border-top:4px solid #f59e0b">
+        <span class="sc-icon">&#128176;</span>
+        <span class="sc-value">37,176,876</span>
+        <span class="sc-label">CoreLogic Transactions</span>
+        <span class="sc-sub">source = 0</span>
+      </div>
+      <div class="summary-card" style="border-top:4px solid #6366f1">
+        <span class="sc-icon">&#128101;</span>
+        <span class="sc-value">1,304,214</span>
+        <span class="sc-label">Zebra Realtors</span>
+        <span class="sc-sub">source = 1</span>
+      </div>
+      <div class="summary-card" style="border-top:4px solid #6366f1">
+        <span class="sc-icon">&#128176;</span>
+        <span class="sc-value">14,299,127</span>
+        <span class="sc-label">Zebra Transactions</span>
+        <span class="sc-sub">source = 1</span>
+      </div>
+      <div class="summary-card" style="border-top:4px solid #10b981">
+        <span class="sc-icon">&#9889;</span>
+        <span class="sc-value">3,085,347</span>
+        <span class="sc-label">Total Realtors</span>
+        <span class="sc-sub">CL + Zebra</span>
+      </div>
+      <div class="summary-card" style="border-top:4px solid #10b981">
+        <span class="sc-icon">&#9889;</span>
+        <span class="sc-value">51,476,003</span>
+        <span class="sc-label">Total Transactions</span>
+        <span class="sc-sub">CL + Zebra</span>
+      </div>
+  </div>
+
+  <!-- Glossary -->
+  <div class="glossary">
+    <div class="glossary-header">
+      <span style="font-size:1.4rem">&#128218;</span>
+      <h2>Quick Glossary</h2>
+    </div>
+    <div class="glossary-grid">
+      <div class="glossary-card">
+        <span class="emoji">&#128203;</span>
+        <div class="term">CoreLogic (source = 0)</div>
+        <div class="definition">Tax &amp; deed-based transaction records. Realtors and sales are filtered with <code>source = 0</code> in both the <code>sales</code> and <code>realtors</code> tables.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128203;</span>
+        <div class="term">Zebra (source = 1)</div>
+        <div class="definition">MLS-based transaction records. Realtors and sales are filtered with <code>source = 1</code> in both the <code>sales</code> and <code>realtors</code> tables.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128101;</span>
+        <div class="term">Unique Realtors</div>
+        <div class="definition">Distinct realtors counted by <code>duplicate_uid</code> who appeared as buyer agent, co-buyer agent, listing agent, or co-listing agent on at least one sale in the state for the given source and date range.</div>
+      </div>
+      <div class="glossary-card">
+        <span class="emoji">&#128176;</span>
+        <div class="term">Transactions</div>
+        <div class="definition">Total sales records (grouped by <code>duplicate_uid</code>) for the state, source, and date window. <strong>Total</strong> columns are the arithmetic sum of CoreLogic + Zebra — agents or deals may appear in both sources.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- State table -->
+  <div class="block">
+    <div class="block-header" style="border-left: 5px solid #10b981">
+      <span class="icon">&#127758;</span>
+      <h2>Per-State Breakdown — CoreLogic &amp; Zebra &amp; Total</h2>
+      <button class="view-toggle" id="chart-toggle" onclick="toggleView()">&#128202; Chart</button>
+    </div>
+    <div class="block-desc">
+      Unique realtors and transactions per state for each source.
+      Click any column header to sort &uarr;&darr;.
+      <div class="denom-row">
+        <span class="denom-chip denom-cl">
+          <strong>CoreLogic % denominator</strong>
+          &nbsp;&mdash;&nbsp;
+          Realtors: <strong>1,781,133</strong>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          Transactions: <strong>37,176,876</strong>
+        </span>
+        <span class="denom-chip denom-zb">
+          <strong>Zebra % denominator</strong>
+          &nbsp;&mdash;&nbsp;
+          Realtors: <strong>1,304,214</strong>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          Transactions: <strong>14,299,127</strong>
+        </span>
+        <span class="denom-chip denom-tot">
+          <strong>Total % denominator</strong>
+          &nbsp;&mdash;&nbsp;
+          Realtors: <strong>3,085,347</strong>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          Transactions: <strong>51,476,003</strong>
+        </span>
+      </div>
+    </div>
+    <div id="table-wrap">
+      <div class="table-scroll">
+        <table id="state-table">
+          <thead>
+            <tr class="group-hdr">
+              <th rowspan="2" style="vertical-align:bottom;text-align:left;padding-bottom:8px">State</th>
+              <th colspan="2" class="grp-cl">CoreLogic</th>
+              <th colspan="2" class="grp-zb">Zebra</th>
+              <th colspan="2" class="grp-tot">Total</th>
+            </tr>
+            <tr class="col-hdr">
+              <th onclick="sortTable(1)" class="col-cl">Realtors</th>
+              <th onclick="sortTable(2)" class="col-cl">Transactions</th>
+              <th onclick="sortTable(3)" class="col-zb">Realtors</th>
+              <th onclick="sortTable(4)" class="col-zb">Transactions</th>
+              <th onclick="sortTable(5)" class="col-tot">Realtors</th>
+              <th onclick="sortTable(6)" class="col-tot">Transactions</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr><td data-val="AL" class="state-cell">AL</td><td data-val="23787" class="value">23,787<span class="pct-sub">(1.34%)</span></td><td data-val="602175" class="value">602,175<span class="pct-sub">(1.62%)</span></td><td data-val="24516" class="value">24,516<span class="pct-sub">(1.88%)</span></td><td data-val="389564" class="value">389,564<span class="pct-sub">(2.72%)</span></td><td data-val="48303" class="value">48,303<span class="pct-sub">(1.57%)</span></td><td data-val="991739" class="value">991,739<span class="pct-sub">(1.93%)</span></td></tr>
+<tr><td data-val="AK" class="state-cell">AK</td><td data-val="15" class="value">15<span class="pct-sub">(0.00%)</span></td><td data-val="12" class="value">12<span class="pct-sub">(0.00%)</span></td><td data-val="2662" class="value">2,662<span class="pct-sub">(0.20%)</span></td><td data-val="54398" class="value">54,398<span class="pct-sub">(0.38%)</span></td><td data-val="2677" class="value">2,677<span class="pct-sub">(0.09%)</span></td><td data-val="54410" class="value">54,410<span class="pct-sub">(0.11%)</span></td></tr>
+<tr><td data-val="AZ" class="state-cell">AZ</td><td data-val="64995" class="value">64,995<span class="pct-sub">(3.65%)</span></td><td data-val="979747" class="value">979,747<span class="pct-sub">(2.64%)</span></td><td data-val="23687" class="value">23,687<span class="pct-sub">(1.82%)</span></td><td data-val="43478" class="value">43,478<span class="pct-sub">(0.30%)</span></td><td data-val="88682" class="value">88,682<span class="pct-sub">(2.87%)</span></td><td data-val="1023225" class="value">1,023,225<span class="pct-sub">(1.99%)</span></td></tr>
+<tr><td data-val="AR" class="state-cell">AR</td><td data-val="6339" class="value">6,339<span class="pct-sub">(0.36%)</span></td><td data-val="140816" class="value">140,816<span class="pct-sub">(0.38%)</span></td><td data-val="12581" class="value">12,581<span class="pct-sub">(0.96%)</span></td><td data-val="224973" class="value">224,973<span class="pct-sub">(1.57%)</span></td><td data-val="18920" class="value">18,920<span class="pct-sub">(0.61%)</span></td><td data-val="365789" class="value">365,789<span class="pct-sub">(0.71%)</span></td></tr>
+<tr><td data-val="CA" class="state-cell">CA</td><td data-val="262106" class="value">262,106<span class="pct-sub">(14.72%)</span></td><td data-val="7176329" class="value">7,176,329<span class="pct-sub">(19.30%)</span></td><td data-val="74156" class="value">74,156<span class="pct-sub">(5.69%)</span></td><td data-val="107275" class="value">107,275<span class="pct-sub">(0.75%)</span></td><td data-val="336262" class="value">336,262<span class="pct-sub">(10.90%)</span></td><td data-val="7283604" class="value">7,283,604<span class="pct-sub">(14.15%)</span></td></tr>
+<tr><td data-val="CO" class="state-cell">CO</td><td data-val="37623" class="value">37,623<span class="pct-sub">(2.11%)</span></td><td data-val="1210285" class="value">1,210,285<span class="pct-sub">(3.26%)</span></td><td data-val="35233" class="value">35,233<span class="pct-sub">(2.70%)</span></td><td data-val="367262" class="value">367,262<span class="pct-sub">(2.57%)</span></td><td data-val="72856" class="value">72,856<span class="pct-sub">(2.36%)</span></td><td data-val="1577547" class="value">1,577,547<span class="pct-sub">(3.06%)</span></td></tr>
+<tr><td data-val="CT" class="state-cell">CT</td><td data-val="957" class="value">957<span class="pct-sub">(0.05%)</span></td><td data-val="2554" class="value">2,554<span class="pct-sub">(0.01%)</span></td><td data-val="21711" class="value">21,711<span class="pct-sub">(1.66%)</span></td><td data-val="227979" class="value">227,979<span class="pct-sub">(1.59%)</span></td><td data-val="22668" class="value">22,668<span class="pct-sub">(0.73%)</span></td><td data-val="230533" class="value">230,533<span class="pct-sub">(0.45%)</span></td></tr>
+<tr><td data-val="DE" class="state-cell">DE</td><td data-val="7315" class="value">7,315<span class="pct-sub">(0.41%)</span></td><td data-val="124231" class="value">124,231<span class="pct-sub">(0.33%)</span></td><td data-val="6868" class="value">6,868<span class="pct-sub">(0.53%)</span></td><td data-val="95011" class="value">95,011<span class="pct-sub">(0.66%)</span></td><td data-val="14183" class="value">14,183<span class="pct-sub">(0.46%)</span></td><td data-val="219242" class="value">219,242<span class="pct-sub">(0.43%)</span></td></tr>
+<tr><td data-val="FL" class="state-cell">FL</td><td data-val="263720" class="value">263,720<span class="pct-sub">(14.81%)</span></td><td data-val="5205932" class="value">5,205,932<span class="pct-sub">(14.00%)</span></td><td data-val="81101" class="value">81,101<span class="pct-sub">(6.22%)</span></td><td data-val="136531" class="value">136,531<span class="pct-sub">(0.95%)</span></td><td data-val="344821" class="value">344,821<span class="pct-sub">(11.18%)</span></td><td data-val="5342463" class="value">5,342,463<span class="pct-sub">(10.38%)</span></td></tr>
+<tr><td data-val="GA" class="state-cell">GA</td><td data-val="83524" class="value">83,524<span class="pct-sub">(4.69%)</span></td><td data-val="1987374" class="value">1,987,374<span class="pct-sub">(5.35%)</span></td><td data-val="29822" class="value">29,822<span class="pct-sub">(2.29%)</span></td><td data-val="71434" class="value">71,434<span class="pct-sub">(0.50%)</span></td><td data-val="113346" class="value">113,346<span class="pct-sub">(3.67%)</span></td><td data-val="2058808" class="value">2,058,808<span class="pct-sub">(4.00%)</span></td></tr>
+<tr><td data-val="HI" class="state-cell">HI</td><td data-val="9132" class="value">9,132<span class="pct-sub">(0.51%)</span></td><td data-val="95061" class="value">95,061<span class="pct-sub">(0.26%)</span></td><td data-val="8995" class="value">8,995<span class="pct-sub">(0.69%)</span></td><td data-val="75061" class="value">75,061<span class="pct-sub">(0.52%)</span></td><td data-val="18127" class="value">18,127<span class="pct-sub">(0.59%)</span></td><td data-val="170122" class="value">170,122<span class="pct-sub">(0.33%)</span></td></tr>
+<tr><td data-val="ID" class="state-cell">ID</td><td data-val="9994" class="value">9,994<span class="pct-sub">(0.56%)</span></td><td data-val="181639" class="value">181,639<span class="pct-sub">(0.49%)</span></td><td data-val="15209" class="value">15,209<span class="pct-sub">(1.17%)</span></td><td data-val="205077" class="value">205,077<span class="pct-sub">(1.43%)</span></td><td data-val="25203" class="value">25,203<span class="pct-sub">(0.82%)</span></td><td data-val="386716" class="value">386,716<span class="pct-sub">(0.75%)</span></td></tr>
+<tr><td data-val="IL" class="state-cell">IL</td><td data-val="61037" class="value">61,037<span class="pct-sub">(3.43%)</span></td><td data-val="1289222" class="value">1,289,222<span class="pct-sub">(3.47%)</span></td><td data-val="25398" class="value">25,398<span class="pct-sub">(1.95%)</span></td><td data-val="70338" class="value">70,338<span class="pct-sub">(0.49%)</span></td><td data-val="86435" class="value">86,435<span class="pct-sub">(2.80%)</span></td><td data-val="1359560" class="value">1,359,560<span class="pct-sub">(2.64%)</span></td></tr>
+<tr><td data-val="IN" class="state-cell">IN</td><td data-val="23381" class="value">23,381<span class="pct-sub">(1.31%)</span></td><td data-val="639583" class="value">639,583<span class="pct-sub">(1.72%)</span></td><td data-val="23984" class="value">23,984<span class="pct-sub">(1.84%)</span></td><td data-val="469756" class="value">469,756<span class="pct-sub">(3.29%)</span></td><td data-val="47365" class="value">47,365<span class="pct-sub">(1.54%)</span></td><td data-val="1109339" class="value">1,109,339<span class="pct-sub">(2.16%)</span></td></tr>
+<tr><td data-val="IA" class="state-cell">IA</td><td data-val="4457" class="value">4,457<span class="pct-sub">(0.25%)</span></td><td data-val="150725" class="value">150,725<span class="pct-sub">(0.41%)</span></td><td data-val="10309" class="value">10,309<span class="pct-sub">(0.79%)</span></td><td data-val="243917" class="value">243,917<span class="pct-sub">(1.71%)</span></td><td data-val="14766" class="value">14,766<span class="pct-sub">(0.48%)</span></td><td data-val="394642" class="value">394,642<span class="pct-sub">(0.77%)</span></td></tr>
+<tr><td data-val="KS" class="state-cell">KS</td><td data-val="10395" class="value">10,395<span class="pct-sub">(0.58%)</span></td><td data-val="141650" class="value">141,650<span class="pct-sub">(0.38%)</span></td><td data-val="14058" class="value">14,058<span class="pct-sub">(1.08%)</span></td><td data-val="212399" class="value">212,399<span class="pct-sub">(1.49%)</span></td><td data-val="24453" class="value">24,453<span class="pct-sub">(0.79%)</span></td><td data-val="354049" class="value">354,049<span class="pct-sub">(0.69%)</span></td></tr>
+<tr><td data-val="KY" class="state-cell">KY</td><td data-val="14988" class="value">14,988<span class="pct-sub">(0.84%)</span></td><td data-val="448627" class="value">448,627<span class="pct-sub">(1.21%)</span></td><td data-val="16156" class="value">16,156<span class="pct-sub">(1.24%)</span></td><td data-val="272628" class="value">272,628<span class="pct-sub">(1.91%)</span></td><td data-val="31144" class="value">31,144<span class="pct-sub">(1.01%)</span></td><td data-val="721255" class="value">721,255<span class="pct-sub">(1.40%)</span></td></tr>
+<tr><td data-val="LA" class="state-cell">LA</td><td data-val="17792" class="value">17,792<span class="pct-sub">(1.00%)</span></td><td data-val="393626" class="value">393,626<span class="pct-sub">(1.06%)</span></td><td data-val="17228" class="value">17,228<span class="pct-sub">(1.32%)</span></td><td data-val="211898" class="value">211,898<span class="pct-sub">(1.48%)</span></td><td data-val="35020" class="value">35,020<span class="pct-sub">(1.14%)</span></td><td data-val="605524" class="value">605,524<span class="pct-sub">(1.18%)</span></td></tr>
+<tr><td data-val="ME" class="state-cell">ME</td><td data-val="7979" class="value">7,979<span class="pct-sub">(0.45%)</span></td><td data-val="157428" class="value">157,428<span class="pct-sub">(0.42%)</span></td><td data-val="7243" class="value">7,243<span class="pct-sub">(0.56%)</span></td><td data-val="120506" class="value">120,506<span class="pct-sub">(0.84%)</span></td><td data-val="15222" class="value">15,222<span class="pct-sub">(0.49%)</span></td><td data-val="277934" class="value">277,934<span class="pct-sub">(0.54%)</span></td></tr>
+<tr><td data-val="MD" class="state-cell">MD</td><td data-val="42572" class="value">42,572<span class="pct-sub">(2.39%)</span></td><td data-val="661157" class="value">661,157<span class="pct-sub">(1.78%)</span></td><td data-val="37791" class="value">37,791<span class="pct-sub">(2.90%)</span></td><td data-val="462123" class="value">462,123<span class="pct-sub">(3.23%)</span></td><td data-val="80363" class="value">80,363<span class="pct-sub">(2.60%)</span></td><td data-val="1123280" class="value">1,123,280<span class="pct-sub">(2.18%)</span></td></tr>
+<tr><td data-val="MA" class="state-cell">MA</td><td data-val="44551" class="value">44,551<span class="pct-sub">(2.50%)</span></td><td data-val="640362" class="value">640,362<span class="pct-sub">(1.72%)</span></td><td data-val="39227" class="value">39,227<span class="pct-sub">(3.01%)</span></td><td data-val="360288" class="value">360,288<span class="pct-sub">(2.52%)</span></td><td data-val="83778" class="value">83,778<span class="pct-sub">(2.72%)</span></td><td data-val="1000650" class="value">1,000,650<span class="pct-sub">(1.94%)</span></td></tr>
+<tr><td data-val="MI" class="state-cell">MI</td><td data-val="50626" class="value">50,626<span class="pct-sub">(2.84%)</span></td><td data-val="1048965" class="value">1,048,965<span class="pct-sub">(2.82%)</span></td><td data-val="43069" class="value">43,069<span class="pct-sub">(3.30%)</span></td><td data-val="683025" class="value">683,025<span class="pct-sub">(4.78%)</span></td><td data-val="93695" class="value">93,695<span class="pct-sub">(3.04%)</span></td><td data-val="1731990" class="value">1,731,990<span class="pct-sub">(3.36%)</span></td></tr>
+<tr><td data-val="MN" class="state-cell">MN</td><td data-val="27510" class="value">27,510<span class="pct-sub">(1.54%)</span></td><td data-val="630974" class="value">630,974<span class="pct-sub">(1.70%)</span></td><td data-val="18558" class="value">18,558<span class="pct-sub">(1.42%)</span></td><td data-val="234381" class="value">234,381<span class="pct-sub">(1.64%)</span></td><td data-val="46068" class="value">46,068<span class="pct-sub">(1.49%)</span></td><td data-val="865355" class="value">865,355<span class="pct-sub">(1.68%)</span></td></tr>
+<tr><td data-val="MS" class="state-cell">MS</td><td data-val="8243" class="value">8,243<span class="pct-sub">(0.46%)</span></td><td data-val="144002" class="value">144,002<span class="pct-sub">(0.39%)</span></td><td data-val="8732" class="value">8,732<span class="pct-sub">(0.67%)</span></td><td data-val="122478" class="value">122,478<span class="pct-sub">(0.86%)</span></td><td data-val="16975" class="value">16,975<span class="pct-sub">(0.55%)</span></td><td data-val="266480" class="value">266,480<span class="pct-sub">(0.52%)</span></td></tr>
+<tr><td data-val="MO" class="state-cell">MO</td><td data-val="30511" class="value">30,511<span class="pct-sub">(1.71%)</span></td><td data-val="845626" class="value">845,626<span class="pct-sub">(2.27%)</span></td><td data-val="34337" class="value">34,337<span class="pct-sub">(2.63%)</span></td><td data-val="529611" class="value">529,611<span class="pct-sub">(3.70%)</span></td><td data-val="64848" class="value">64,848<span class="pct-sub">(2.10%)</span></td><td data-val="1375237" class="value">1,375,237<span class="pct-sub">(2.67%)</span></td></tr>
+<tr><td data-val="MT" class="state-cell">MT</td><td data-val="1343" class="value">1,343<span class="pct-sub">(0.08%)</span></td><td data-val="27918" class="value">27,918<span class="pct-sub">(0.08%)</span></td><td data-val="5144" class="value">5,144<span class="pct-sub">(0.39%)</span></td><td data-val="70542" class="value">70,542<span class="pct-sub">(0.49%)</span></td><td data-val="6487" class="value">6,487<span class="pct-sub">(0.21%)</span></td><td data-val="98460" class="value">98,460<span class="pct-sub">(0.19%)</span></td></tr>
+<tr><td data-val="NE" class="state-cell">NE</td><td data-val="281" class="value">281<span class="pct-sub">(0.02%)</span></td><td data-val="1184" class="value">1,184<span class="pct-sub">(0.00%)</span></td><td data-val="6301" class="value">6,301<span class="pct-sub">(0.48%)</span></td><td data-val="124140" class="value">124,140<span class="pct-sub">(0.87%)</span></td><td data-val="6582" class="value">6,582<span class="pct-sub">(0.21%)</span></td><td data-val="125324" class="value">125,324<span class="pct-sub">(0.24%)</span></td></tr>
+<tr><td data-val="NV" class="state-cell">NV</td><td data-val="24593" class="value">24,593<span class="pct-sub">(1.38%)</span></td><td data-val="392439" class="value">392,439<span class="pct-sub">(1.06%)</span></td><td data-val="21024" class="value">21,024<span class="pct-sub">(1.61%)</span></td><td data-val="233848" class="value">233,848<span class="pct-sub">(1.64%)</span></td><td data-val="45617" class="value">45,617<span class="pct-sub">(1.48%)</span></td><td data-val="626287" class="value">626,287<span class="pct-sub">(1.22%)</span></td></tr>
+<tr><td data-val="NH" class="state-cell">NH</td><td data-val="10832" class="value">10,832<span class="pct-sub">(0.61%)</span></td><td data-val="170587" class="value">170,587<span class="pct-sub">(0.46%)</span></td><td data-val="9142" class="value">9,142<span class="pct-sub">(0.70%)</span></td><td data-val="112620" class="value">112,620<span class="pct-sub">(0.79%)</span></td><td data-val="19974" class="value">19,974<span class="pct-sub">(0.65%)</span></td><td data-val="283207" class="value">283,207<span class="pct-sub">(0.55%)</span></td></tr>
+<tr><td data-val="NJ" class="state-cell">NJ</td><td data-val="52005" class="value">52,005<span class="pct-sub">(2.92%)</span></td><td data-val="649668" class="value">649,668<span class="pct-sub">(1.75%)</span></td><td data-val="52460" class="value">52,460<span class="pct-sub">(4.02%)</span></td><td data-val="490452" class="value">490,452<span class="pct-sub">(3.43%)</span></td><td data-val="104465" class="value">104,465<span class="pct-sub">(3.39%)</span></td><td data-val="1140120" class="value">1,140,120<span class="pct-sub">(2.21%)</span></td></tr>
+<tr><td data-val="NM" class="state-cell">NM</td><td data-val="5974" class="value">5,974<span class="pct-sub">(0.34%)</span></td><td data-val="71429" class="value">71,429<span class="pct-sub">(0.19%)</span></td><td data-val="9116" class="value">9,116<span class="pct-sub">(0.70%)</span></td><td data-val="132551" class="value">132,551<span class="pct-sub">(0.93%)</span></td><td data-val="15090" class="value">15,090<span class="pct-sub">(0.49%)</span></td><td data-val="203980" class="value">203,980<span class="pct-sub">(0.40%)</span></td></tr>
+<tr><td data-val="NY" class="state-cell">NY</td><td data-val="76811" class="value">76,811<span class="pct-sub">(4.31%)</span></td><td data-val="1145800" class="value">1,145,800<span class="pct-sub">(3.08%)</span></td><td data-val="28590" class="value">28,590<span class="pct-sub">(2.19%)</span></td><td data-val="55447" class="value">55,447<span class="pct-sub">(0.39%)</span></td><td data-val="105401" class="value">105,401<span class="pct-sub">(3.42%)</span></td><td data-val="1201247" class="value">1,201,247<span class="pct-sub">(2.33%)</span></td></tr>
+<tr><td data-val="NC" class="state-cell">NC</td><td data-val="70905" class="value">70,905<span class="pct-sub">(3.98%)</span></td><td data-val="1706839" class="value">1,706,839<span class="pct-sub">(4.59%)</span></td><td data-val="33306" class="value">33,306<span class="pct-sub">(2.55%)</span></td><td data-val="89542" class="value">89,542<span class="pct-sub">(0.63%)</span></td><td data-val="104211" class="value">104,211<span class="pct-sub">(3.38%)</span></td><td data-val="1796381" class="value">1,796,381<span class="pct-sub">(3.49%)</span></td></tr>
+<tr><td data-val="ND" class="state-cell">ND</td><td data-val="900" class="value">900<span class="pct-sub">(0.05%)</span></td><td data-val="23339" class="value">23,339<span class="pct-sub">(0.06%)</span></td><td data-val="2425" class="value">2,425<span class="pct-sub">(0.19%)</span></td><td data-val="40156" class="value">40,156<span class="pct-sub">(0.28%)</span></td><td data-val="3325" class="value">3,325<span class="pct-sub">(0.11%)</span></td><td data-val="63495" class="value">63,495<span class="pct-sub">(0.12%)</span></td></tr>
+<tr><td data-val="OH" class="state-cell">OH</td><td data-val="46413" class="value">46,413<span class="pct-sub">(2.61%)</span></td><td data-val="1169340" class="value">1,169,340<span class="pct-sub">(3.15%)</span></td><td data-val="42312" class="value">42,312<span class="pct-sub">(3.24%)</span></td><td data-val="797801" class="value">797,801<span class="pct-sub">(5.58%)</span></td><td data-val="88725" class="value">88,725<span class="pct-sub">(2.88%)</span></td><td data-val="1967141" class="value">1,967,141<span class="pct-sub">(3.82%)</span></td></tr>
+<tr><td data-val="OK" class="state-cell">OK</td><td data-val="18587" class="value">18,587<span class="pct-sub">(1.04%)</span></td><td data-val="399625" class="value">399,625<span class="pct-sub">(1.07%)</span></td><td data-val="16332" class="value">16,332<span class="pct-sub">(1.25%)</span></td><td data-val="265274" class="value">265,274<span class="pct-sub">(1.86%)</span></td><td data-val="34919" class="value">34,919<span class="pct-sub">(1.13%)</span></td><td data-val="664899" class="value">664,899<span class="pct-sub">(1.29%)</span></td></tr>
+<tr><td data-val="OR" class="state-cell">OR</td><td data-val="18519" class="value">18,519<span class="pct-sub">(1.04%)</span></td><td data-val="371929" class="value">371,929<span class="pct-sub">(1.00%)</span></td><td data-val="20847" class="value">20,847<span class="pct-sub">(1.60%)</span></td><td data-val="321727" class="value">321,727<span class="pct-sub">(2.25%)</span></td><td data-val="39366" class="value">39,366<span class="pct-sub">(1.28%)</span></td><td data-val="693656" class="value">693,656<span class="pct-sub">(1.35%)</span></td></tr>
+<tr><td data-val="PA" class="state-cell">PA</td><td data-val="51416" class="value">51,416<span class="pct-sub">(2.89%)</span></td><td data-val="989330" class="value">989,330<span class="pct-sub">(2.66%)</span></td><td data-val="51583" class="value">51,583<span class="pct-sub">(3.96%)</span></td><td data-val="787824" class="value">787,824<span class="pct-sub">(5.51%)</span></td><td data-val="102999" class="value">102,999<span class="pct-sub">(3.34%)</span></td><td data-val="1777154" class="value">1,777,154<span class="pct-sub">(3.45%)</span></td></tr>
+<tr><td data-val="RI" class="state-cell">RI</td><td data-val="8039" class="value">8,039<span class="pct-sub">(0.45%)</span></td><td data-val="83397" class="value">83,397<span class="pct-sub">(0.22%)</span></td><td data-val="7567" class="value">7,567<span class="pct-sub">(0.58%)</span></td><td data-val="73163" class="value">73,163<span class="pct-sub">(0.51%)</span></td><td data-val="15606" class="value">15,606<span class="pct-sub">(0.51%)</span></td><td data-val="156560" class="value">156,560<span class="pct-sub">(0.30%)</span></td></tr>
+<tr><td data-val="SC" class="state-cell">SC</td><td data-val="23505" class="value">23,505<span class="pct-sub">(1.32%)</span></td><td data-val="333127" class="value">333,127<span class="pct-sub">(0.90%)</span></td><td data-val="32417" class="value">32,417<span class="pct-sub">(2.49%)</span></td><td data-val="453415" class="value">453,415<span class="pct-sub">(3.17%)</span></td><td data-val="55922" class="value">55,922<span class="pct-sub">(1.81%)</span></td><td data-val="786542" class="value">786,542<span class="pct-sub">(1.53%)</span></td></tr>
+<tr><td data-val="SD" class="state-cell">SD</td><td data-val="210" class="value">210<span class="pct-sub">(0.01%)</span></td><td data-val="2347" class="value">2,347<span class="pct-sub">(0.01%)</span></td><td data-val="2265" class="value">2,265<span class="pct-sub">(0.17%)</span></td><td data-val="31040" class="value">31,040<span class="pct-sub">(0.22%)</span></td><td data-val="2475" class="value">2,475<span class="pct-sub">(0.08%)</span></td><td data-val="33387" class="value">33,387<span class="pct-sub">(0.06%)</span></td></tr>
+<tr><td data-val="TN" class="state-cell">TN</td><td data-val="35751" class="value">35,751<span class="pct-sub">(2.01%)</span></td><td data-val="695857" class="value">695,857<span class="pct-sub">(1.87%)</span></td><td data-val="43483" class="value">43,483<span class="pct-sub">(3.33%)</span></td><td data-val="677448" class="value">677,448<span class="pct-sub">(4.74%)</span></td><td data-val="79234" class="value">79,234<span class="pct-sub">(2.57%)</span></td><td data-val="1373305" class="value">1,373,305<span class="pct-sub">(2.67%)</span></td></tr>
+<tr><td data-val="TX" class="state-cell">TX</td><td data-val="131953" class="value">131,953<span class="pct-sub">(7.41%)</span></td><td data-val="2100143" class="value">2,100,143<span class="pct-sub">(5.65%)</span></td><td data-val="152368" class="value">152,368<span class="pct-sub">(11.68%)</span></td><td data-val="1738982" class="value">1,738,982<span class="pct-sub">(12.16%)</span></td><td data-val="284321" class="value">284,321<span class="pct-sub">(9.22%)</span></td><td data-val="3839125" class="value">3,839,125<span class="pct-sub">(7.46%)</span></td></tr>
+<tr><td data-val="UT" class="state-cell">UT</td><td data-val="29" class="value">29<span class="pct-sub">(0.00%)</span></td><td data-val="191" class="value">191<span class="pct-sub">(0.00%)</span></td><td data-val="5901" class="value">5,901<span class="pct-sub">(0.45%)</span></td><td data-val="51512" class="value">51,512<span class="pct-sub">(0.36%)</span></td><td data-val="5930" class="value">5,930<span class="pct-sub">(0.19%)</span></td><td data-val="51703" class="value">51,703<span class="pct-sub">(0.10%)</span></td></tr>
+<tr><td data-val="VT" class="state-cell">VT</td><td data-val="1169" class="value">1,169<span class="pct-sub">(0.07%)</span></td><td data-val="64091" class="value">64,091<span class="pct-sub">(0.17%)</span></td><td data-val="1986" class="value">1,986<span class="pct-sub">(0.15%)</span></td><td data-val="54011" class="value">54,011<span class="pct-sub">(0.38%)</span></td><td data-val="3155" class="value">3,155<span class="pct-sub">(0.10%)</span></td><td data-val="118102" class="value">118,102<span class="pct-sub">(0.23%)</span></td></tr>
+<tr><td data-val="VA" class="state-cell">VA</td><td data-val="48354" class="value">48,354<span class="pct-sub">(2.71%)</span></td><td data-val="1272323" class="value">1,272,323<span class="pct-sub">(3.42%)</span></td><td data-val="44963" class="value">44,963<span class="pct-sub">(3.45%)</span></td><td data-val="542694" class="value">542,694<span class="pct-sub">(3.80%)</span></td><td data-val="93317" class="value">93,317<span class="pct-sub">(3.02%)</span></td><td data-val="1815017" class="value">1,815,017<span class="pct-sub">(3.53%)</span></td></tr>
+<tr><td data-val="WA" class="state-cell">WA</td><td data-val="7166" class="value">7,166<span class="pct-sub">(0.40%)</span></td><td data-val="119138" class="value">119,138<span class="pct-sub">(0.32%)</span></td><td data-val="43310" class="value">43,310<span class="pct-sub">(3.32%)</span></td><td data-val="600841" class="value">600,841<span class="pct-sub">(4.20%)</span></td><td data-val="50476" class="value">50,476<span class="pct-sub">(1.64%)</span></td><td data-val="719979" class="value">719,979<span class="pct-sub">(1.40%)</span></td></tr>
+<tr><td data-val="WV" class="state-cell">WV</td><td data-val="3636" class="value">3,636<span class="pct-sub">(0.20%)</span></td><td data-val="74867" class="value">74,867<span class="pct-sub">(0.20%)</span></td><td data-val="5445" class="value">5,445<span class="pct-sub">(0.42%)</span></td><td data-val="87611" class="value">87,611<span class="pct-sub">(0.61%)</span></td><td data-val="9081" class="value">9,081<span class="pct-sub">(0.29%)</span></td><td data-val="162478" class="value">162,478<span class="pct-sub">(0.32%)</span></td></tr>
+<tr><td data-val="WI" class="state-cell">WI</td><td data-val="19088" class="value">19,088<span class="pct-sub">(1.07%)</span></td><td data-val="346639" class="value">346,639<span class="pct-sub">(0.93%)</span></td><td data-val="21623" class="value">21,623<span class="pct-sub">(1.66%)</span></td><td data-val="395059" class="value">395,059<span class="pct-sub">(2.76%)</span></td><td data-val="40711" class="value">40,711<span class="pct-sub">(1.32%)</span></td><td data-val="741698" class="value">741,698<span class="pct-sub">(1.44%)</span></td></tr>
+<tr><td data-val="WY" class="state-cell">WY</td><td data-val="19" class="value">19<span class="pct-sub">(0.00%)</span></td><td data-val="18" class="value">18<span class="pct-sub">(0.00%)</span></td><td data-val="2741" class="value">2,741<span class="pct-sub">(0.21%)</span></td><td data-val="31977" class="value">31,977<span class="pct-sub">(0.22%)</span></td><td data-val="2760" class="value">2,760<span class="pct-sub">(0.09%)</span></td><td data-val="31995" class="value">31,995<span class="pct-sub">(0.06%)</span></td></tr>
+<tr><td data-val="DC" class="state-cell">DC</td><td data-val="10086" class="value">10,086<span class="pct-sub">(0.57%)</span></td><td data-val="67209" class="value">67,209<span class="pct-sub">(0.18%)</span></td><td data-val="8932" class="value">8,932<span class="pct-sub">(0.68%)</span></td><td data-val="48059" class="value">48,059<span class="pct-sub">(0.34%)</span></td><td data-val="19018" class="value">19,018<span class="pct-sub">(0.62%)</span></td><td data-val="115268" class="value">115,268<span class="pct-sub">(0.22%)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="chart-wrap" style="display:none; padding:20px; position:relative; height:1400px">
+      <canvas id="canvas-states"></canvas>
+    </div>
+  </div>
+
+  <script>
+    /* ── Theme toggle ───────────────────────────────────── */
+    (function () {
+      var btn = document.getElementById('themeToggle');
+      function applyTheme(t) {
+        if (t === 'light') {
+          document.documentElement.classList.add('light');
+          btn.textContent = '🌙 Dark';
+        } else {
+          document.documentElement.classList.remove('light');
+          btn.textContent = '☀️ Light';
+        }
+        localStorage.setItem('theme', t);
+      }
+      applyTheme(localStorage.getItem('theme') || 'dark');
+      btn.addEventListener('click', function () {
+        applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+      });
+    })();
+
+    /* ── Sortable table ─────────────────────────────────── */
+    var _sortDir = {};
+    window.sortTable = function (colIdx) {
+      var tbl   = document.getElementById('state-table');
+      var tbody = tbl.tBodies[0];
+      var rows  = Array.from(tbody.rows);
+      var asc   = !_sortDir[colIdx];
+      _sortDir  = {};
+      _sortDir[colIdx] = asc;
+      rows.sort(function (a, b) {
+        var av = a.cells[colIdx].getAttribute('data-val') || '';
+        var bv = b.cells[colIdx].getAttribute('data-val') || '';
+        var an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+        return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+      });
+      rows.forEach(function (r) { tbody.appendChild(r); });
+      var ths = tbl.tHead.rows[1].cells;
+      for (var i = 0; i < ths.length; i++) {
+        ths[i].textContent = ths[i].textContent.replace(/ [▲▼]$/, '');
+      }
+      /* col-hdr starts at display col 1 (0-indexed from the second header row) */
+      var thIdx = colIdx - 1;
+      if (thIdx >= 0 && thIdx < ths.length) {
+        ths[thIdx].textContent += asc ? ' ▲' : ' ▼';
+      }
+    };
+
+    /* ── Chart toggle ───────────────────────────────────── */
+    var chartInit = false;
+    var chartData = {"labels": ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"], "cl_realtors": [23787, 15, 64995, 6339, 262106, 37623, 957, 7315, 263720, 83524, 9132, 9994, 61037, 23381, 4457, 10395, 14988, 17792, 7979, 42572, 44551, 50626, 27510, 8243, 30511, 1343, 281, 24593, 10832, 52005, 5974, 76811, 70905, 900, 46413, 18587, 18519, 51416, 8039, 23505, 210, 35751, 131953, 29, 1169, 48354, 7166, 3636, 19088, 19, 10086], "cl_tx": [602175, 12, 979747, 140816, 7176329, 1210285, 2554, 124231, 5205932, 1987374, 95061, 181639, 1289222, 639583, 150725, 141650, 448627, 393626, 157428, 661157, 640362, 1048965, 630974, 144002, 845626, 27918, 1184, 392439, 170587, 649668, 71429, 1145800, 1706839, 23339, 1169340, 399625, 371929, 989330, 83397, 333127, 2347, 695857, 2100143, 191, 64091, 1272323, 119138, 74867, 346639, 18, 67209], "zb_realtors": [24516, 2662, 23687, 12581, 74156, 35233, 21711, 6868, 81101, 29822, 8995, 15209, 25398, 23984, 10309, 14058, 16156, 17228, 7243, 37791, 39227, 43069, 18558, 8732, 34337, 5144, 6301, 21024, 9142, 52460, 9116, 28590, 33306, 2425, 42312, 16332, 20847, 51583, 7567, 32417, 2265, 43483, 152368, 5901, 1986, 44963, 43310, 5445, 21623, 2741, 8932], "zb_tx": [389564, 54398, 43478, 224973, 107275, 367262, 227979, 95011, 136531, 71434, 75061, 205077, 70338, 469756, 243917, 212399, 272628, 211898, 120506, 462123, 360288, 683025, 234381, 122478, 529611, 70542, 124140, 233848, 112620, 490452, 132551, 55447, 89542, 40156, 797801, 265274, 321727, 787824, 73163, 453415, 31040, 677448, 1738982, 51512, 54011, 542694, 600841, 87611, 395059, 31977, 48059]};
+
+    window.toggleView = function () {
+      var tw  = document.getElementById('table-wrap');
+      var cw  = document.getElementById('chart-wrap');
+      var btn = document.getElementById('chart-toggle');
+      var showChart = tw.style.display !== 'none';
+      tw.style.display  = showChart ? 'none' : '';
+      cw.style.display  = showChart ? '' : 'none';
+      btn.innerHTML = showChart ? '&#128203; Table' : '&#128202; Chart';
+      if (showChart && !chartInit) { chartInit = true; renderChart(); }
+    };
+
+    function renderChart() {
+      var canvas = document.getElementById('canvas-states');
+      if (!canvas) return;
+      var isLight = document.documentElement.classList.contains('light');
+      var txtClr  = isLight ? '#475569' : '#cbd5e1';
+      var gridClr = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
+      new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: [
+            { label: 'CoreLogic Realtors',     data: chartData.cl_realtors, backgroundColor: '#f59e0b', borderRadius: 3, maxBarThickness: 12 },
+            { label: 'CoreLogic Transactions',  data: chartData.cl_tx,       backgroundColor: '#fcd34d', borderRadius: 3, maxBarThickness: 12 },
+            { label: 'Zebra Realtors',          data: chartData.zb_realtors, backgroundColor: '#6366f1', borderRadius: 3, maxBarThickness: 12 },
+            { label: 'Zebra Transactions',      data: chartData.zb_tx,       backgroundColor: '#a5b4fc', borderRadius: 3, maxBarThickness: 12 }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, labels: { color: txtClr, font: { size: 12 } } },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return ctx.dataset.label + ': ' + ctx.parsed.x.toLocaleString();
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: txtClr, callback: function(v) { return v.toLocaleString(); } },
+              grid: { color: gridClr }
+            },
+            y: { ticks: { color: txtClr, font: { size: 11 } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

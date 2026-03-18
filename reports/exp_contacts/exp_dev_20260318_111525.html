@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exp — realtor_contacts_2 stats — dev — 20260318_111525</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-sep);
+      color: var(--bar-fill);
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+      user-select: none;
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    thead th.sortable { cursor: pointer; }
+    thead th.sortable:hover { background: var(--th-hover); }
+    thead th .sort-ind { font-size: 0.7rem; opacity: 0.5; margin-left: 4px; }
+    tbody.pinned td { border-bottom: 2px solid var(--bar-fill); font-weight: 600; }
+    tbody.pinned .label { color: var(--value-clr); }
+    tr.pinned-row td { background: var(--th-bg); }
+    tbody.metrics tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); width: 22%; }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; width: 12%; text-align: right; }
+    td.pct-cell { width: 18%; padding-right: 12px; }
+    td.example-cell { max-width: 42%; font-size: 0.8rem; line-height: 1.35; word-break: break-word; vertical-align: top; color: var(--value-clr); max-height: 8rem; overflow-y: auto; }
+    td.example-na, .example-empty { color: var(--pct-clr); font-style: italic; }
+    .pct { font-size: 0.78rem; color: var(--pct-clr); display: block; text-align: right; }
+    .bar-wrap { height: 4px; background: var(--bar-bg); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .bar { height: 100%; background: var(--bar-fill); border-radius: 2px; opacity: 0.85; }
+  </style>
+  <script>if(localStorage.getItem('exp_stats_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>Exp — realtor_contacts_2 stats</h1>
+    <div class="meta">Generated on 2026-03-18 11:15:25</div>
+    <div class="badge">ENV: dev</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <table id="statsTable">
+        <thead>
+          <tr>
+            <th class="sortable" data-key="label" data-type="str">Metric <span class="sort-ind"></span></th>
+            <th class="sortable num" data-key="count" data-type="num">Count <span class="sort-ind"></span></th>
+            <th class="sortable pct-h" data-key="pct" data-type="num">% of total <span class="sort-ind"></span></th>
+            <th class="sortable" data-key="example" data-type="exstr">Example (from DB) <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody class="pinned" id="tbPinned">
+
+      <tr class="pinned-row">
+        <td class="label">Total rows</td>
+        <td class="value">1,813,436</td>
+        <td class="pct-cell"><span class="pct">100.00%</span></td>
+        <td class="example-cell example-na">—</td>
+      </tr>
+        </tbody>
+        <tbody class="metrics" id="tbMetrics">
+
+      <tr class="metric-row" data-label="full_name_is_null" data-count="1" data-pct="0.000055" data-ex="Si5KLiBCYWxsZXc=">
+        <td class="label">full_name_is_null</td>
+        <td class="value">1</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="J.J. Ballew">J.J. Ballew</td>
+      </tr>
+      <tr class="metric-row" data-label="profile_url_is_null" data-count="0" data-pct="0.000000" data-ex="aHR0cHM6Ly93d3cuZXhwZXJpZW5jZS5jb20vcmV2aWV3cy9qai0xMjU5OTAyNQ==">
+        <td class="label">profile_url_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="https://www.experience.com/reviews/jj-12599025">https://www.experience.com/reviews/jj-12599025</td>
+      </tr>
+      <tr class="metric-row" data-label="first_name_is_null" data-count="976" data-pct="0.053820" data-ex="Si5KLg==">
+        <td class="label">first_name_is_null</td>
+        <td class="value">976</td>
+        <td class="pct-cell">
+          <span class="pct">0.05%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.05%"></div></div>
+        </td>
+        <td class="example-cell" title="J.J.">J.J.</td>
+      </tr>
+      <tr class="metric-row" data-label="last_name_is_null" data-count="976" data-pct="0.053820" data-ex="QmFsbGV3">
+        <td class="label">last_name_is_null</td>
+        <td class="value">976</td>
+        <td class="pct-cell">
+          <span class="pct">0.05%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.05%"></div></div>
+        </td>
+        <td class="example-cell" title="Ballew">Ballew</td>
+      </tr>
+      <tr class="metric-row" data-label="title_role_is_null" data-count="664273" data-pct="36.630628" data-ex="TGljZW5zZWQgUmVhbCBFc3RhdGUgQnJva2Vy">
+        <td class="label">title_role_is_null</td>
+        <td class="value">664,273</td>
+        <td class="pct-cell">
+          <span class="pct">36.63%</span>
+          <div class="bar-wrap"><div class="bar" style="width:36.63%"></div></div>
+        </td>
+        <td class="example-cell" title="Licensed Real Estate Broker">Licensed Real Estate Broker</td>
+      </tr>
+      <tr class="metric-row" data-label="company_is_null" data-count="355111" data-pct="19.582219" data-ex="WW91ciBDYXN0bGUgU2VydmljZXM=">
+        <td class="label">company_is_null</td>
+        <td class="value">355,111</td>
+        <td class="pct-cell">
+          <span class="pct">19.58%</span>
+          <div class="bar-wrap"><div class="bar" style="width:19.58%"></div></div>
+        </td>
+        <td class="example-cell" title="Your Castle Services">Your Castle Services</td>
+      </tr>
+      <tr class="metric-row" data-label="email_is_null" data-count="1813364" data-pct="99.996030" data-ex="QENpc25lcm9zUmVhbHR5R3JvdXA=">
+        <td class="label">email_is_null</td>
+        <td class="value">1,813,364</td>
+        <td class="pct-cell">
+          <span class="pct">100.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+        </td>
+        <td class="example-cell" title="@CisnerosRealtyGroup">@CisnerosRealtyGroup</td>
+      </tr>
+      <tr class="metric-row" data-label="phone_is_null" data-count="50705" data-pct="2.796073" data-ex="NzIwOTc1NDg2MA==">
+        <td class="label">phone_is_null</td>
+        <td class="value">50,705</td>
+        <td class="pct-cell">
+          <span class="pct">2.80%</span>
+          <div class="bar-wrap"><div class="bar" style="width:2.80%"></div></div>
+        </td>
+        <td class="example-cell" title="7209754860">7209754860</td>
+      </tr>
+      <tr class="metric-row" data-label="street_is_null" data-count="317633" data-pct="17.515534" data-ex="MTc3NyBTIEhhcnJpc29uIFN0">
+        <td class="label">street_is_null</td>
+        <td class="value">317,633</td>
+        <td class="pct-cell">
+          <span class="pct">17.52%</span>
+          <div class="bar-wrap"><div class="bar" style="width:17.52%"></div></div>
+        </td>
+        <td class="example-cell" title="1777 S Harrison St">1777 S Harrison St</td>
+      </tr>
+      <tr class="metric-row" data-label="city_is_null" data-count="255509" data-pct="14.089772" data-ex="RGVudmVy">
+        <td class="label">city_is_null</td>
+        <td class="value">255,509</td>
+        <td class="pct-cell">
+          <span class="pct">14.09%</span>
+          <div class="bar-wrap"><div class="bar" style="width:14.09%"></div></div>
+        </td>
+        <td class="example-cell" title="Denver">Denver</td>
+      </tr>
+      <tr class="metric-row" data-label="state_is_null" data-count="218453" data-pct="12.046358" data-ex="Q08=">
+        <td class="label">state_is_null</td>
+        <td class="value">218,453</td>
+        <td class="pct-cell">
+          <span class="pct">12.05%</span>
+          <div class="bar-wrap"><div class="bar" style="width:12.05%"></div></div>
+        </td>
+        <td class="example-cell" title="CO">CO</td>
+      </tr>
+      <tr class="metric-row" data-label="zip_is_null" data-count="323876" data-pct="17.859798" data-ex="ODAwMjc=">
+        <td class="label">zip_is_null</td>
+        <td class="value">323,876</td>
+        <td class="pct-cell">
+          <span class="pct">17.86%</span>
+          <div class="bar-wrap"><div class="bar" style="width:17.86%"></div></div>
+        </td>
+        <td class="example-cell" title="80027">80027</td>
+      </tr>
+      <tr class="metric-row" data-label="website_is_null" data-count="462646" data-pct="25.512122" data-ex="aHR0cDovL3d3dy5iZXN0aG91c2Vjb2xvcmFkby5jb20v">
+        <td class="label">website_is_null</td>
+        <td class="value">462,646</td>
+        <td class="pct-cell">
+          <span class="pct">25.51%</span>
+          <div class="bar-wrap"><div class="bar" style="width:25.51%"></div></div>
+        </td>
+        <td class="example-cell" title="http://www.besthousecolorado.com/">http://www.besthousecolorado.com/</td>
+      </tr>
+      <tr class="metric-row" data-label="description_is_null" data-count="5169" data-pct="0.285039" data-ex="TXkgdG9wIHByaW9yaXR5IGlzIHRvIGhlbHAgbXkgY2xpZW50cyByZWFjaCB0aGVpciBnb2FscyEgTXkgZ3JlYXRlc3Qgc2F0aXNmYWN0aW9uIGlzIHRvIGVhcm4gbXkgY2xpZW50cycgcmVmZXJyYWxzIGJlY2F1c2UgSSBoYXZlIG1hZGUgdGhlaXIgZXhwZXJpZW5jZSBlbmpveWFibGUsIHdvcnJ5LWZyZWUsIGFuZCBzZWFtbGVzcy4gICBVc2luZyBhbGwgYXZhaWxhYmxlIGxvY2FsIHJlYWwgZXN0YXRlIGRhdGEsIHRvcC1vZi10aGUtbGluZSB3ZWIgdG9vbHMgYW5kIG1hcmtldGluZywgYWxvbmcgd2l0aCBhIGZyaWVuZGx5IHBlcnNvbmFsIHRvdWNoLCBJIHdpbGwgbWFrZSBidXlpbmcgb3Igc2VsbGluZyBhIGhvbWUgZXhjaXRpbmcgYW5kIHNhdGlzZnlpbmchICBDYWxsIG9yIGVtYWlsIG1lIHRvZGF5IGFuZCBsZXQncyBnZXQgc3RhcnRlZCEgICAgSi5KLiBCYWxsZXcgQnJva2VyIEFzc29jaWF0ZSwgWW91ciBDYXN0bGUgUmVhbHR5ICAgNzIwLTk3NS00ODYwLCBqamJAeW8uLi4=">
+        <td class="label">description_is_null</td>
+        <td class="value">5,169</td>
+        <td class="pct-cell">
+          <span class="pct">0.29%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.29%"></div></div>
+        </td>
+        <td class="example-cell" title="My top priority is to help my clients reach their goals! My greatest satisfaction is to earn my clients&#x27; referrals because I have made their experience enjoyable, worry-free, and seamless.   Using all available local real estate data, top-of-the-line web tools and marketing, along with a friendly personal touch, I will make buying or selling a home exciting and satisfying!  Call or email me today and let&#x27;s get started!    J.J. Ballew Broker Associate, Your Castle Realty   720-975-4860, jjb@yo...">My top priority is to help my clients reach their goals! My greatest satisfaction is to earn my clients&#x27; referrals because I have made their experience enjoyable, worry-free, and seamless.   Using all available local real estate data, top-of-the-line web tools and marketing, along with a friendly personal touch, I will make buying or selling a home exciting and satisfying!  Call or email me today and let&#x27;s get started!    J.J. Ballew Broker Associate, Your Castle Realty   720-975-4860, jjb@yo...</td>
+      </tr>
+      <tr class="metric-row" data-label="facebook_url_is_null" data-count="1284016" data-pct="70.805697" data-ex="aHR0cDovL3d3dy5mYWNlYm9vay5jb20vU2FuZHlIYXlmb3Jk">
+        <td class="label">facebook_url_is_null</td>
+        <td class="value">1,284,016</td>
+        <td class="pct-cell">
+          <span class="pct">70.81%</span>
+          <div class="bar-wrap"><div class="bar" style="width:70.81%"></div></div>
+        </td>
+        <td class="example-cell" title="http://www.facebook.com/SandyHayford">http://www.facebook.com/SandyHayford</td>
+      </tr>
+      <tr class="metric-row" data-label="instagram_url_is_null" data-count="1672603" data-pct="92.233914" data-ex="aHR0cHM6Ly9pbnN0YWdyYW0uY29tL21hcmdhcmV0bGFidXM/aWdzaGlkPTEwYnBkcWh2cm5yd3Q=">
+        <td class="label">instagram_url_is_null</td>
+        <td class="value">1,672,603</td>
+        <td class="pct-cell">
+          <span class="pct">92.23%</span>
+          <div class="bar-wrap"><div class="bar" style="width:92.23%"></div></div>
+        </td>
+        <td class="example-cell" title="https://instagram.com/margaretlabus?igshid=10bpdqhvrnrwt">https://instagram.com/margaretlabus?igshid=10bpdqhvrnrwt</td>
+      </tr>
+      <tr class="metric-row" data-label="linkedin_url_is_null" data-count="1524435" data-pct="84.063347" data-ex="aHR0cDovL3d3dy5saW5rZWRpbi5jb20vcHViL21hcmdhcmV0LWxhYnVzLzYvMjgyL2I0NS8=">
+        <td class="label">linkedin_url_is_null</td>
+        <td class="value">1,524,435</td>
+        <td class="pct-cell">
+          <span class="pct">84.06%</span>
+          <div class="bar-wrap"><div class="bar" style="width:84.06%"></div></div>
+        </td>
+        <td class="example-cell" title="http://www.linkedin.com/pub/margaret-labus/6/282/b45/">http://www.linkedin.com/pub/margaret-labus/6/282/b45/</td>
+      </tr>
+      <tr class="metric-row" data-label="twitter_url_is_null" data-count="1649013" data-pct="90.933068" data-ex="aHR0cDovL3R3aXR0ZXIuY29tL0dXU3RpY2tuZXk=">
+        <td class="label">twitter_url_is_null</td>
+        <td class="value">1,649,013</td>
+        <td class="pct-cell">
+          <span class="pct">90.93%</span>
+          <div class="bar-wrap"><div class="bar" style="width:90.93%"></div></div>
+        </td>
+        <td class="example-cell" title="http://twitter.com/GWStickney">http://twitter.com/GWStickney</td>
+      </tr>
+      <tr class="metric-row" data-label="photo_url_is_null" data-count="437280" data-pct="24.113341" data-ex="aHR0cHM6Ly9zY3JhcC5leHBlcmllbmNlLmNvbS9QUk9ELzEyNTk5MDI1LzEyNTk5MDI1X2Rpc3BsYXlwaWMuanBn">
+        <td class="label">photo_url_is_null</td>
+        <td class="value">437,280</td>
+        <td class="pct-cell">
+          <span class="pct">24.11%</span>
+          <div class="bar-wrap"><div class="bar" style="width:24.11%"></div></div>
+        </td>
+        <td class="example-cell" title="https://scrap.experience.com/PROD/12599025/12599025_displaypic.jpg">https://scrap.experience.com/PROD/12599025/12599025_displaypic.jpg</td>
+      </tr>
+      <tr class="metric-row" data-label="rating_eq_0" data-count="1570168" data-pct="86.585245" data-ex="NS4wMA==">
+        <td class="label">rating_eq_0</td>
+        <td class="value">1,570,168</td>
+        <td class="pct-cell">
+          <span class="pct">86.59%</span>
+          <div class="bar-wrap"><div class="bar" style="width:86.59%"></div></div>
+        </td>
+        <td class="example-cell" title="5.00">5.00</td>
+      </tr>
+      <tr class="metric-row" data-label="total_reviews_eq_0" data-count="1569086" data-pct="86.525579" data-ex="Ng==">
+        <td class="label">total_reviews_eq_0</td>
+        <td class="value">1,569,086</td>
+        <td class="pct-cell">
+          <span class="pct">86.53%</span>
+          <div class="bar-wrap"><div class="bar" style="width:86.53%"></div></div>
+        </td>
+        <td class="example-cell" title="6">6</td>
+      </tr>
+      <tr class="metric-row" data-label="license_number_is_null" data-count="817922" data-pct="45.103439" data-ex="MTAwMDY3Mzk5">
+        <td class="label">license_number_is_null</td>
+        <td class="value">817,922</td>
+        <td class="pct-cell">
+          <span class="pct">45.10%</span>
+          <div class="bar-wrap"><div class="bar" style="width:45.10%"></div></div>
+        </td>
+        <td class="example-cell" title="100067399">100067399</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('exp_stats_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () {
+    applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+  });
+
+  var sortState = { key: null, dir: 1 };
+  var tb = document.getElementById('tbMetrics');
+  var headers = document.querySelectorAll('#statsTable thead th.sortable');
+
+  function b64ToUtf8(b64) {
+    if (!b64 || !b64.length) return '';
+    try {
+      return decodeURIComponent(Array.prototype.map.call(atob(b64), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+    } catch (e) { return ''; }
+  }
+  function escHtml(s) {
+    if (!s) return '<span class="example-empty">(no sample)</span>';
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function escAttr(s) {
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  function rowHtml(tr) {
+    var label = tr.getAttribute('data-label') || '';
+    var count = parseInt(tr.getAttribute('data-count'), 10);
+    var pct = parseFloat(tr.getAttribute('data-pct'));
+    var exB64 = tr.getAttribute('data-ex') || '';
+    var exText = b64ToUtf8(exB64);
+    var pctDisp = pct.toFixed(2);
+    var w = Math.min(pct, 100);
+    var title = exText ? ' title="' + escAttr(exText.length > 800 ? exText.slice(0, 800) : exText) + '"' : '';
+    return '<tr class="metric-row" data-label="' + label.replace(/"/g, '&quot;') + '" data-count="' + count + '" data-pct="' + pct + '" data-ex="' + exB64.replace(/"/g, '&quot;') + '">' +
+      '<td class="label">' + label + '</td>' +
+      '<td class="value">' + count.toLocaleString() + '</td>' +
+      '<td class="pct-cell"><span class="pct">' + pctDisp + '%</span>' +
+      '<div class="bar-wrap"><div class="bar" style="width:' + w + '%"></div></div></td>' +
+      '<td class="example-cell"' + title + '>' + escHtml(exText) + '</td></tr>';
+  }
+
+  function sortBy(key, type) {
+    if (sortState.key === key) sortState.dir = -sortState.dir;
+    else { sortState.key = key; sortState.dir = 1; }
+    var rows = Array.prototype.slice.call(tb.querySelectorAll('tr.metric-row'));
+    rows.sort(function (a, b) {
+      var va, vb;
+      if (key === 'label') {
+        va = (a.getAttribute('data-label') || '').toLowerCase();
+        vb = (b.getAttribute('data-label') || '').toLowerCase();
+        return va < vb ? -sortState.dir : va > vb ? sortState.dir : 0;
+      }
+      if (key === 'count') {
+        va = parseInt(a.getAttribute('data-count'), 10);
+        vb = parseInt(b.getAttribute('data-count'), 10);
+        return (va - vb) * sortState.dir;
+      }
+      if (key === 'example') {
+        va = b64ToUtf8(a.getAttribute('data-ex') || '');
+        vb = b64ToUtf8(b.getAttribute('data-ex') || '');
+        return va.localeCompare(vb, undefined, { sensitivity: 'base' }) * sortState.dir;
+      }
+      va = parseFloat(a.getAttribute('data-pct'));
+      vb = parseFloat(b.getAttribute('data-pct'));
+      return (va - vb) * sortState.dir;
+    });
+    tb.innerHTML = rows.map(rowHtml).join('');
+    headers.forEach(function (th) {
+      var ind = th.querySelector('.sort-ind');
+      if (th.getAttribute('data-key') === sortState.key)
+        ind.textContent = sortState.dir > 0 ? '▲' : '▼';
+      else
+        ind.textContent = '';
+    });
+  }
+
+  headers.forEach(function (th) {
+    th.addEventListener('click', function () {
+      sortBy(th.getAttribute('data-key'), th.getAttribute('data-type'));
+    });
+  });
+})();
+  </script>
+</body>
+</html>

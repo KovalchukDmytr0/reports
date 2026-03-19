@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pre Mover Comparison — SmartZip vs PropertyReach — 2026-03-19 13:36:33</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .states { margin-top: 8px; font-size: 0.85rem; color: var(--label-clr); max-width: 800px; margin-left: auto; margin-right: auto; }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block { margin-bottom: 24px; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px var(--shadow); }
+    .block h2 { padding: 14px 20px; font-size: 1rem; font-weight: 600; color: var(--label-clr); background: var(--th-bg); border-bottom: 1px solid var(--card-sep); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+    td.pct-cell { color: var(--pct-clr); font-size: 0.85rem; text-align: right; }
+    td.example-cell { font-size: 0.8rem; line-height: 1.4; word-break: break-word; color: var(--value-clr); max-width: 420px; }
+    tr.highlight-row td { background: var(--row-alt); border-top: 1px solid var(--card-sep); }
+    tr.red-row td { background: #7f1d1d !important; color: #fecaca; border-top: 1px solid #b91c1c; }
+    table.red-table tbody tr td { background: #7f1d1d !important; color: #fecaca; }
+    table.red-table tbody tr:nth-child(even) td { background: #991b1b !important; color: #fecaca; }
+    :root.light tr.red-row td { background: #fef2f2 !important; color: #991b1b; border-top: 1px solid #fecaca; }
+    :root.light table.red-table tbody tr td { background: #fef2f2 !important; color: #991b1b; }
+    :root.light table.red-table tbody tr:nth-child(even) td { background: #fee2e2 !important; color: #991b1b; }
+  </style>
+  <script>if(localStorage.getItem('pre_mover_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>Pre Mover: SmartZip vs PropertyReach</h1>
+    <div class="meta">Generated 2026-03-19 13:36:33 · Total records: 693</div>
+    <div class="states">States: AK, AL, AR, AZ, CA, CO, CT</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <h2>Overall — Loaded / Not loaded</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">693</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded SmartZip</td><td class="value">343</td><td class="pct-cell">49.49%</td></tr>
+      <tr><td class="label">Not loaded SmartZip</td><td class="value">350</td><td class="pct-cell">50.51%</td></tr>
+      <tr class="highlight-row"><td class="label">Likely to sell (SmartZip score &gt; 70)</td><td class="value">219</td><td class="pct-cell">31.60% of total · 63.85% of SmartZip loaded</td></tr>
+      <tr><td class="label">Loaded PropertyReach</td><td class="value">364</td><td class="pct-cell">52.53%</td></tr>
+      <tr><td class="label">Not loaded PropertyReach</td><td class="value">329</td><td class="pct-cell">47.47%</td></tr>
+      <tr class="highlight-row red-row"><td class="label">Likely to sell (PropertyReach score &gt; 70)</td><td class="value">7</td><td class="pct-cell">1.01% of total · 1.92% of PropertyReach loaded</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Per state</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>State</th>
+            <th class="num">Total</th>
+            <th class="num">SZ loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">SZ not</th>
+            <th class="pct-h">%</th>
+            <th class="num">PR loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">PR not</th>
+            <th class="pct-h">%</th>
+            <th class="num">Both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">AK</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+      </tr>
+
+      <tr>
+        <td class="label">AL</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">72</td>
+        <td class="pct-cell">72.00%</td>
+        <td class="value">28</td>
+        <td class="pct-cell">28.00%</td>
+        <td class="value">40</td>
+      </tr>
+
+      <tr>
+        <td class="label">AR</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">82</td>
+        <td class="pct-cell">82.00%</td>
+        <td class="value">18</td>
+        <td class="pct-cell">18.00%</td>
+        <td class="value">45</td>
+      </tr>
+
+      <tr>
+        <td class="label">AZ</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">18</td>
+        <td class="pct-cell">18.00%</td>
+        <td class="value">82</td>
+        <td class="pct-cell">82.00%</td>
+        <td class="value">9</td>
+      </tr>
+
+      <tr>
+        <td class="label">CA</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">69</td>
+        <td class="pct-cell">69.00%</td>
+        <td class="value">31</td>
+        <td class="pct-cell">31.00%</td>
+        <td class="value">39</td>
+      </tr>
+
+      <tr>
+        <td class="label">CO</td>
+        <td class="value">100</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">63</td>
+        <td class="pct-cell">63.00%</td>
+        <td class="value">37</td>
+        <td class="pct-cell">37.00%</td>
+        <td class="value">37</td>
+      </tr>
+
+      <tr>
+        <td class="label">CT</td>
+        <td class="value">93</td>
+        <td class="value">43</td>
+        <td class="pct-cell">46.24%</td>
+        <td class="value">50</td>
+        <td class="pct-cell">53.76%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">64.52%</td>
+        <td class="value">33</td>
+        <td class="pct-cell">35.48%</td>
+        <td class="value">33</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Value comparison (both loaded only, n=203)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% of both loaded</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">4</td>
+        <td class="pct-cell">0.58%</td>
+        <td class="pct-cell">1.97%</td>
+        <td class="example-cell">9454 Vintner Cir, Patterson, CA 95363 | CA | SmartZip raw=925 → norm=92 | PropertyReach=85 | diff=7.6%<br>23004 Via Nuez, Mission Viejo, CA 92691 | CA | SmartZip raw=757 → norm=76 | PropertyReach=85 | diff=10.6%<br>6 Fawn Ridge, Woodstock, CT 06281 | CT | SmartZip raw=587 → norm=59 | PropertyReach=61 | diff=3.3%<br>162 Center Street, Thompson, CT 06277 | CT | SmartZip raw=579 → norm=58 | PropertyReach=52 | diff=10.3%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">0.29%</td>
+        <td class="pct-cell">0.99%</td>
+        <td class="example-cell">1740 Colorado Avenue, Turlock, CA 95382 | CA | SmartZip raw=637 → norm=64 | PropertyReach=85 | diff=24.7%<br>20 Ridgewood Road, East Hartford, CT 06118 | CT | SmartZip raw=483 → norm=48 | PropertyReach=34 | diff=29.2%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">0.29%</td>
+        <td class="pct-cell">0.99%</td>
+        <td class="example-cell">37 Griggers Ln, Conway, AR 72032 | AR | SmartZip raw=645 → norm=64 | PropertyReach=35 | diff=45.3%<br>16 Parker Road, Marlborough, CT 06447 | CT | SmartZip raw=549 → norm=55 | PropertyReach=28 | diff=49.1%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">14</td>
+        <td class="pct-cell">2.02%</td>
+        <td class="pct-cell">6.90%</td>
+        <td class="example-cell">93 Islay Dr, Bella Vista, AR 72715 | AR | SmartZip raw=777 → norm=78 | PropertyReach=16 | diff=79.5%<br>11427 Quail Rd, Rogers, AR 72756 | AR | SmartZip raw=790 → norm=79 | PropertyReach=25 | diff=68.4%<br>2200 Nw Turner Dr, Bentonville, AR 72712 | AR | SmartZip raw=537 → norm=54 | PropertyReach=13 | diff=75.9%<br>78 Linam Lane, Dover, AR 72837 | AR | SmartZip raw=781 → norm=78 | PropertyReach=27 | diff=65.4%<br>716 Homestead Street, Lafayette, CO 80026 | CO | SmartZip raw=694 → norm=69 | PropertyReach=19 | diff=72.5%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">181</td>
+        <td class="pct-cell">26.12%</td>
+        <td class="pct-cell">89.16%</td>
+        <td class="example-cell">4845 Crystal Cir, Hoover, AL 35226 | AL | SmartZip raw=715 → norm=72 | PropertyReach=3 | diff=95.8%<br>172 Chase Creek Circle, Pelham, AL 35124 | AL | SmartZip raw=869 → norm=87 | PropertyReach=7 | diff=92.0%<br>117 Sugar Hill Lane, Alabaster, AL 35007 | AL | SmartZip raw=827 → norm=83 | PropertyReach=6 | diff=92.8%<br>3621 Haven View Circle, Hoover, AL 35216 | AL | SmartZip raw=749 → norm=75 | PropertyReach=13 | diff=82.7%<br>340 Ashville Circle, Montevallo, AL 35115 | AL | SmartZip raw=896 → norm=90 | PropertyReach=3 | diff=96.7%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Top 5 most popular values (records where both sources loaded)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Most frequent score values per source among records that have both SmartZip and PropertyReach loaded.</p>
+      <table>
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">SmartZip (norm)</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">85</td>
+        <td class="value">12</td>
+        <td class="pct-cell">5.91%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">78</td>
+        <td class="value">10</td>
+        <td class="pct-cell">4.93%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">76</td>
+        <td class="value">9</td>
+        <td class="pct-cell">4.43%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">83</td>
+        <td class="value">8</td>
+        <td class="pct-cell">3.94%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">74</td>
+        <td class="value">8</td>
+        <td class="pct-cell">3.94%</td>
+      </tr>
+        </tbody>
+      </table>
+      <table class="red-table" style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">PropertyReach</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">1</td>
+        <td class="value">68</td>
+        <td class="pct-cell">33.50%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">2</td>
+        <td class="value">25</td>
+        <td class="pct-cell">12.32%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="value">16</td>
+        <td class="pct-cell">7.88%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">7</td>
+        <td class="value">13</td>
+        <td class="pct-cell">6.40%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">4</td>
+        <td class="value">12</td>
+        <td class="pct-cell">5.91%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('pre_mover_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () { applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light'); });
+})();
+  </script>
+</body>
+</html>

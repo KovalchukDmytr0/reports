@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pre Mover Comparison — pre_mover_score vs prop_pulse_score — 2026-03-25 19:23:02</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .states { margin-top: 8px; font-size: 0.85rem; color: var(--label-clr); max-width: 800px; margin-left: auto; margin-right: auto; }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block { margin-bottom: 24px; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px var(--shadow); }
+    .block h2 { padding: 14px 20px; font-size: 1rem; font-weight: 600; color: var(--label-clr); background: var(--th-bg); border-bottom: 1px solid var(--card-sep); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+    td.pct-cell { color: var(--pct-clr); font-size: 0.85rem; text-align: right; }
+    td.example-cell { font-size: 0.8rem; line-height: 1.4; word-break: break-word; color: var(--value-clr); max-width: 420px; }
+    tr.highlight-row td { background: var(--row-alt); border-top: 1px solid var(--card-sep); }
+    tr.red-row td { background: #7f1d1d !important; color: #fecaca; border-top: 1px solid #b91c1c; }
+    table.red-table tbody tr td { background: #7f1d1d !important; color: #fecaca; }
+    table.red-table tbody tr:nth-child(even) td { background: #991b1b !important; color: #fecaca; }
+    :root.light tr.red-row td { background: #fef2f2 !important; color: #991b1b; border-top: 1px solid #fecaca; }
+    :root.light table.red-table tbody tr td { background: #fef2f2 !important; color: #991b1b; }
+    :root.light table.red-table tbody tr:nth-child(even) td { background: #fee2e2 !important; color: #991b1b; }
+  </style>
+  <script>if(localStorage.getItem('pre_mover_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>Pre Mover: pre_mover_score (SmartZip) vs prop_pulse_score (PropertyReach)</h1>
+    <div class="meta">Generated 2026-03-25 19:23:02 · Total records: 5,000</div>
+    <div class="states">States: AK, AL, AR, AZ, CA, CO, CT, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA, MD, ME, MI, MN, MO, MS, MT, NC, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, RI, SC, TN, TX, UT, VA, WA, WI, WV, WY</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <h2>Overall — Loaded / Not loaded</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded pre_mover_score (SmartZip)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded pre_mover_score</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr class="highlight-row"><td class="label">Likely to sell (pre_mover norm &gt; 70)</td><td class="value">3,156</td><td class="pct-cell">63.12% of total · 63.12% of pre_mover loaded</td></tr>
+      <tr><td class="label">Loaded prop_pulse_score (PropertyReach)</td><td class="value">3,729</td><td class="pct-cell">74.58%</td></tr>
+      <tr><td class="label">Not loaded prop_pulse_score</td><td class="value">1,271</td><td class="pct-cell">25.42%</td></tr>
+      <tr class="highlight-row red-row"><td class="label">Likely to sell (prop_pulse_score &gt; 70)</td><td class="value">53</td><td class="pct-cell">1.06% of total · 1.42% of prop_pulse loaded</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Per state</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>State</th>
+            <th class="num">Total</th>
+            <th class="num">pre_mover loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">pre_mover not</th>
+            <th class="pct-h">%</th>
+            <th class="num">prop_pulse loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">prop_pulse not</th>
+            <th class="pct-h">%</th>
+            <th class="num">Both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">AK</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">2</td>
+      </tr>
+
+      <tr>
+        <td class="label">AL</td>
+        <td class="value">22</td>
+        <td class="value">22</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">18</td>
+        <td class="pct-cell">81.82%</td>
+        <td class="value">4</td>
+        <td class="pct-cell">18.18%</td>
+        <td class="value">18</td>
+      </tr>
+
+      <tr>
+        <td class="label">AR</td>
+        <td class="value">30</td>
+        <td class="value">30</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">28</td>
+        <td class="pct-cell">93.33%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">6.67%</td>
+        <td class="value">28</td>
+      </tr>
+
+      <tr>
+        <td class="label">AZ</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">12.00%</td>
+        <td class="value">88</td>
+        <td class="pct-cell">88.00%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">CA</td>
+        <td class="value">1,908</td>
+        <td class="value">1,908</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">1,573</td>
+        <td class="pct-cell">82.44%</td>
+        <td class="value">335</td>
+        <td class="pct-cell">17.56%</td>
+        <td class="value">1,573</td>
+      </tr>
+
+      <tr>
+        <td class="label">CO</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">59</td>
+        <td class="pct-cell">59.00%</td>
+        <td class="value">41</td>
+        <td class="pct-cell">41.00%</td>
+        <td class="value">59</td>
+      </tr>
+
+      <tr>
+        <td class="label">CT</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">93</td>
+        <td class="pct-cell">93.00%</td>
+        <td class="value">7</td>
+        <td class="pct-cell">7.00%</td>
+        <td class="value">93</td>
+      </tr>
+
+      <tr>
+        <td class="label">DE</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">81</td>
+        <td class="pct-cell">81.00%</td>
+        <td class="value">19</td>
+        <td class="pct-cell">19.00%</td>
+        <td class="value">81</td>
+      </tr>
+
+      <tr>
+        <td class="label">FL</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">90</td>
+        <td class="pct-cell">90.00%</td>
+        <td class="value">10</td>
+        <td class="pct-cell">10.00%</td>
+        <td class="value">90</td>
+      </tr>
+
+      <tr>
+        <td class="label">GA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">80</td>
+        <td class="pct-cell">80.00%</td>
+        <td class="value">20</td>
+        <td class="pct-cell">20.00%</td>
+        <td class="value">80</td>
+      </tr>
+
+      <tr>
+        <td class="label">HI</td>
+        <td class="value">7</td>
+        <td class="value">7</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">85.71%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">14.29%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">IA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">47</td>
+        <td class="pct-cell">47.00%</td>
+        <td class="value">53</td>
+        <td class="pct-cell">53.00%</td>
+        <td class="value">47</td>
+      </tr>
+
+      <tr>
+        <td class="label">ID</td>
+        <td class="value">36</td>
+        <td class="value">36</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">24</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">IL</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">60.00%</td>
+        <td class="value">40</td>
+        <td class="pct-cell">40.00%</td>
+        <td class="value">60</td>
+      </tr>
+
+      <tr>
+        <td class="label">IN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">89</td>
+        <td class="pct-cell">89.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">11.00%</td>
+        <td class="value">89</td>
+      </tr>
+
+      <tr>
+        <td class="label">KS</td>
+        <td class="value">17</td>
+        <td class="value">17</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">64.71%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">35.29%</td>
+        <td class="value">11</td>
+      </tr>
+
+      <tr>
+        <td class="label">KY</td>
+        <td class="value">79</td>
+        <td class="value">79</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">71</td>
+        <td class="pct-cell">89.87%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">10.13%</td>
+        <td class="value">71</td>
+      </tr>
+
+      <tr>
+        <td class="label">LA</td>
+        <td class="value">16</td>
+        <td class="value">16</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">15</td>
+        <td class="pct-cell">93.75%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">6.25%</td>
+        <td class="value">15</td>
+      </tr>
+
+      <tr>
+        <td class="label">MA</td>
+        <td class="value">39</td>
+        <td class="value">39</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">37</td>
+        <td class="pct-cell">94.87%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">5.13%</td>
+        <td class="value">37</td>
+      </tr>
+
+      <tr>
+        <td class="label">MD</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">92</td>
+        <td class="pct-cell">92.00%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">8.00%</td>
+        <td class="value">92</td>
+      </tr>
+
+      <tr>
+        <td class="label">ME</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">2</td>
+      </tr>
+
+      <tr>
+        <td class="label">MI</td>
+        <td class="value">95</td>
+        <td class="value">95</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">74</td>
+        <td class="pct-cell">77.89%</td>
+        <td class="value">21</td>
+        <td class="pct-cell">22.11%</td>
+        <td class="value">74</td>
+      </tr>
+
+      <tr>
+        <td class="label">MN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">59</td>
+        <td class="pct-cell">59.00%</td>
+        <td class="value">41</td>
+        <td class="pct-cell">41.00%</td>
+        <td class="value">59</td>
+      </tr>
+
+      <tr>
+        <td class="label">MO</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">47</td>
+        <td class="pct-cell">47.00%</td>
+        <td class="value">53</td>
+        <td class="pct-cell">53.00%</td>
+        <td class="value">47</td>
+      </tr>
+
+      <tr>
+        <td class="label">MS</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">3</td>
+      </tr>
+
+      <tr>
+        <td class="label">MT</td>
+        <td class="value">6</td>
+        <td class="value">6</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">83.33%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">16.67%</td>
+        <td class="value">5</td>
+      </tr>
+
+      <tr>
+        <td class="label">NC</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">95</td>
+        <td class="pct-cell">95.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">5.00%</td>
+        <td class="value">95</td>
+      </tr>
+
+      <tr>
+        <td class="label">NE</td>
+        <td class="value">12</td>
+        <td class="value">12</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">NH</td>
+        <td class="value">40</td>
+        <td class="value">40</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">38</td>
+        <td class="pct-cell">95.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">5.00%</td>
+        <td class="value">38</td>
+      </tr>
+
+      <tr>
+        <td class="label">NJ</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">93</td>
+        <td class="pct-cell">93.00%</td>
+        <td class="value">7</td>
+        <td class="pct-cell">7.00%</td>
+        <td class="value">93</td>
+      </tr>
+
+      <tr>
+        <td class="label">NM</td>
+        <td class="value">7</td>
+        <td class="value">7</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">85.71%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">14.29%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">NV</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">83</td>
+        <td class="pct-cell">83.00%</td>
+        <td class="value">17</td>
+        <td class="pct-cell">17.00%</td>
+        <td class="value">83</td>
+      </tr>
+
+      <tr>
+        <td class="label">NY</td>
+        <td class="value">80</td>
+        <td class="value">80</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">75.00%</td>
+        <td class="value">20</td>
+        <td class="pct-cell">25.00%</td>
+        <td class="value">60</td>
+      </tr>
+
+      <tr>
+        <td class="label">OH</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">90</td>
+        <td class="pct-cell">90.00%</td>
+        <td class="value">10</td>
+        <td class="pct-cell">10.00%</td>
+        <td class="value">90</td>
+      </tr>
+
+      <tr>
+        <td class="label">OK</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">48</td>
+        <td class="pct-cell">48.00%</td>
+        <td class="value">52</td>
+        <td class="pct-cell">52.00%</td>
+        <td class="value">48</td>
+      </tr>
+
+      <tr>
+        <td class="label">OR</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">49</td>
+        <td class="pct-cell">49.00%</td>
+        <td class="value">51</td>
+        <td class="pct-cell">51.00%</td>
+        <td class="value">49</td>
+      </tr>
+
+      <tr>
+        <td class="label">PA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">77</td>
+        <td class="pct-cell">77.00%</td>
+        <td class="value">23</td>
+        <td class="pct-cell">23.00%</td>
+        <td class="value">77</td>
+      </tr>
+
+      <tr>
+        <td class="label">RI</td>
+        <td class="value">5</td>
+        <td class="value">5</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+      </tr>
+
+      <tr>
+        <td class="label">SC</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">89</td>
+        <td class="pct-cell">89.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">11.00%</td>
+        <td class="value">89</td>
+      </tr>
+
+      <tr>
+        <td class="label">TN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">86</td>
+        <td class="pct-cell">86.00%</td>
+        <td class="value">14</td>
+        <td class="pct-cell">14.00%</td>
+        <td class="value">86</td>
+      </tr>
+
+      <tr>
+        <td class="label">TX</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">88</td>
+        <td class="pct-cell">88.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">12.00%</td>
+        <td class="value">88</td>
+      </tr>
+
+      <tr>
+        <td class="label">UT</td>
+        <td class="value">76</td>
+        <td class="value">76</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">15.79%</td>
+        <td class="value">64</td>
+        <td class="pct-cell">84.21%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">VA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">79</td>
+        <td class="pct-cell">79.00%</td>
+        <td class="value">21</td>
+        <td class="pct-cell">21.00%</td>
+        <td class="value">79</td>
+      </tr>
+
+      <tr>
+        <td class="label">WA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">8.00%</td>
+        <td class="value">92</td>
+        <td class="pct-cell">92.00%</td>
+        <td class="value">8</td>
+      </tr>
+
+      <tr>
+        <td class="label">WI</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">40</td>
+        <td class="pct-cell">40.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">60.00%</td>
+        <td class="value">40</td>
+      </tr>
+
+      <tr>
+        <td class="label">WV</td>
+        <td class="value">8</td>
+        <td class="value">8</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">75.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">25.00%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">WY</td>
+        <td class="value">8</td>
+        <td class="value">8</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">62.50%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">37.50%</td>
+        <td class="value">5</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Value comparison (both loaded only, n=3,729)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% of both loaded</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">41</td>
+        <td class="pct-cell">0.82%</td>
+        <td class="pct-cell">1.10%</td>
+        <td class="example-cell">201 Oleander Avenue, Bakersfield, CA 93304 | CA | pre_mover raw=787 → norm=79 | prop_pulse=85 | diff=7.1%<br>4180 Louisiana Street, San Diego, CA 92104 | CA | pre_mover raw=733 → norm=73 | prop_pulse=85 | diff=14.1%<br>14 Elizabeth Dr, Bella Vista, AR 72715 | AR | pre_mover raw=769 → norm=77 | prop_pulse=87 | diff=11.5%<br>305 Southridge Pl, Longmont, CO 80501 | CO | pre_mover raw=792 → norm=79 | prop_pulse=87 | diff=9.2%<br>3255 Champions Drive, Wilmington, DE 19808 | DE | pre_mover raw=669 → norm=67 | prop_pulse=75 | diff=10.7%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">13</td>
+        <td class="pct-cell">0.26%</td>
+        <td class="pct-cell">0.35%</td>
+        <td class="example-cell">205 Winterberry Way, Enterprise, AL 36330 | AL | pre_mover raw=678 → norm=68 | prop_pulse=85 | diff=20.0%<br>330 Savin Avenue, West Haven, CT 06516 | CT | pre_mover raw=896 → norm=90 | prop_pulse=70 | diff=22.2%<br>3164 Burdock Avenue, Melbourne, FL 32904 | FL | pre_mover raw=383 → norm=38 | prop_pulse=27 | diff=28.9%<br>5005 Green Clover Avenue, Bakersfield, CA 93313 | CA | pre_mover raw=702 → norm=70 | prop_pulse=85 | diff=17.6%<br>23461 Williamsburg Circle, Woodhaven, MI 48183 | MI | pre_mover raw=635 → norm=64 | prop_pulse=86 | diff=25.6%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">30</td>
+        <td class="pct-cell">0.60%</td>
+        <td class="pct-cell">0.80%</td>
+        <td class="example-cell">805 4th Street, Douglas, AK 99824 | AK | pre_mover raw=423 → norm=42 | prop_pulse=80 | diff=47.5%<br>46 Fieldstone Lane, Coventry, CT 06238 | CT | pre_mover raw=706 → norm=71 | prop_pulse=38 | diff=46.5%<br>43 Sims Road, East Haddam, CT 06423 | CT | pre_mover raw=663 → norm=66 | prop_pulse=40 | diff=39.4%<br>40 Tarragon Drive, East Hampton, CT 06424 | CT | pre_mover raw=504 → norm=50 | prop_pulse=29 | diff=42.0%<br>1726 New London Turnpike, Glastonbury, CT 06033 | CT | pre_mover raw=359 → norm=36 | prop_pulse=20 | diff=44.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">143</td>
+        <td class="pct-cell">2.86%</td>
+        <td class="pct-cell">3.83%</td>
+        <td class="example-cell">2107 Hamilton Place Street, Opelika, AL 36801 | AL | pre_mover raw=679 → norm=68 | prop_pulse=15 | diff=77.9%<br>3491 Wildewood Drive, Pelham, AL 35124 | AL | pre_mover raw=680 → norm=68 | prop_pulse=14 | diff=79.4%<br>2045 Wood Tree Ct, Siloam Springs, AR 72761 | AR | pre_mover raw=646 → norm=65 | prop_pulse=19 | diff=70.8%<br>703 Atlanta St Se, Gravette, AR 72736 | AR | pre_mover raw=639 → norm=64 | prop_pulse=13 | diff=79.7%<br>28 Pimlico Dr, Bella Vista, AR 72715 | AR | pre_mover raw=782 → norm=78 | prop_pulse=16 | diff=79.5%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">3,502</td>
+        <td class="pct-cell">70.04%</td>
+        <td class="pct-cell">93.91%</td>
+        <td class="example-cell">2511 Park Street, Opelika, AL 36801 | AL | pre_mover raw=713 → norm=71 | prop_pulse=3 | diff=95.8%<br>2100 Glenwood Drive, Opelika, AL 36801 | AL | pre_mover raw=726 → norm=73 | prop_pulse=1 | diff=98.6%<br>3437 Suwanee Drive, Montgomery, AL 36108 | AL | pre_mover raw=917 → norm=92 | prop_pulse=1 | diff=98.9%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | pre_mover raw=590 → norm=59 | prop_pulse=4 | diff=93.2%<br>303 Bradford Circle, Trussville, AL 35173 | AL | pre_mover raw=914 → norm=91 | prop_pulse=2 | diff=97.8%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Top 5 most popular values (records where both sources loaded)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Most frequent score values per source among records that have both pre_mover_score and prop_pulse_score loaded.</p>
+      <table>
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">pre_mover_score (norm)</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">92</td>
+        <td class="value">176</td>
+        <td class="pct-cell">4.72%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">91</td>
+        <td class="value">158</td>
+        <td class="pct-cell">4.24%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">78</td>
+        <td class="value">147</td>
+        <td class="pct-cell">3.94%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">74</td>
+        <td class="value">139</td>
+        <td class="pct-cell">3.73%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">76</td>
+        <td class="value">121</td>
+        <td class="pct-cell">3.24%</td>
+      </tr>
+        </tbody>
+      </table>
+      <table class="red-table" style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">prop_pulse_score</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">1</td>
+        <td class="value">2,368</td>
+        <td class="pct-cell">63.50%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">2</td>
+        <td class="value">377</td>
+        <td class="pct-cell">10.11%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="value">186</td>
+        <td class="pct-cell">4.99%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">4</td>
+        <td class="value">143</td>
+        <td class="pct-cell">3.83%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">5</td>
+        <td class="value">101</td>
+        <td class="pct-cell">2.71%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('pre_mover_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () { applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light'); });
+})();
+  </script>
+</body>
+</html>

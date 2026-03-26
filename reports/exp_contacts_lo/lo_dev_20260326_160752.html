@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LO — loan_officer_contacts_2 stats — dev — 20260326_160752</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-sep);
+      color: var(--bar-fill);
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+      user-select: none;
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    thead th.sortable { cursor: pointer; }
+    thead th.sortable:hover { background: var(--th-hover); }
+    thead th .sort-ind { font-size: 0.7rem; opacity: 0.5; margin-left: 4px; }
+    tbody.pinned td { border-bottom: 2px solid var(--bar-fill); font-weight: 600; }
+    tbody.pinned .label { color: var(--value-clr); }
+    tr.pinned-row td { background: var(--th-bg); }
+    tbody.metrics tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); width: 22%; }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; width: 12%; text-align: right; }
+    td.pct-cell { width: 18%; padding-right: 12px; }
+    td.example-cell { max-width: 42%; font-size: 0.8rem; line-height: 1.35; word-break: break-word; vertical-align: top; color: var(--value-clr); max-height: 8rem; overflow-y: auto; }
+    td.example-na, .example-empty { color: var(--pct-clr); font-style: italic; }
+    .pct { font-size: 0.78rem; color: var(--pct-clr); display: block; text-align: right; }
+    .bar-wrap { height: 4px; background: var(--bar-bg); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .bar { height: 100%; background: var(--bar-fill); border-radius: 2px; opacity: 0.85; }
+  </style>
+  <script>if(localStorage.getItem('lo_stats_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>LO — loan_officer_contacts_2 stats</h1>
+    <div class="meta">Generated on 2026-03-26 16:07:52</div>
+    <div class="badge">ENV: dev</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <table id="statsTable">
+        <thead>
+          <tr>
+            <th class="sortable" data-key="label" data-type="str">Metric <span class="sort-ind"></span></th>
+            <th class="sortable num" data-key="count" data-type="num">Count <span class="sort-ind"></span></th>
+            <th class="sortable pct-h" data-key="pct" data-type="num">% of total <span class="sort-ind"></span></th>
+            <th class="sortable" data-key="example" data-type="exstr">Example (from DB) <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody class="pinned" id="tbPinned">
+
+      <tr class="pinned-row">
+        <td class="label">Total rows</td>
+        <td class="value">483,856</td>
+        <td class="pct-cell"><span class="pct">100.00%</span></td>
+        <td class="example-cell example-na">—</td>
+      </tr>
+        </tbody>
+        <tbody class="metrics" id="tbMetrics">
+
+      <tr class="metric-row" data-label="profile_url_is_null" data-count="0" data-pct="0.000000" data-ex="aHR0cHM6Ly93d3cuZXhwZXJpZW5jZS5jb20vcmV2aWV3cy9sb2dhbi0xMzQ4MTkwNw==">
+        <td class="label">profile_url_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="https://www.experience.com/reviews/logan-13481907">https://www.experience.com/reviews/logan-13481907</td>
+      </tr>
+      <tr class="metric-row" data-label="full_name_is_null" data-count="0" data-pct="0.000000" data-ex="TG9nYW4gRmFsaw==">
+        <td class="label">full_name_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="Logan Falk">Logan Falk</td>
+      </tr>
+      <tr class="metric-row" data-label="email_is_null" data-count="478108" data-pct="98.812043" data-ex="YXBwbHktb25saW5l">
+        <td class="label">email_is_null</td>
+        <td class="value">478,108</td>
+        <td class="pct-cell">
+          <span class="pct">98.81%</span>
+          <div class="bar-wrap"><div class="bar" style="width:98.81%"></div></div>
+        </td>
+        <td class="example-cell" title="apply-online">apply-online</td>
+      </tr>
+      <tr class="metric-row" data-label="phone_is_null" data-count="15821" data-pct="3.269774" data-ex="MjYyODg4MDgxMQ==">
+        <td class="label">phone_is_null</td>
+        <td class="value">15,821</td>
+        <td class="pct-cell">
+          <span class="pct">3.27%</span>
+          <div class="bar-wrap"><div class="bar" style="width:3.27%"></div></div>
+        </td>
+        <td class="example-cell" title="2628880811">2628880811</td>
+      </tr>
+      <tr class="metric-row" data-label="normalized_phone_is_null" data-count="15847" data-pct="3.275148" data-ex="KzEyNjI4ODgwODEx">
+        <td class="label">normalized_phone_is_null</td>
+        <td class="value">15,847</td>
+        <td class="pct-cell">
+          <span class="pct">3.28%</span>
+          <div class="bar-wrap"><div class="bar" style="width:3.28%"></div></div>
+        </td>
+        <td class="example-cell" title="+12628880811">+12628880811</td>
+      </tr>
+      <tr class="metric-row" data-label="address_is_null" data-count="11837" data-pct="2.446389" data-ex="SWxsaW5vaXM=">
+        <td class="label">address_is_null</td>
+        <td class="value">11,837</td>
+        <td class="pct-cell">
+          <span class="pct">2.45%</span>
+          <div class="bar-wrap"><div class="bar" style="width:2.45%"></div></div>
+        </td>
+        <td class="example-cell" title="Illinois">Illinois</td>
+      </tr>
+      <tr class="metric-row" data-label="street_is_null" data-count="92576" data-pct="19.132965" data-ex="NzEwIFcgT2x5bXBpYyBCbHZk">
+        <td class="label">street_is_null</td>
+        <td class="value">92,576</td>
+        <td class="pct-cell">
+          <span class="pct">19.13%</span>
+          <div class="bar-wrap"><div class="bar" style="width:19.13%"></div></div>
+        </td>
+        <td class="example-cell" title="710 W Olympic Blvd">710 W Olympic Blvd</td>
+      </tr>
+      <tr class="metric-row" data-label="city_is_null" data-count="92657" data-pct="19.149706" data-ex="TG9zIEFuZ2VsZXM=">
+        <td class="label">city_is_null</td>
+        <td class="value">92,657</td>
+        <td class="pct-cell">
+          <span class="pct">19.15%</span>
+          <div class="bar-wrap"><div class="bar" style="width:19.15%"></div></div>
+        </td>
+        <td class="example-cell" title="Los Angeles">Los Angeles</td>
+      </tr>
+      <tr class="metric-row" data-label="state_is_null" data-count="12925" data-pct="2.671249" data-ex="SUw=">
+        <td class="label">state_is_null</td>
+        <td class="value">12,925</td>
+        <td class="pct-cell">
+          <span class="pct">2.67%</span>
+          <div class="bar-wrap"><div class="bar" style="width:2.67%"></div></div>
+        </td>
+        <td class="example-cell" title="IL">IL</td>
+      </tr>
+      <tr class="metric-row" data-label="zip_is_null" data-count="92310" data-pct="19.077990" data-ex="OTAwMTU=">
+        <td class="label">zip_is_null</td>
+        <td class="value">92,310</td>
+        <td class="pct-cell">
+          <span class="pct">19.08%</span>
+          <div class="bar-wrap"><div class="bar" style="width:19.08%"></div></div>
+        </td>
+        <td class="example-cell" title="90015">90015</td>
+      </tr>
+      <tr class="metric-row" data-label="website_is_null" data-count="362722" data-pct="74.964866" data-ex="aHR0cDovL3R4YmVzdGhvbWVsb2Fucy5jb20=">
+        <td class="label">website_is_null</td>
+        <td class="value">362,722</td>
+        <td class="pct-cell">
+          <span class="pct">74.96%</span>
+          <div class="bar-wrap"><div class="bar" style="width:74.96%"></div></div>
+        </td>
+        <td class="example-cell" title="http://txbesthomeloans.com">http://txbesthomeloans.com</td>
+      </tr>
+      <tr class="metric-row" data-label="raw_license_number_is_null" data-count="270037" data-pct="55.809373" data-ex="MjI3NDY2Nw==">
+        <td class="label">raw_license_number_is_null</td>
+        <td class="value">270,037</td>
+        <td class="pct-cell">
+          <span class="pct">55.81%</span>
+          <div class="bar-wrap"><div class="bar" style="width:55.81%"></div></div>
+        </td>
+        <td class="example-cell" title="2274667">2274667</td>
+      </tr>
+      <tr class="metric-row" data-label="license_number_is_null" data-count="270039" data-pct="55.809786" data-ex="MjI3NDY2Nw==">
+        <td class="label">license_number_is_null</td>
+        <td class="value">270,039</td>
+        <td class="pct-cell">
+          <span class="pct">55.81%</span>
+          <div class="bar-wrap"><div class="bar" style="width:55.81%"></div></div>
+        </td>
+        <td class="example-cell" title="2274667">2274667</td>
+      </tr>
+      <tr class="metric-row" data-label="company_name_is_null" data-count="76792" data-pct="15.870838" data-ex="Q2hhcmxlcyBTY2h3YWIgQmFuaywgU1NC">
+        <td class="label">company_name_is_null</td>
+        <td class="value">76,792</td>
+        <td class="pct-cell">
+          <span class="pct">15.87%</span>
+          <div class="bar-wrap"><div class="bar" style="width:15.87%"></div></div>
+        </td>
+        <td class="example-cell" title="Charles Schwab Bank, SSB">Charles Schwab Bank, SSB</td>
+      </tr>
+      <tr class="metric-row" data-label="facebook_url_is_null" data-count="448458" data-pct="92.684187" data-ex="aHR0cHM6Ly93d3cuZmFjZWJvb2suY29tL3Byb2ZpbGUucGhwP2lkPTEwMDA4OTc5ODU5MDM2OA==">
+        <td class="label">facebook_url_is_null</td>
+        <td class="value">448,458</td>
+        <td class="pct-cell">
+          <span class="pct">92.68%</span>
+          <div class="bar-wrap"><div class="bar" style="width:92.68%"></div></div>
+        </td>
+        <td class="example-cell" title="https://www.facebook.com/profile.php?id=100089798590368">https://www.facebook.com/profile.php?id=100089798590368</td>
+      </tr>
+      <tr class="metric-row" data-label="instagram_url_is_null" data-count="462765" data-pct="95.641058" data-ex="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS93aWxsY2FsbGZpbmFuY2Uv">
+        <td class="label">instagram_url_is_null</td>
+        <td class="value">462,765</td>
+        <td class="pct-cell">
+          <span class="pct">95.64%</span>
+          <div class="bar-wrap"><div class="bar" style="width:95.64%"></div></div>
+        </td>
+        <td class="example-cell" title="https://www.instagram.com/willcallfinance/">https://www.instagram.com/willcallfinance/</td>
+      </tr>
+      <tr class="metric-row" data-label="linkedin_url_is_null" data-count="454760" data-pct="93.986641" data-ex="aHR0cHM6Ly93d3cubGlua2VkaW4uY29tL2luL3N0YWN5LWRpbW9uLTUzNWE1NDEzLw==">
+        <td class="label">linkedin_url_is_null</td>
+        <td class="value">454,760</td>
+        <td class="pct-cell">
+          <span class="pct">93.99%</span>
+          <div class="bar-wrap"><div class="bar" style="width:93.99%"></div></div>
+        </td>
+        <td class="example-cell" title="https://www.linkedin.com/in/stacy-dimon-535a5413/">https://www.linkedin.com/in/stacy-dimon-535a5413/</td>
+      </tr>
+      <tr class="metric-row" data-label="twitter_url_is_null" data-count="472003" data-pct="97.550304" data-ex="aHR0cHM6Ly90d2l0dGVyLmNvbS9TaW1vbk1hcnJhTGVfTVM=">
+        <td class="label">twitter_url_is_null</td>
+        <td class="value">472,003</td>
+        <td class="pct-cell">
+          <span class="pct">97.55%</span>
+          <div class="bar-wrap"><div class="bar" style="width:97.55%"></div></div>
+        </td>
+        <td class="example-cell" title="https://twitter.com/SimonMarraLe_MS">https://twitter.com/SimonMarraLe_MS</td>
+      </tr>
+      <tr class="metric-row" data-label="photo_link_is_null" data-count="337614" data-pct="69.775718" data-ex="aHR0cHM6Ly9zY3JhcC5leHBlcmllbmNlLmNvbS9QUk9ELzEzMzk5MDM4LzEzMzk5MDM4X2Rpc3BsYXlwaWMuanBn">
+        <td class="label">photo_link_is_null</td>
+        <td class="value">337,614</td>
+        <td class="pct-cell">
+          <span class="pct">69.78%</span>
+          <div class="bar-wrap"><div class="bar" style="width:69.78%"></div></div>
+        </td>
+        <td class="example-cell" title="https://scrap.experience.com/PROD/13399038/13399038_displaypic.jpg">https://scrap.experience.com/PROD/13399038/13399038_displaypic.jpg</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('lo_stats_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () {
+    applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+  });
+
+  var sortState = { key: null, dir: 1 };
+  var tb = document.getElementById('tbMetrics');
+  var headers = document.querySelectorAll('#statsTable thead th.sortable');
+
+  function b64ToUtf8(b64) {
+    if (!b64 || !b64.length) return '';
+    try {
+      return decodeURIComponent(Array.prototype.map.call(atob(b64), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+    } catch (e) { return ''; }
+  }
+  function escHtml(s) {
+    if (!s) return '<span class="example-empty">(no sample)</span>';
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function escAttr(s) {
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  function rowHtml(tr) {
+    var label = tr.getAttribute('data-label') || '';
+    var count = parseInt(tr.getAttribute('data-count'), 10);
+    var pct = parseFloat(tr.getAttribute('data-pct'));
+    var exB64 = tr.getAttribute('data-ex') || '';
+    var exText = b64ToUtf8(exB64);
+    var pctDisp = pct.toFixed(2);
+    var w = Math.min(pct, 100);
+    var title = exText ? ' title="' + escAttr(exText.length > 800 ? exText.slice(0, 800) : exText) + '"' : '';
+    return '<tr class="metric-row" data-label="' + label.replace(/"/g, '&quot;') + '" data-count="' + count + '" data-pct="' + pct + '" data-ex="' + exB64.replace(/"/g, '&quot;') + '">' +
+      '<td class="label">' + label + '</td>' +
+      '<td class="value">' + count.toLocaleString() + '</td>' +
+      '<td class="pct-cell"><span class="pct">' + pctDisp + '%</span>' +
+      '<div class="bar-wrap"><div class="bar" style="width:' + w + '%"></div></div></td>' +
+      '<td class="example-cell"' + title + '>' + escHtml(exText) + '</td></tr>';
+  }
+
+  function sortBy(key, type) {
+    if (sortState.key === key) sortState.dir = -sortState.dir;
+    else { sortState.key = key; sortState.dir = 1; }
+    var rows = Array.prototype.slice.call(tb.querySelectorAll('tr.metric-row'));
+    rows.sort(function (a, b) {
+      var va, vb;
+      if (key === 'label') {
+        va = (a.getAttribute('data-label') || '').toLowerCase();
+        vb = (b.getAttribute('data-label') || '').toLowerCase();
+        return va < vb ? -sortState.dir : va > vb ? sortState.dir : 0;
+      }
+      if (key === 'count') {
+        va = parseInt(a.getAttribute('data-count'), 10);
+        vb = parseInt(b.getAttribute('data-count'), 10);
+        return (va - vb) * sortState.dir;
+      }
+      if (key === 'example') {
+        va = b64ToUtf8(a.getAttribute('data-ex') || '');
+        vb = b64ToUtf8(b.getAttribute('data-ex') || '');
+        return va.localeCompare(vb, undefined, { sensitivity: 'base' }) * sortState.dir;
+      }
+      va = parseFloat(a.getAttribute('data-pct'));
+      vb = parseFloat(b.getAttribute('data-pct'));
+      return (va - vb) * sortState.dir;
+    });
+    tb.innerHTML = rows.map(rowHtml).join('');
+    headers.forEach(function (th) {
+      var ind = th.querySelector('.sort-ind');
+      if (th.getAttribute('data-key') === sortState.key)
+        ind.textContent = sortState.dir > 0 ? '▲' : '▼';
+      else
+        ind.textContent = '';
+    });
+  }
+
+  headers.forEach(function (th) {
+    th.addEventListener('click', function () {
+      sortBy(th.getAttribute('data-key'), th.getAttribute('data-type'));
+    });
+  });
+})();
+  </script>
+</body>
+</html>

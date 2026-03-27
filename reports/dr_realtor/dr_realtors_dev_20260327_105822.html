@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>dr_realtors — realtor_contacts stats — dev — 20260327_105822</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 14px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-sep);
+      color: var(--bar-fill);
+    }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px var(--shadow);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+      user-select: none;
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    thead th.sortable { cursor: pointer; }
+    thead th.sortable:hover { background: var(--th-hover); }
+    thead th .sort-ind { font-size: 0.7rem; opacity: 0.5; margin-left: 4px; }
+    tbody.pinned td { border-bottom: 2px solid var(--bar-fill); font-weight: 600; }
+    tbody.pinned .label { color: var(--value-clr); }
+    tr.pinned-row td { background: var(--th-bg); }
+    tbody.metrics tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); width: 22%; }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; width: 12%; text-align: right; }
+    td.pct-cell { width: 18%; padding-right: 12px; }
+    td.example-cell { max-width: 42%; font-size: 0.8rem; line-height: 1.35; word-break: break-word; vertical-align: top; color: var(--value-clr); max-height: 8rem; overflow-y: auto; }
+    td.example-na, .example-empty { color: var(--pct-clr); font-style: italic; }
+    .pct { font-size: 0.78rem; color: var(--pct-clr); display: block; text-align: right; }
+    .bar-wrap { height: 4px; background: var(--bar-bg); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .bar { height: 100%; background: var(--bar-fill); border-radius: 2px; opacity: 0.85; }
+  </style>
+  <script>if(localStorage.getItem('dr_realtors_stats_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>dr_realtors — realtor_contacts stats</h1>
+    <div class="meta">Generated on 2026-03-27 10:58:22</div>
+    <div class="badge">ENV: dev</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <table id="statsTable">
+        <thead>
+          <tr>
+            <th class="sortable" data-key="label" data-type="str">Metric <span class="sort-ind"></span></th>
+            <th class="sortable num" data-key="count" data-type="num">Count <span class="sort-ind"></span></th>
+            <th class="sortable pct-h" data-key="pct" data-type="num">% of total <span class="sort-ind"></span></th>
+            <th class="sortable" data-key="example" data-type="exstr">Example (from DB) <span class="sort-ind"></span></th>
+          </tr>
+        </thead>
+        <tbody class="pinned" id="tbPinned">
+
+      <tr class="pinned-row">
+        <td class="label">Total rows</td>
+        <td class="value">2,197,906</td>
+        <td class="pct-cell"><span class="pct">100.00%</span></td>
+        <td class="example-cell example-na">—</td>
+      </tr>
+        </tbody>
+        <tbody class="metrics" id="tbMetrics">
+
+      <tr class="metric-row" data-label="email_is_null" data-count="0" data-pct="0.000000" data-ex="aW5mb0BjZWNjaGluaXJlYWx0eS5jb20=">
+        <td class="label">email_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="info@cecchinirealty.com">info@cecchinirealty.com</td>
+      </tr>
+      <tr class="metric-row" data-label="full_name_is_null" data-count="51" data-pct="0.002320" data-ex="RGFudGUgQ2VjY2hpbmk=">
+        <td class="label">full_name_is_null</td>
+        <td class="value">51</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="Dante Cecchini">Dante Cecchini</td>
+      </tr>
+      <tr class="metric-row" data-label="first_name_is_null" data-count="17" data-pct="0.000773" data-ex="RGFudGU=">
+        <td class="label">first_name_is_null</td>
+        <td class="value">17</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="Dante">Dante</td>
+      </tr>
+      <tr class="metric-row" data-label="middle_name_is_null" data-count="1189792" data-pct="54.132979" data-ex="RGF2aWQ=">
+        <td class="label">middle_name_is_null</td>
+        <td class="value">1,189,792</td>
+        <td class="pct-cell">
+          <span class="pct">54.13%</span>
+          <div class="bar-wrap"><div class="bar" style="width:54.13%"></div></div>
+        </td>
+        <td class="example-cell" title="David">David</td>
+      </tr>
+      <tr class="metric-row" data-label="last_name_is_null" data-count="0" data-pct="0.000000" data-ex="Q2VjY2hpbmk=">
+        <td class="label">last_name_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="Cecchini">Cecchini</td>
+      </tr>
+      <tr class="metric-row" data-label="suffix_is_null" data-count="2164156" data-pct="98.464448" data-ex="SnI=">
+        <td class="label">suffix_is_null</td>
+        <td class="value">2,164,156</td>
+        <td class="pct-cell">
+          <span class="pct">98.46%</span>
+          <div class="bar-wrap"><div class="bar" style="width:98.46%"></div></div>
+        </td>
+        <td class="example-cell" title="Jr">Jr</td>
+      </tr>
+      <tr class="metric-row" data-label="office_name_is_null" data-count="196448" data-pct="8.937962" data-ex="Q2VjY2hpbmkgUmVhbHR5IERhbnRl">
+        <td class="label">office_name_is_null</td>
+        <td class="value">196,448</td>
+        <td class="pct-cell">
+          <span class="pct">8.94%</span>
+          <div class="bar-wrap"><div class="bar" style="width:8.94%"></div></div>
+        </td>
+        <td class="example-cell" title="Cecchini Realty Dante">Cecchini Realty Dante</td>
+      </tr>
+      <tr class="metric-row" data-label="office_address_line1_is_null" data-count="10074" data-pct="0.458345" data-ex="NTIxNGYgRGlhbW9uZCBIdHMgQmx2ZCBTdGUgNTI3">
+        <td class="label">office_address_line1_is_null</td>
+        <td class="value">10,074</td>
+        <td class="pct-cell">
+          <span class="pct">0.46%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.46%"></div></div>
+        </td>
+        <td class="example-cell" title="5214f Diamond Hts Blvd Ste 527">5214f Diamond Hts Blvd Ste 527</td>
+      </tr>
+      <tr class="metric-row" data-label="office_address_line2_is_null" data-count="2046670" data-pct="93.119087" data-ex="MTAx">
+        <td class="label">office_address_line2_is_null</td>
+        <td class="value">2,046,670</td>
+        <td class="pct-cell">
+          <span class="pct">93.12%</span>
+          <div class="bar-wrap"><div class="bar" style="width:93.12%"></div></div>
+        </td>
+        <td class="example-cell" title="101">101</td>
+      </tr>
+      <tr class="metric-row" data-label="office_city_is_null" data-count="0" data-pct="0.000000" data-ex="U2FuIEZyYW5jaXNjbw==">
+        <td class="label">office_city_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="San Francisco">San Francisco</td>
+      </tr>
+      <tr class="metric-row" data-label="office_state_is_null" data-count="0" data-pct="0.000000" data-ex="Q0E=">
+        <td class="label">office_state_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="CA">CA</td>
+      </tr>
+      <tr class="metric-row" data-label="office_zip_is_null" data-count="8" data-pct="0.000364" data-ex="OTQxMzE=">
+        <td class="label">office_zip_is_null</td>
+        <td class="value">8</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="94131">94131</td>
+      </tr>
+      <tr class="metric-row" data-label="office_county_is_null" data-count="1762" data-pct="0.080167" data-ex="U2FuIEZyYW5jaXNjbw==">
+        <td class="label">office_county_is_null</td>
+        <td class="value">1,762</td>
+        <td class="pct-cell">
+          <span class="pct">0.08%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.08%"></div></div>
+        </td>
+        <td class="example-cell" title="San Francisco">San Francisco</td>
+      </tr>
+      <tr class="metric-row" data-label="office_phone_is_null" data-count="159811" data-pct="7.271057" data-ex="NDE1LTU1MC04ODU1">
+        <td class="label">office_phone_is_null</td>
+        <td class="value">159,811</td>
+        <td class="pct-cell">
+          <span class="pct">7.27%</span>
+          <div class="bar-wrap"><div class="bar" style="width:7.27%"></div></div>
+        </td>
+        <td class="example-cell" title="415-550-8855">415-550-8855</td>
+      </tr>
+      <tr class="metric-row" data-label="normalized_office_phone_is_null" data-count="159862" data-pct="7.273377" data-ex="KzE0MTU1NTA4ODU1">
+        <td class="label">normalized_office_phone_is_null</td>
+        <td class="value">159,862</td>
+        <td class="pct-cell">
+          <span class="pct">7.27%</span>
+          <div class="bar-wrap"><div class="bar" style="width:7.27%"></div></div>
+        </td>
+        <td class="example-cell" title="+14155508855">+14155508855</td>
+      </tr>
+      <tr class="metric-row" data-label="office_fax_is_null" data-count="1509776" data-pct="68.691564" data-ex="MzE3LTU2NC03MTEx">
+        <td class="label">office_fax_is_null</td>
+        <td class="value">1,509,776</td>
+        <td class="pct-cell">
+          <span class="pct">68.69%</span>
+          <div class="bar-wrap"><div class="bar" style="width:68.69%"></div></div>
+        </td>
+        <td class="example-cell" title="317-564-7111">317-564-7111</td>
+      </tr>
+      <tr class="metric-row" data-label="cell_phone_is_null" data-count="1361663" data-pct="61.952740" data-ex="ODUwLTM3Ni01Nzc4">
+        <td class="label">cell_phone_is_null</td>
+        <td class="value">1,361,663</td>
+        <td class="pct-cell">
+          <span class="pct">61.95%</span>
+          <div class="bar-wrap"><div class="bar" style="width:61.95%"></div></div>
+        </td>
+        <td class="example-cell" title="850-376-5778">850-376-5778</td>
+      </tr>
+      <tr class="metric-row" data-label="normalized_cell_phone_is_null" data-count="1361685" data-pct="61.953741" data-ex="KzE4NTAzNzY1Nzc4">
+        <td class="label">normalized_cell_phone_is_null</td>
+        <td class="value">1,361,685</td>
+        <td class="pct-cell">
+          <span class="pct">61.95%</span>
+          <div class="bar-wrap"><div class="bar" style="width:61.95%"></div></div>
+        </td>
+        <td class="example-cell" title="+18503765778">+18503765778</td>
+      </tr>
+      <tr class="metric-row" data-label="license_type_is_null" data-count="167930" data-pct="7.640454" data-ex="QnJva2Vy">
+        <td class="label">license_type_is_null</td>
+        <td class="value">167,930</td>
+        <td class="pct-cell">
+          <span class="pct">7.64%</span>
+          <div class="bar-wrap"><div class="bar" style="width:7.64%"></div></div>
+        </td>
+        <td class="example-cell" title="Broker">Broker</td>
+      </tr>
+      <tr class="metric-row" data-label="license_number_is_null" data-count="0" data-pct="0.000000" data-ex="NjIxNzE4">
+        <td class="label">license_number_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="621718">621718</td>
+      </tr>
+      <tr class="metric-row" data-label="original_issue_date_is_null" data-count="417131" data-pct="18.978564" data-ex="MTk4My0xMC0wNw==">
+        <td class="label">original_issue_date_is_null</td>
+        <td class="value">417,131</td>
+        <td class="pct-cell">
+          <span class="pct">18.98%</span>
+          <div class="bar-wrap"><div class="bar" style="width:18.98%"></div></div>
+        </td>
+        <td class="example-cell" title="1983-10-07">1983-10-07</td>
+      </tr>
+      <tr class="metric-row" data-label="expiration_date_is_null" data-count="290897" data-pct="13.235188" data-ex="MjAyNy0xMS0xMw==">
+        <td class="label">expiration_date_is_null</td>
+        <td class="value">290,897</td>
+        <td class="pct-cell">
+          <span class="pct">13.24%</span>
+          <div class="bar-wrap"><div class="bar" style="width:13.24%"></div></div>
+        </td>
+        <td class="example-cell" title="2027-11-13">2027-11-13</td>
+      </tr>
+      <tr class="metric-row" data-label="association_name_is_null" data-count="264738" data-pct="12.045010" data-ex="U2FuIE1hdGVvIENvdW50eSBBc3NvY2lhdGlvbiBPZiBSZWFsdG9ycw==">
+        <td class="label">association_name_is_null</td>
+        <td class="value">264,738</td>
+        <td class="pct-cell">
+          <span class="pct">12.05%</span>
+          <div class="bar-wrap"><div class="bar" style="width:12.05%"></div></div>
+        </td>
+        <td class="example-cell" title="San Mateo County Association Of Realtors">San Mateo County Association Of Realtors</td>
+      </tr>
+      <tr class="metric-row" data-label="license_number_alphanumeric_is_null" data-count="0" data-pct="0.000000" data-ex="NjIxNzE4">
+        <td class="label">license_number_alphanumeric_is_null</td>
+        <td class="value">0</td>
+        <td class="pct-cell">
+          <span class="pct">0.00%</span>
+          <div class="bar-wrap"><div class="bar" style="width:0.00%"></div></div>
+        </td>
+        <td class="example-cell" title="621718">621718</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('dr_realtors_stats_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () {
+    applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light');
+  });
+
+  var sortState = { key: null, dir: 1 };
+  var tb = document.getElementById('tbMetrics');
+  var headers = document.querySelectorAll('#statsTable thead th.sortable');
+
+  function b64ToUtf8(b64) {
+    if (!b64 || !b64.length) return '';
+    try {
+      return decodeURIComponent(Array.prototype.map.call(atob(b64), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+    } catch (e) { return ''; }
+  }
+  function escHtml(s) {
+    if (!s) return '<span class="example-empty">(no sample)</span>';
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function escAttr(s) {
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  }
+
+  function rowHtml(tr) {
+    var label = tr.getAttribute('data-label') || '';
+    var count = parseInt(tr.getAttribute('data-count'), 10);
+    var pct = parseFloat(tr.getAttribute('data-pct'));
+    var exB64 = tr.getAttribute('data-ex') || '';
+    var exText = b64ToUtf8(exB64);
+    var pctDisp = pct.toFixed(2);
+    var w = Math.min(pct, 100);
+    var title = exText ? ' title="' + escAttr(exText.length > 800 ? exText.slice(0, 800) : exText) + '"' : '';
+    return '<tr class="metric-row" data-label="' + label.replace(/"/g, '&quot;') + '" data-count="' + count + '" data-pct="' + pct + '" data-ex="' + exB64.replace(/"/g, '&quot;') + '">' +
+      '<td class="label">' + label + '</td>' +
+      '<td class="value">' + count.toLocaleString() + '</td>' +
+      '<td class="pct-cell"><span class="pct">' + pctDisp + '%</span>' +
+      '<div class="bar-wrap"><div class="bar" style="width:' + w + '%"></div></div></td>' +
+      '<td class="example-cell"' + title + '>' + escHtml(exText) + '</td></tr>';
+  }
+
+  function sortBy(key, type) {
+    if (sortState.key === key) sortState.dir = -sortState.dir;
+    else { sortState.key = key; sortState.dir = 1; }
+    var rows = Array.prototype.slice.call(tb.querySelectorAll('tr.metric-row'));
+    rows.sort(function (a, b) {
+      var va, vb;
+      if (key === 'label') {
+        va = (a.getAttribute('data-label') || '').toLowerCase();
+        vb = (b.getAttribute('data-label') || '').toLowerCase();
+        return va < vb ? -sortState.dir : va > vb ? sortState.dir : 0;
+      }
+      if (key === 'count') {
+        va = parseInt(a.getAttribute('data-count'), 10);
+        vb = parseInt(b.getAttribute('data-count'), 10);
+        return (va - vb) * sortState.dir;
+      }
+      if (key === 'example') {
+        va = b64ToUtf8(a.getAttribute('data-ex') || '');
+        vb = b64ToUtf8(b.getAttribute('data-ex') || '');
+        return va.localeCompare(vb, undefined, { sensitivity: 'base' }) * sortState.dir;
+      }
+      va = parseFloat(a.getAttribute('data-pct'));
+      vb = parseFloat(b.getAttribute('data-pct'));
+      return (va - vb) * sortState.dir;
+    });
+    tb.innerHTML = rows.map(rowHtml).join('');
+    headers.forEach(function (th) {
+      var ind = th.querySelector('.sort-ind');
+      if (th.getAttribute('data-key') === sortState.key)
+        ind.textContent = sortState.dir > 0 ? '▲' : '▼';
+      else
+        ind.textContent = '';
+    });
+  }
+
+  headers.forEach(function (th) {
+    th.addEventListener('click', function () {
+      sortBy(th.getAttribute('data-key'), th.getAttribute('data-type'));
+    });
+  });
+})();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pre Mover Comparison — pre_mover_score vs prop_pulse_score — 2026-03-30 14:23:30</title>
+  <style>
+    :root {
+      --bg:         #0f1117;
+      --text:       #e2e8f0;
+      --card-bg:    #1e293b;
+      --card-sep:   #2d3f55;
+      --row-alt:    #172033;
+      --label-clr:  #94a3b8;
+      --value-clr:  #f1f5f9;
+      --pct-clr:    #64748b;
+      --meta-clr:   #94a3b8;
+      --h1-clr:     #f8fafc;
+      --bar-bg:     #2d3f55;
+      --bar-fill:   #4F86C6;
+      --th-bg:      #1a2538;
+      --th-hover:   #243047;
+      --shadow:     rgba(0,0,0,0.4);
+    }
+    :root.light {
+      --bg:         #f1f5f9;
+      --text:       #1e293b;
+      --card-bg:    #ffffff;
+      --card-sep:   #e2e8f0;
+      --row-alt:    #f8fafc;
+      --label-clr:  #64748b;
+      --value-clr:  #1e293b;
+      --pct-clr:    #94a3b8;
+      --meta-clr:   #64748b;
+      --h1-clr:     #0f172a;
+      --bar-bg:     #e2e8f0;
+      --bar-fill:   #2563eb;
+      --th-bg:      #f8fafc;
+      --th-hover:   #e2e8f0;
+      --shadow:     rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px 20px;
+      min-height: 100vh;
+      transition: background 0.2s, color 0.2s;
+    }
+    header { text-align: center; margin-bottom: 28px; position: relative; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    header h1 { font-size: 1.75rem; font-weight: 700; color: var(--h1-clr); }
+    header .meta { margin-top: 8px; font-size: 0.9rem; color: var(--meta-clr); }
+    header .states { margin-top: 8px; font-size: 0.85rem; color: var(--label-clr); max-width: 800px; margin-left: auto; margin-right: auto; }
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-sep);
+      background: var(--card-bg);
+      color: var(--bar-fill);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { opacity: 0.85; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    .block { margin-bottom: 24px; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px var(--shadow); }
+    .block h2 { padding: 14px 20px; font-size: 1rem; font-weight: 600; color: var(--label-clr); background: var(--th-bg); border-bottom: 1px solid var(--card-sep); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--label-clr);
+      background: var(--th-bg);
+      border-bottom: 1px solid var(--card-sep);
+    }
+    thead th.num, thead th.pct-h { text-align: right; }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    td { padding: 10px 20px; font-size: 0.9rem; vertical-align: middle; }
+    td.label { color: var(--label-clr); }
+    td.value { color: var(--value-clr); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+    td.pct-cell { color: var(--pct-clr); font-size: 0.85rem; text-align: right; }
+    td.example-cell { font-size: 0.8rem; line-height: 1.4; word-break: break-word; color: var(--value-clr); max-width: 420px; }
+    tr.highlight-row td { background: var(--row-alt); border-top: 1px solid var(--card-sep); }
+    tr.red-row td { background: #7f1d1d !important; color: #fecaca; border-top: 1px solid #b91c1c; }
+    table.red-table tbody tr td { background: #7f1d1d !important; color: #fecaca; }
+    table.red-table tbody tr:nth-child(even) td { background: #991b1b !important; color: #fecaca; }
+    :root.light tr.red-row td { background: #fef2f2 !important; color: #991b1b; border-top: 1px solid #fecaca; }
+    :root.light table.red-table tbody tr td { background: #fef2f2 !important; color: #991b1b; }
+    :root.light table.red-table tbody tr:nth-child(even) td { background: #fee2e2 !important; color: #991b1b; }
+  </style>
+  <script>if(localStorage.getItem('pre_mover_theme')==='light')document.documentElement.classList.add('light');</script>
+</head>
+<body>
+  <header>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">Theme</button>
+    <h1>Pre Mover: pre_mover_score (SmartZip) vs prop_pulse_score (PropertyReach)</h1>
+    <div class="meta">Generated 2026-03-30 14:23:30 · Total records: 5,000</div>
+    <div class="states">States: AK, AL, AR, AZ, CA, CO, CT, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA, MD, ME, MI, MN, MO, MS, MT, NC, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, RI, SC, TN, TX, UT, VA, WA, WI, WV, WY</div>
+  </header>
+  <div class="wrap">
+    <div class="block">
+      <h2>Overall — Loaded / Not loaded</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded pre_mover_score (SmartZip)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded pre_mover_score</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr class="highlight-row"><td class="label">Likely to sell (pre_mover norm &gt; 70)</td><td class="value">3,156</td><td class="pct-cell">63.12% of total · 63.12% of pre_mover loaded</td></tr>
+      <tr><td class="label">Loaded prop_pulse_score (PropertyReach)</td><td class="value">3,729</td><td class="pct-cell">74.58%</td></tr>
+      <tr><td class="label">Not loaded prop_pulse_score</td><td class="value">1,271</td><td class="pct-cell">25.42%</td></tr>
+      <tr class="highlight-row red-row"><td class="label">Likely to sell (prop_pulse_score &gt; 70)</td><td class="value">53</td><td class="pct-cell">1.06% of total · 1.42% of prop_pulse loaded</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Per state</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>State</th>
+            <th class="num">Total</th>
+            <th class="num">pre_mover loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">pre_mover not</th>
+            <th class="pct-h">%</th>
+            <th class="num">prop_pulse loaded</th>
+            <th class="pct-h">%</th>
+            <th class="num">prop_pulse not</th>
+            <th class="pct-h">%</th>
+            <th class="num">Both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">AK</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">2</td>
+      </tr>
+
+      <tr>
+        <td class="label">AL</td>
+        <td class="value">22</td>
+        <td class="value">22</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">18</td>
+        <td class="pct-cell">81.82%</td>
+        <td class="value">4</td>
+        <td class="pct-cell">18.18%</td>
+        <td class="value">18</td>
+      </tr>
+
+      <tr>
+        <td class="label">AR</td>
+        <td class="value">30</td>
+        <td class="value">30</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">28</td>
+        <td class="pct-cell">93.33%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">6.67%</td>
+        <td class="value">28</td>
+      </tr>
+
+      <tr>
+        <td class="label">AZ</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">12.00%</td>
+        <td class="value">88</td>
+        <td class="pct-cell">88.00%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">CA</td>
+        <td class="value">1,908</td>
+        <td class="value">1,908</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">1,573</td>
+        <td class="pct-cell">82.44%</td>
+        <td class="value">335</td>
+        <td class="pct-cell">17.56%</td>
+        <td class="value">1,573</td>
+      </tr>
+
+      <tr>
+        <td class="label">CO</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">59</td>
+        <td class="pct-cell">59.00%</td>
+        <td class="value">41</td>
+        <td class="pct-cell">41.00%</td>
+        <td class="value">59</td>
+      </tr>
+
+      <tr>
+        <td class="label">CT</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">93</td>
+        <td class="pct-cell">93.00%</td>
+        <td class="value">7</td>
+        <td class="pct-cell">7.00%</td>
+        <td class="value">93</td>
+      </tr>
+
+      <tr>
+        <td class="label">DE</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">81</td>
+        <td class="pct-cell">81.00%</td>
+        <td class="value">19</td>
+        <td class="pct-cell">19.00%</td>
+        <td class="value">81</td>
+      </tr>
+
+      <tr>
+        <td class="label">FL</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">90</td>
+        <td class="pct-cell">90.00%</td>
+        <td class="value">10</td>
+        <td class="pct-cell">10.00%</td>
+        <td class="value">90</td>
+      </tr>
+
+      <tr>
+        <td class="label">GA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">80</td>
+        <td class="pct-cell">80.00%</td>
+        <td class="value">20</td>
+        <td class="pct-cell">20.00%</td>
+        <td class="value">80</td>
+      </tr>
+
+      <tr>
+        <td class="label">HI</td>
+        <td class="value">7</td>
+        <td class="value">7</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">85.71%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">14.29%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">IA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">47</td>
+        <td class="pct-cell">47.00%</td>
+        <td class="value">53</td>
+        <td class="pct-cell">53.00%</td>
+        <td class="value">47</td>
+      </tr>
+
+      <tr>
+        <td class="label">ID</td>
+        <td class="value">36</td>
+        <td class="value">36</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">24</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">IL</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">60.00%</td>
+        <td class="value">40</td>
+        <td class="pct-cell">40.00%</td>
+        <td class="value">60</td>
+      </tr>
+
+      <tr>
+        <td class="label">IN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">89</td>
+        <td class="pct-cell">89.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">11.00%</td>
+        <td class="value">89</td>
+      </tr>
+
+      <tr>
+        <td class="label">KS</td>
+        <td class="value">17</td>
+        <td class="value">17</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">64.71%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">35.29%</td>
+        <td class="value">11</td>
+      </tr>
+
+      <tr>
+        <td class="label">KY</td>
+        <td class="value">79</td>
+        <td class="value">79</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">71</td>
+        <td class="pct-cell">89.87%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">10.13%</td>
+        <td class="value">71</td>
+      </tr>
+
+      <tr>
+        <td class="label">LA</td>
+        <td class="value">16</td>
+        <td class="value">16</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">15</td>
+        <td class="pct-cell">93.75%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">6.25%</td>
+        <td class="value">15</td>
+      </tr>
+
+      <tr>
+        <td class="label">MA</td>
+        <td class="value">39</td>
+        <td class="value">39</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">37</td>
+        <td class="pct-cell">94.87%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">5.13%</td>
+        <td class="value">37</td>
+      </tr>
+
+      <tr>
+        <td class="label">MD</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">92</td>
+        <td class="pct-cell">92.00%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">8.00%</td>
+        <td class="value">92</td>
+      </tr>
+
+      <tr>
+        <td class="label">ME</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">66.67%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">33.33%</td>
+        <td class="value">2</td>
+      </tr>
+
+      <tr>
+        <td class="label">MI</td>
+        <td class="value">95</td>
+        <td class="value">95</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">74</td>
+        <td class="pct-cell">77.89%</td>
+        <td class="value">21</td>
+        <td class="pct-cell">22.11%</td>
+        <td class="value">74</td>
+      </tr>
+
+      <tr>
+        <td class="label">MN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">59</td>
+        <td class="pct-cell">59.00%</td>
+        <td class="value">41</td>
+        <td class="pct-cell">41.00%</td>
+        <td class="value">59</td>
+      </tr>
+
+      <tr>
+        <td class="label">MO</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">47</td>
+        <td class="pct-cell">47.00%</td>
+        <td class="value">53</td>
+        <td class="pct-cell">53.00%</td>
+        <td class="value">47</td>
+      </tr>
+
+      <tr>
+        <td class="label">MS</td>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">3</td>
+      </tr>
+
+      <tr>
+        <td class="label">MT</td>
+        <td class="value">6</td>
+        <td class="value">6</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">83.33%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">16.67%</td>
+        <td class="value">5</td>
+      </tr>
+
+      <tr>
+        <td class="label">NC</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">95</td>
+        <td class="pct-cell">95.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">5.00%</td>
+        <td class="value">95</td>
+      </tr>
+
+      <tr>
+        <td class="label">NE</td>
+        <td class="value">12</td>
+        <td class="value">12</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">50.00%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">NH</td>
+        <td class="value">40</td>
+        <td class="value">40</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">38</td>
+        <td class="pct-cell">95.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">5.00%</td>
+        <td class="value">38</td>
+      </tr>
+
+      <tr>
+        <td class="label">NJ</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">93</td>
+        <td class="pct-cell">93.00%</td>
+        <td class="value">7</td>
+        <td class="pct-cell">7.00%</td>
+        <td class="value">93</td>
+      </tr>
+
+      <tr>
+        <td class="label">NM</td>
+        <td class="value">7</td>
+        <td class="value">7</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">85.71%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">14.29%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">NV</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">83</td>
+        <td class="pct-cell">83.00%</td>
+        <td class="value">17</td>
+        <td class="pct-cell">17.00%</td>
+        <td class="value">83</td>
+      </tr>
+
+      <tr>
+        <td class="label">NY</td>
+        <td class="value">80</td>
+        <td class="value">80</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">75.00%</td>
+        <td class="value">20</td>
+        <td class="pct-cell">25.00%</td>
+        <td class="value">60</td>
+      </tr>
+
+      <tr>
+        <td class="label">OH</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">90</td>
+        <td class="pct-cell">90.00%</td>
+        <td class="value">10</td>
+        <td class="pct-cell">10.00%</td>
+        <td class="value">90</td>
+      </tr>
+
+      <tr>
+        <td class="label">OK</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">48</td>
+        <td class="pct-cell">48.00%</td>
+        <td class="value">52</td>
+        <td class="pct-cell">52.00%</td>
+        <td class="value">48</td>
+      </tr>
+
+      <tr>
+        <td class="label">OR</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">49</td>
+        <td class="pct-cell">49.00%</td>
+        <td class="value">51</td>
+        <td class="pct-cell">51.00%</td>
+        <td class="value">49</td>
+      </tr>
+
+      <tr>
+        <td class="label">PA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">77</td>
+        <td class="pct-cell">77.00%</td>
+        <td class="value">23</td>
+        <td class="pct-cell">23.00%</td>
+        <td class="value">77</td>
+      </tr>
+
+      <tr>
+        <td class="label">RI</td>
+        <td class="value">5</td>
+        <td class="value">5</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+      </tr>
+
+      <tr>
+        <td class="label">SC</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">89</td>
+        <td class="pct-cell">89.00%</td>
+        <td class="value">11</td>
+        <td class="pct-cell">11.00%</td>
+        <td class="value">89</td>
+      </tr>
+
+      <tr>
+        <td class="label">TN</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">86</td>
+        <td class="pct-cell">86.00%</td>
+        <td class="value">14</td>
+        <td class="pct-cell">14.00%</td>
+        <td class="value">86</td>
+      </tr>
+
+      <tr>
+        <td class="label">TX</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">88</td>
+        <td class="pct-cell">88.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">12.00%</td>
+        <td class="value">88</td>
+      </tr>
+
+      <tr>
+        <td class="label">UT</td>
+        <td class="value">76</td>
+        <td class="value">76</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">12</td>
+        <td class="pct-cell">15.79%</td>
+        <td class="value">64</td>
+        <td class="pct-cell">84.21%</td>
+        <td class="value">12</td>
+      </tr>
+
+      <tr>
+        <td class="label">VA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">79</td>
+        <td class="pct-cell">79.00%</td>
+        <td class="value">21</td>
+        <td class="pct-cell">21.00%</td>
+        <td class="value">79</td>
+      </tr>
+
+      <tr>
+        <td class="label">WA</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">8.00%</td>
+        <td class="value">92</td>
+        <td class="pct-cell">92.00%</td>
+        <td class="value">8</td>
+      </tr>
+
+      <tr>
+        <td class="label">WI</td>
+        <td class="value">100</td>
+        <td class="value">100</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">40</td>
+        <td class="pct-cell">40.00%</td>
+        <td class="value">60</td>
+        <td class="pct-cell">60.00%</td>
+        <td class="value">40</td>
+      </tr>
+
+      <tr>
+        <td class="label">WV</td>
+        <td class="value">8</td>
+        <td class="value">8</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">75.00%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">25.00%</td>
+        <td class="value">6</td>
+      </tr>
+
+      <tr>
+        <td class="label">WY</td>
+        <td class="value">8</td>
+        <td class="value">8</td>
+        <td class="pct-cell">100.00%</td>
+        <td class="value">0</td>
+        <td class="pct-cell">0.00%</td>
+        <td class="value">5</td>
+        <td class="pct-cell">62.50%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">37.50%</td>
+        <td class="value">5</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Value comparison (both loaded only, n=3,729)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% of both loaded</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">41</td>
+        <td class="pct-cell">0.82%</td>
+        <td class="pct-cell">1.10%</td>
+        <td class="example-cell">201 Oleander Avenue, Bakersfield, CA 93304 | CA | pre_mover raw=787 → norm=79 | prop_pulse=85 | diff=7.1%<br>4180 Louisiana Street, San Diego, CA 92104 | CA | pre_mover raw=733 → norm=73 | prop_pulse=85 | diff=14.1%<br>14 Elizabeth Dr, Bella Vista, AR 72715 | AR | pre_mover raw=769 → norm=77 | prop_pulse=87 | diff=11.5%<br>305 Southridge Pl, Longmont, CO 80501 | CO | pre_mover raw=792 → norm=79 | prop_pulse=87 | diff=9.2%<br>3255 Champions Drive, Wilmington, DE 19808 | DE | pre_mover raw=669 → norm=67 | prop_pulse=75 | diff=10.7%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">13</td>
+        <td class="pct-cell">0.26%</td>
+        <td class="pct-cell">0.35%</td>
+        <td class="example-cell">205 Winterberry Way, Enterprise, AL 36330 | AL | pre_mover raw=678 → norm=68 | prop_pulse=85 | diff=20.0%<br>330 Savin Avenue, West Haven, CT 06516 | CT | pre_mover raw=896 → norm=90 | prop_pulse=70 | diff=22.2%<br>3164 Burdock Avenue, Melbourne, FL 32904 | FL | pre_mover raw=383 → norm=38 | prop_pulse=27 | diff=28.9%<br>5005 Green Clover Avenue, Bakersfield, CA 93313 | CA | pre_mover raw=702 → norm=70 | prop_pulse=85 | diff=17.6%<br>23461 Williamsburg Circle, Woodhaven, MI 48183 | MI | pre_mover raw=635 → norm=64 | prop_pulse=86 | diff=25.6%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">30</td>
+        <td class="pct-cell">0.60%</td>
+        <td class="pct-cell">0.80%</td>
+        <td class="example-cell">805 4th Street, Douglas, AK 99824 | AK | pre_mover raw=423 → norm=42 | prop_pulse=80 | diff=47.5%<br>46 Fieldstone Lane, Coventry, CT 06238 | CT | pre_mover raw=706 → norm=71 | prop_pulse=38 | diff=46.5%<br>43 Sims Road, East Haddam, CT 06423 | CT | pre_mover raw=663 → norm=66 | prop_pulse=40 | diff=39.4%<br>40 Tarragon Drive, East Hampton, CT 06424 | CT | pre_mover raw=504 → norm=50 | prop_pulse=29 | diff=42.0%<br>1726 New London Turnpike, Glastonbury, CT 06033 | CT | pre_mover raw=359 → norm=36 | prop_pulse=20 | diff=44.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">143</td>
+        <td class="pct-cell">2.86%</td>
+        <td class="pct-cell">3.83%</td>
+        <td class="example-cell">2107 Hamilton Place Street, Opelika, AL 36801 | AL | pre_mover raw=679 → norm=68 | prop_pulse=15 | diff=77.9%<br>3491 Wildewood Drive, Pelham, AL 35124 | AL | pre_mover raw=680 → norm=68 | prop_pulse=14 | diff=79.4%<br>2045 Wood Tree Ct, Siloam Springs, AR 72761 | AR | pre_mover raw=646 → norm=65 | prop_pulse=19 | diff=70.8%<br>703 Atlanta St Se, Gravette, AR 72736 | AR | pre_mover raw=639 → norm=64 | prop_pulse=13 | diff=79.7%<br>28 Pimlico Dr, Bella Vista, AR 72715 | AR | pre_mover raw=782 → norm=78 | prop_pulse=16 | diff=79.5%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">3,502</td>
+        <td class="pct-cell">70.04%</td>
+        <td class="pct-cell">93.91%</td>
+        <td class="example-cell">2511 Park Street, Opelika, AL 36801 | AL | pre_mover raw=713 → norm=71 | prop_pulse=3 | diff=95.8%<br>2100 Glenwood Drive, Opelika, AL 36801 | AL | pre_mover raw=726 → norm=73 | prop_pulse=1 | diff=98.6%<br>3437 Suwanee Drive, Montgomery, AL 36108 | AL | pre_mover raw=917 → norm=92 | prop_pulse=1 | diff=98.9%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | pre_mover raw=590 → norm=59 | prop_pulse=4 | diff=93.2%<br>303 Bradford Circle, Trussville, AL 35173 | AL | pre_mover raw=914 → norm=91 | prop_pulse=2 | diff=97.8%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Top 5 most popular values (records where both sources loaded)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Most frequent score values per source among records that have both pre_mover_score and prop_pulse_score loaded.</p>
+      <table>
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">pre_mover_score (norm)</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">92</td>
+        <td class="value">176</td>
+        <td class="pct-cell">4.72%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">91</td>
+        <td class="value">158</td>
+        <td class="pct-cell">4.24%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">78</td>
+        <td class="value">147</td>
+        <td class="pct-cell">3.94%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">74</td>
+        <td class="value">139</td>
+        <td class="pct-cell">3.73%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">76</td>
+        <td class="value">121</td>
+        <td class="pct-cell">3.24%</td>
+      </tr>
+        </tbody>
+      </table>
+      <table class="red-table" style="margin-top: 16px;">
+        <thead>
+          <tr>
+            <th class="num">Rank</th>
+            <th class="num">prop_pulse_score</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of both loaded</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="value">1</td>
+        <td class="value">1</td>
+        <td class="value">2,368</td>
+        <td class="pct-cell">63.50%</td>
+      </tr>
+
+      <tr>
+        <td class="value">2</td>
+        <td class="value">2</td>
+        <td class="value">377</td>
+        <td class="pct-cell">10.11%</td>
+      </tr>
+
+      <tr>
+        <td class="value">3</td>
+        <td class="value">3</td>
+        <td class="value">186</td>
+        <td class="pct-cell">4.99%</td>
+      </tr>
+
+      <tr>
+        <td class="value">4</td>
+        <td class="value">4</td>
+        <td class="value">143</td>
+        <td class="pct-cell">3.83%</td>
+      </tr>
+
+      <tr>
+        <td class="value">5</td>
+        <td class="value">5</td>
+        <td class="value">101</td>
+        <td class="pct-cell">2.71%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Owner Name — Loaded / Not loaded (HIQ vs PropertyReach)</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded owner_name (HIQ)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded owner_name (HIQ)</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr><td class="label">Loaded api_owner1_name (PropertyReach)</td><td class="value">3,729</td><td class="pct-cell">74.58%</td></tr>
+      <tr><td class="label">Not loaded api_owner1_name (PropertyReach)</td><td class="value">1,271</td><td class="pct-cell">25.42%</td></tr>
+      <tr class="highlight-row"><td class="label">Both loaded</td><td class="value">3,729</td><td class="pct-cell">74.58% of total</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Owner Name fuzzy match — HIQ vs PropertyReach (both loaded only, n=3,729)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">difflib.SequenceMatcher similarity (case-insensitive). Exact = 100 %, High = 80–99 %, Moderate = 50–79 %, Low = 30–49 %, No match &lt; 30 %.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Similarity bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% of both loaded</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Exact (100%)</td>
+        <td class="value">1,306</td>
+        <td class="pct-cell">26.12%</td>
+        <td class="pct-cell">35.02%</td>
+        <td class="example-cell">2511 Park Street, Opelika, AL 36801 | AL | hiq_owner=Cristian Alberto Manzano | pr_owner=Cristian Alberto Manzano | similarity=100%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | hiq_owner=Deshane S Price | pr_owner=Deshane S Price | similarity=100%<br>303 Bradford Circle, Trussville, AL 35173 | AL | hiq_owner=Nicolas Graziano | pr_owner=Nicolas Graziano | similarity=100%<br>1345 County Road 377, Hillsboro, AL 35643 | AL | hiq_owner=Daniel J Butler | pr_owner=Daniel J Butler | similarity=100%<br>6622 Division Avenue, Birmingham, AL 35206 | AL | hiq_owner=James Mills | pr_owner=James Mills | similarity=100%</td>
+      </tr>
+
+      <tr>
+        <td class="label">High (80–99%)</td>
+        <td class="value">669</td>
+        <td class="pct-cell">13.38%</td>
+        <td class="pct-cell">17.94%</td>
+        <td class="example-cell">2100 Glenwood Drive, Opelika, AL 36801 | AL | hiq_owner=Timothy Ray Davis Jr | pr_owner=Timothy Ray Davis | similarity=92%<br>3437 Suwanee Drive, Montgomery, AL 36108 | AL | hiq_owner=Private Holdings Llc Edge | pr_owner=Edge Private Holdings Llc | similarity=80%<br>205 Winterberry Way, Enterprise, AL 36330 | AL | hiq_owner=Katie Utley | pr_owner=Katie M Utley | similarity=92%<br>1085 Tulane Ct, Dixon, CA 95620 | CA | hiq_owner=Robert J. Velarde | pr_owner=Robert J Velarde | similarity=97%<br>3117 Brasilia Court, Sacramento, CA 95826 | CA | hiq_owner=Heather Johnson | pr_owner=Heather A Johnson | similarity=94%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Moderate (50–79%)</td>
+        <td class="value">688</td>
+        <td class="pct-cell">13.76%</td>
+        <td class="pct-cell">18.45%</td>
+        <td class="example-cell">8240 Fort Collins Way, Roseville, CA 95747 | CA | hiq_owner=Arisak Simphoukham | pr_owner=Simphoukham Arisak Tr | similarity=56%<br>3253 Showcase Way, Modesto, CA 95356 | CA | hiq_owner=Naser George Shatara | pr_owner=Naser Shatara | similarity=79%<br>9057 Rieti Lane, Stockton, CA 95212 | CA | hiq_owner=Noah Anthony Gonzales | pr_owner=Paul A Gonzales | similarity=67%<br>1765 Trouville Avenue, Grover Beach, CA 93433 | CA | hiq_owner=Keith Ozzimo | pr_owner=Keith A Ozzimo 2024 Living Trust | similarity=55%<br>1111 Olive Avenue, National City, CA 91950 | CA | hiq_owner=Living Trust Rimando | pr_owner=Rimando Living Trust | similarity=60%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Low (30–49%)</td>
+        <td class="value">495</td>
+        <td class="pct-cell">9.90%</td>
+        <td class="pct-cell">13.27%</td>
+        <td class="example-cell">211 Vero Court, Opelika, AL 36801 | AL | hiq_owner=Marcos Gonzalez | pr_owner=Birchwood Homes Llc | similarity=35%<br>800 Hintze Landing Ct, Modesto, CA 95354 | CA | hiq_owner=Glenn E Miller | pr_owner=John Obegolu | similarity=31%<br>10039 Primrose Drive, Riverside, CA 92503 | CA | hiq_owner=Karina Mena | pr_owner=Manuel Martinez Martines | similarity=40%<br>246 Lion Heart Court, Rio Linda, CA 95673 | CA | hiq_owner=Suzie Homeowner | pr_owner=Jacqueline Forrest | similarity=36%<br>2405 Josiah Wing Drive, Fairfield, CA 94533 | CA | hiq_owner=Mark Wiechmann | pr_owner=Wiechmann Revocable Living Trust | similarity=39%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">No match (&lt; 30%)</td>
+        <td class="value">571</td>
+        <td class="pct-cell">11.42%</td>
+        <td class="pct-cell">15.31%</td>
+        <td class="example-cell">1307 Frederick Road, Opelika, AL 36801 | AL | hiq_owner=Eliener Monteagudo | pr_owner=Adrm Investments Llc &amp; Mfiver Llc | similarity=24%<br>2107 Hamilton Place Street, Opelika, AL 36801 | AL | hiq_owner=Bill Price | pr_owner=Ridley Kenneth M | similarity=23%<br>1701 Midway Street, Montgomery, AL 36110 | AL | hiq_owner=Isaac Argueta | pr_owner=Spear Ventures Group Llc | similarity=27%<br>1207 Glenwood Road, Montgomery, AL 36109 | AL | hiq_owner=Isaac Argueta | pr_owner=Spear Ventures Group Llc | similarity=27%<br>3560 Le Bron Road, Montgomery, AL 36111 | AL | hiq_owner=Gelkys Delgado | pr_owner=Renovatio Holdings Llc | similarity=22%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>AVM — Loaded / Not loaded (HIQ vs PropertyReach)</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded HIQ AVM (avm_by_api)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded HIQ AVM</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr><td class="label">Loaded PropertyReach AVM (market_value)</td><td class="value">2,460</td><td class="pct-cell">49.20%</td></tr>
+      <tr><td class="label">Not loaded PropertyReach AVM</td><td class="value">2,540</td><td class="pct-cell">50.80%</td></tr>
+      <tr class="highlight-row"><td class="label">Both loaded</td><td class="value">2,460</td><td class="pct-cell">49.20% of total</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>AVM value comparison — HIQ vs PropertyReach (both loaded only, n=2,460)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Relative difference: 100 × |HIQ AVM − PropertyReach AVM| / max(HIQ AVM, PropertyReach AVM). Both values must be &gt; 0.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% of both loaded</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">1,141</td>
+        <td class="pct-cell">22.82%</td>
+        <td class="pct-cell">46.38%</td>
+        <td class="example-cell">168 Sarah Jane Drive, Madison, AL 35757 | AL | HIQ AVM=$513,200 | PropertyReach AVM=$489,000 | diff=4.7%<br>303 Bradford Circle, Trussville, AL 35173 | AL | HIQ AVM=$520,100 | PropertyReach AVM=$472,700 | diff=9.1%<br>2107 Hamilton Place Street, Opelika, AL 36801 | AL | HIQ AVM=$177,600 | PropertyReach AVM=$163,140 | diff=8.1%<br>1701 Midway Street, Montgomery, AL 36110 | AL | HIQ AVM=$72,900 | PropertyReach AVM=$66,300 | diff=9.1%<br>3560 Le Bron Road, Montgomery, AL 36111 | AL | HIQ AVM=$106,900 | PropertyReach AVM=$102,600 | diff=4.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">754</td>
+        <td class="pct-cell">15.08%</td>
+        <td class="pct-cell">30.65%</td>
+        <td class="example-cell">2100 Glenwood Drive, Opelika, AL 36801 | AL | HIQ AVM=$345,000 | PropertyReach AVM=$247,300 | diff=28.3%<br>3437 Suwanee Drive, Montgomery, AL 36108 | AL | HIQ AVM=$109,900 | PropertyReach AVM=$86,000 | diff=21.7%<br>205 Winterberry Way, Enterprise, AL 36330 | AL | HIQ AVM=$239,500 | PropertyReach AVM=$189,590 | diff=20.8%<br>3447 Le Bron Road, Montgomery, AL 36111 | AL | HIQ AVM=$84,700 | PropertyReach AVM=$103,100 | diff=17.8%<br>915 Pleasant Avenue, Auburn, AL 36832 | AL | HIQ AVM=$200,800 | PropertyReach AVM=$141,680 | diff=29.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">408</td>
+        <td class="pct-cell">8.16%</td>
+        <td class="pct-cell">16.59%</td>
+        <td class="example-cell">1307 Frederick Road, Opelika, AL 36801 | AL | HIQ AVM=$247,600 | PropertyReach AVM=$147,920 | diff=40.3%<br>1207 Glenwood Road, Montgomery, AL 36109 | AL | HIQ AVM=$87,500 | PropertyReach AVM=$48,100 | diff=45.0%<br>211 Vero Court, Opelika, AL 36801 | AL | HIQ AVM=$70,600 | PropertyReach AVM=$39,120 | diff=44.6%<br>6622 Division Avenue, Birmingham, AL 35206 | AL | HIQ AVM=$189,100 | PropertyReach AVM=$104,000 | diff=45.0%<br>10039 Primrose Drive, Riverside, CA 92503 | CA | HIQ AVM=$714,400 | PropertyReach AVM=$370,620 | diff=48.1%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">127</td>
+        <td class="pct-cell">2.54%</td>
+        <td class="pct-cell">5.16%</td>
+        <td class="example-cell">2511 Park Street, Opelika, AL 36801 | AL | HIQ AVM=$243,800 | PropertyReach AVM=$98,440 | diff=59.6%<br>620 Gould Street, Eustis, FL 32726 | FL | HIQ AVM=$268,600 | PropertyReach AVM=$111,903 | diff=58.3%<br>2879 Kalawao Street, Honolulu, HI 96822 | HI | HIQ AVM=$671,600 | PropertyReach AVM=$2,046,400 | diff=67.2%<br>2295 Kahekili Highway, Wailuku, HI 96793 | HI | HIQ AVM=$775,400 | PropertyReach AVM=$336,500 | diff=56.6%<br>21728 Orion Avenue, Sauk Village, IL 60411 | IL | HIQ AVM=$157,700 | PropertyReach AVM=$76,950 | diff=51.2%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">30</td>
+        <td class="pct-cell">0.60%</td>
+        <td class="pct-cell">1.22%</td>
+        <td class="example-cell">12890 W Wailaki Way, Tucson, AZ 85743 | AZ | HIQ AVM=$245,100 | PropertyReach AVM=$27,925 | diff=88.6%<br>327 Lincoln Avenue, Woodstock, IL 60098 | IL | HIQ AVM=$309,500 | PropertyReach AVM=$26,952 | diff=91.3%<br>10330 King Rd, Davisburg, MI 48350 | MI | HIQ AVM=$817,900 | PropertyReach AVM=$98,240 | diff=88.0%<br>3957 Lenox Street, Detroit, MI 48215 | MI | HIQ AVM=$132,600 | PropertyReach AVM=$21,400 | diff=83.9%<br>4200 Chestnut Avenue, Kansas City, MO 64130 | MO | HIQ AVM=$244,500 | PropertyReach AVM=$33,060 | diff=86.5%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Loan — Loaded / Not loaded (HIQ vs PropertyReach)</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded loan_date (HIQ)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded loan_date</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr><td class="label">Loaded loan_recording_date (PropertyReach)</td><td class="value">3,604</td><td class="pct-cell">72.08%</td></tr>
+      <tr><td class="label">Not loaded loan_recording_date</td><td class="value">1,396</td><td class="pct-cell">27.92%</td></tr>
+      <tr><td class="label">Loaded open_lien_amount (HIQ)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded loan_amount (PropertyReach)</td><td class="value">3,600</td><td class="pct-cell">72.00%</td></tr>
+      <tr><td class="label">Loaded loan_amortization_period (HIQ, years)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded loan_term (PropertyReach, months)</td><td class="value">3,474</td><td class="pct-cell">69.48%</td></tr>
+      <tr><td class="label">Loaded interest_rate (HIQ, %)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded loan_rate (PropertyReach, decimal → %)</td><td class="value">3,560</td><td class="pct-cell">71.20%</td></tr>
+      <tr class="highlight-row"><td class="label">Both dates loaded</td><td class="value">3,604</td><td class="pct-cell">72.08% of total</td></tr>
+      <tr class="highlight-row"><td class="label">Dates within 45-day window (same loan)</td><td class="value">2,908</td><td class="pct-cell">58.16% of total</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Loan amount comparison — open_lien_amount (HIQ) vs loan_amount (PropertyReach) — dates ≤ 45 days, n=2,907</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Only records where |loan_date − loan_recording_date| ≤ 45 days and both amounts are loaded. Relative difference: 100 × |open_lien_amount − loan_amount| / max(...).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th><th class="num">Count</th><th class="pct-h">% of total</th>
+            <th class="pct-h">% within window</th><th class="pct-h">% of comparable</th><th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">2,812</td>
+        <td class="pct-cell">56.24%</td>
+        <td class="pct-cell">96.70%</td>
+        <td class="pct-cell">96.73%</td>
+        <td class="example-cell">3437 Suwanee Drive, Montgomery, AL 36108 | AL | loan_date=2025-02-24 | loan_recording_date=2025-02-24 | hiq_open_lien=$53,250 | pr_loan_amount=$53,250 | diff=0.0%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | loan_date=2026-01-07 | loan_recording_date=2026-01-07 | hiq_open_lien=$368,735 | pr_loan_amount=$368,735 | diff=0.0%<br>205 Winterberry Way, Enterprise, AL 36330 | AL | loan_date=2022-04-06 | loan_recording_date=2022-04-06 | hiq_open_lien=$145,500 | pr_loan_amount=$145,500 | diff=0.0%<br>1701 Midway Street, Montgomery, AL 36110 | AL | loan_date=2025-03-28 | loan_recording_date=2025-03-28 | hiq_open_lien=$90,900 | pr_loan_amount=$90,900 | diff=0.0%<br>1207 Glenwood Road, Montgomery, AL 36109 | AL | loan_date=2025-03-28 | loan_recording_date=2025-03-28 | hiq_open_lien=$81,750 | pr_loan_amount=$81,750 | diff=0.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">0.06%</td>
+        <td class="pct-cell">0.10%</td>
+        <td class="pct-cell">0.10%</td>
+        <td class="example-cell">3116 Featherstone Drive, Burlington, KY 41005 | KY | loan_date=2020-07-13 | loan_recording_date=2020-07-13 | hiq_open_lien=$135,800 | pr_loan_amount=$185,800 | diff=26.9%<br>914 Wears Valley Road, Townsend, TN 37882 | TN | loan_date=2024-01-22 | loan_recording_date=2024-02-13 | hiq_open_lien=$358,388 | pr_loan_amount=$425,218 | diff=15.7%<br>6321 Wescates Court, Brentwood, TN 37027 | TN | loan_date=2021-01-05 | loan_recording_date=2021-01-06 | hiq_open_lien=$129,000 | pr_loan_amount=$155,000 | diff=16.8%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">1</td>
+        <td class="pct-cell">0.02%</td>
+        <td class="pct-cell">0.03%</td>
+        <td class="pct-cell">0.03%</td>
+        <td class="example-cell">1021 Peak Drive, Castalian Springs, TN 37031 | TN | loan_date=2020-11-12 | loan_recording_date=2020-11-12 | hiq_open_lien=$91,000 | pr_loan_amount=$154,175 | diff=41.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">13</td>
+        <td class="pct-cell">0.26%</td>
+        <td class="pct-cell">0.45%</td>
+        <td class="pct-cell">0.45%</td>
+        <td class="example-cell">4388 Amberwick Lane, Moorpark, CA 93021 | CA | loan_date=2025-07-18 | loan_recording_date=2025-07-18 | hiq_open_lien=$520,000 | pr_loan_amount=$130,000 | diff=75.0%<br>6090 Benton Street, Arvada, CO 80003 | CO | loan_date=2024-01-03 | loan_recording_date=2024-01-03 | hiq_open_lien=$420,000 | pr_loan_amount=$150,000 | diff=64.3%<br>101 Red Top Drive, West Hartford, CT 06110 | CT | loan_date=2016-10-27 | loan_recording_date=2016-10-27 | hiq_open_lien=$240,000 | pr_loan_amount=$53,900 | diff=77.5%<br>48 Vauxhall Street, New London, CT 06320 | CT | loan_date=2021-03-09 | loan_recording_date=2021-04-20 | hiq_open_lien=$221,300 | pr_loan_amount=$100,000 | diff=54.8%<br>10459 Ne 82nd Ave, Bondurant, IA 50035 | IA | loan_date=2022-07-01 | loan_recording_date=2022-06-23 | hiq_open_lien=$181,818 | pr_loan_amount=$50,000 | diff=72.5%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">78</td>
+        <td class="pct-cell">1.56%</td>
+        <td class="pct-cell">2.68%</td>
+        <td class="pct-cell">2.68%</td>
+        <td class="example-cell">10424 Stage Coach Drive, Adelanto, CA 92301 | CA | loan_date=2023-02-14 | loan_recording_date=2023-02-14 | hiq_open_lien=$302,640 | pr_loan_amount=$9,360 | diff=96.9%<br>2830 Castleview Drive, Turlock, CA 95382 | CA | loan_date=2022-03-18 | loan_recording_date=2022-03-18 | hiq_open_lien=$628,000 | pr_loan_amount=$76,000 | diff=87.9%<br>99 Kara Cove, Vilonia, AR 72173 | AR | loan_date=2022-10-31 | loan_recording_date=2022-10-31 | hiq_open_lien=$162,011 | pr_loan_amount=$13,000 | diff=92.0%<br>9210 Julian Way, Westminster, CO 80031 | CO | loan_date=2021-05-07 | loan_recording_date=2021-05-07 | hiq_open_lien=$407,483 | pr_loan_amount=$16,299 | diff=96.0%<br>305 Southridge Pl, Longmont, CO 80501 | CO | loan_date=2022-10-17 | loan_recording_date=2022-10-17 | hiq_open_lien=$382,936 | pr_loan_amount=$15,317 | diff=96.0%</td>
+      </tr></tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Loan term comparison — loan_amortization_period (HIQ, yrs) vs loan_term÷12 (PropertyReach, yrs) — dates ≤ 45 days, n=2,843</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">PropertyReach loan_term (months) is divided by 12 before comparison. Relative difference: 100 × |amort_years − term_years| / max(...).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th><th class="num">Count</th><th class="pct-h">% of total</th>
+            <th class="pct-h">% within window</th><th class="pct-h">% of comparable</th><th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">2,786</td>
+        <td class="pct-cell">55.72%</td>
+        <td class="pct-cell">95.80%</td>
+        <td class="pct-cell">98.00%</td>
+        <td class="example-cell">3437 Suwanee Drive, Montgomery, AL 36108 | AL | hiq_amort=30.0yr | pr_term=30.0yr (÷12) | diff=0.0%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | hiq_amort=30.0yr | pr_term=30.0yr (÷12) | diff=0.0%<br>205 Winterberry Way, Enterprise, AL 36330 | AL | hiq_amort=30.0yr | pr_term=30.0yr (÷12) | diff=0.0%<br>1701 Midway Street, Montgomery, AL 36110 | AL | hiq_amort=30.0yr | pr_term=30.0yr (÷12) | diff=0.0%<br>1207 Glenwood Road, Montgomery, AL 36109 | AL | hiq_amort=30.0yr | pr_term=30.0yr (÷12) | diff=0.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">8</td>
+        <td class="pct-cell">0.16%</td>
+        <td class="pct-cell">0.28%</td>
+        <td class="pct-cell">0.28%</td>
+        <td class="example-cell">2506 Timber Lane, Lindenhurst, IL 60046 | IL | hiq_amort=25.0yr | pr_term=20.0yr (÷12) | diff=20.0%<br>3567 Central Avenue, San Diego, CA 92105 | CA | hiq_amort=40.0yr | pr_term=30.0yr (÷12) | diff=25.0%<br>970 Mill Street, Phillipsburg, NJ 08865 | NJ | hiq_amort=30.0yr | pr_term=39.0yr (÷12) | diff=23.1%<br>3809 Salters Ln, Sacramento, CA 95835 | CA | hiq_amort=40.0yr | pr_term=30.0yr (÷12) | diff=25.0%<br>11190 Elk Run Road, Chardon, OH 44024 | OH | hiq_amort=30.0yr | pr_term=40.0yr (÷12) | diff=25.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">20</td>
+        <td class="pct-cell">0.40%</td>
+        <td class="pct-cell">0.69%</td>
+        <td class="pct-cell">0.70%</td>
+        <td class="example-cell">17 Rustic Terrace, Portland, CT 06480 | CT | hiq_amort=30.0yr | pr_term=20.0yr (÷12) | diff=33.3%<br>101 Red Top Drive, West Hartford, CT 06110 | CT | hiq_amort=30.0yr | pr_term=20.0yr (÷12) | diff=33.3%<br>3501 Hage Way, Orlando, FL 32805 | FL | hiq_amort=15.0yr | pr_term=30.0yr (÷12) | diff=50.0%<br>10363 Petersburg Court, Independence, KY 41051 | KY | hiq_amort=30.0yr | pr_term=15.0yr (÷12) | diff=50.0%<br>33r Leach Road, Kittery, ME 03904 | ME | hiq_amort=15.0yr | pr_term=30.0yr (÷12) | diff=50.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">2</td>
+        <td class="pct-cell">0.04%</td>
+        <td class="pct-cell">0.07%</td>
+        <td class="pct-cell">0.07%</td>
+        <td class="example-cell">19 Jarrett Street, Asheville, NC 28806 | NC | hiq_amort=30.0yr | pr_term=10.0yr (÷12) | diff=66.7%<br>1465 San Diego Loop, Grover Beach, CA 93433 | CA | hiq_amort=30.0yr | pr_term=10.0yr (÷12) | diff=66.7%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">27</td>
+        <td class="pct-cell">0.54%</td>
+        <td class="pct-cell">0.93%</td>
+        <td class="pct-cell">0.95%</td>
+        <td class="example-cell">4388 Amberwick Lane, Moorpark, CA 93021 | CA | hiq_amort=30.0yr | pr_term=2.5yr (÷12) | diff=91.7%<br>617 Woods Avenue, Ault, CO 80610 | CO | hiq_amort=2.0yr | pr_term=27.0yr (÷12) | diff=92.6%<br>4790 Columbine Street, Denver, CO 80216 | CO | hiq_amort=30.0yr | pr_term=2.5yr (÷12) | diff=91.7%<br>20 Seminole Avenue, Claymont, DE 19703 | DE | hiq_amort=30.0yr | pr_term=0.8yr (÷12) | diff=97.2%<br>6 Ross Court, Newark, DE 19702 | DE | hiq_amort=30.0yr | pr_term=2.5yr (÷12) | diff=91.7%</td>
+      </tr></tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Loan rate comparison — interest_rate (HIQ, %) vs loan_rate×100 (PropertyReach, %) — dates ≤ 45 days, n=2,869</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">PropertyReach loan_rate (decimal, e.g. 0.0696) is multiplied by 100 before comparison. Relative difference: 100 × |hiq_rate − pr_rate| / max(...).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th><th class="num">Count</th><th class="pct-h">% of total</th>
+            <th class="pct-h">% within window</th><th class="pct-h">% of comparable</th><th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">2,615</td>
+        <td class="pct-cell">52.30%</td>
+        <td class="pct-cell">89.92%</td>
+        <td class="pct-cell">91.15%</td>
+        <td class="example-cell">3437 Suwanee Drive, Montgomery, AL 36108 | AL | hiq_rate=6.850% | pr_rate=6.960% (×100) | diff=1.6%<br>168 Sarah Jane Drive, Madison, AL 35757 | AL | hiq_rate=6.150% | pr_rate=6.190% (×100) | diff=0.6%<br>1701 Midway Street, Montgomery, AL 36110 | AL | hiq_rate=7.625% | pr_rate=6.760% (×100) | diff=11.3%<br>3560 Le Bron Road, Montgomery, AL 36111 | AL | hiq_rate=6.999% | pr_rate=6.640% (×100) | diff=5.1%<br>3447 Le Bron Road, Montgomery, AL 36111 | AL | hiq_rate=7.250% | pr_rate=6.640% (×100) | diff=8.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">216</td>
+        <td class="pct-cell">4.32%</td>
+        <td class="pct-cell">7.43%</td>
+        <td class="pct-cell">7.53%</td>
+        <td class="example-cell">205 Winterberry Way, Enterprise, AL 36330 | AL | hiq_rate=4.670% | pr_rate=3.890% (×100) | diff=16.7%<br>1207 Glenwood Road, Montgomery, AL 36109 | AL | hiq_rate=8.000% | pr_rate=6.760% (×100) | diff=15.5%<br>10156 Capetown Lane, Stockton, CA 95219 | CA | hiq_rate=3.370% | pr_rate=4.090% (×100) | diff=17.6%<br>4865 Timepiece Circle, Stockton, CA 95219 | CA | hiq_rate=2.580% | pr_rate=3.200% (×100) | diff=19.4%<br>3602 Gleneagles Drive, Stockton, CA 95219 | CA | hiq_rate=2.370% | pr_rate=2.800% (×100) | diff=15.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">29</td>
+        <td class="pct-cell">0.58%</td>
+        <td class="pct-cell">1.00%</td>
+        <td class="pct-cell">1.01%</td>
+        <td class="example-cell">300 Putter St, Townsend, DE 19734 | DE | hiq_rate=7.500% | pr_rate=5.000% (×100) | diff=33.3%<br>7 Glenrock Dr, Claymont, DE 19703 | DE | hiq_rate=7.090% | pr_rate=4.000% (×100) | diff=43.6%<br>302 Weiner Ave, Harrington, DE 19952 | DE | hiq_rate=7.440% | pr_rate=4.900% (×100) | diff=34.1%<br>6574 Larne Avenue, Jacksonville, FL 32244 | FL | hiq_rate=7.500% | pr_rate=12.000% (×100) | diff=37.5%<br>2328 Berry Street, Lemon Grove, CA 91945 | CA | hiq_rate=3.920% | pr_rate=7.130% (×100) | diff=45.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">0.12%</td>
+        <td class="pct-cell">0.21%</td>
+        <td class="pct-cell">0.21%</td>
+        <td class="example-cell">2012 Colter Cove, Fort Wayne, IN 46808 | IN | hiq_rate=6.990% | pr_rate=2.200% (×100) | diff=68.5%<br>3904 Covina Drive, Raleigh, NC 27613 | NC | hiq_rate=2.460% | pr_rate=5.000% (×100) | diff=50.8%<br>315 Ella St, Smyrna , TN 37167 | TN | hiq_rate=6.950% | pr_rate=2.400% (×100) | diff=65.5%<br>2315 Starboard Lane, Stockton, CA 95206 | CA | hiq_rate=5.810% | pr_rate=2.900% (×100) | diff=50.1%<br>1540 Locust Dr, Tracy, CA 95376 | CA | hiq_rate=2.000% | pr_rate=6.000% (×100) | diff=66.7%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">3</td>
+        <td class="pct-cell">0.06%</td>
+        <td class="pct-cell">0.10%</td>
+        <td class="pct-cell">0.10%</td>
+        <td class="example-cell">617 Woods Avenue, Ault, CO 80610 | CO | hiq_rate=25.000% | pr_rate=2.700% (×100) | diff=89.2%<br>1200 Arkansas Avenue, Rolla, MO 65401 | MO | hiq_rate=6.600% | pr_rate=0.660% (×100) | diff=90.0%<br>13711 10th Terrace, Grandview, MO 64030 | MO | hiq_rate=7.020% | pr_rate=82.000% (×100) | diff=91.4%</td>
+      </tr></tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Listing — Loaded / Not loaded (HIQ vs PropertyReach)</h2>
+      <table>
+        <thead><tr><th>Metric</th><th class="num">Count</th><th class="pct-h">% of total</th></tr></thead>
+        <tbody>
+
+      <tr class="pinned-row"><td class="label">Total records</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded sale_date (HIQ)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Not loaded sale_date</td><td class="value">0</td><td class="pct-cell">0.00%</td></tr>
+      <tr><td class="label">Loaded listing_date (PropertyReach)</td><td class="value">2,551</td><td class="pct-cell">51.02%</td></tr>
+      <tr><td class="label">Not loaded listing_date</td><td class="value">2,449</td><td class="pct-cell">48.98%</td></tr>
+      <tr><td class="label">Loaded sale_price (HIQ)</td><td class="value">5,000</td><td class="pct-cell">100.00%</td></tr>
+      <tr><td class="label">Loaded listing_amount (PropertyReach)</td><td class="value">2,540</td><td class="pct-cell">50.80%</td></tr>
+      <tr class="highlight-row"><td class="label">Both dates loaded</td><td class="value">2,551</td><td class="pct-cell">51.02% of total</td></tr>
+      <tr class="highlight-row"><td class="label">Dates within 45-day window (same listing)</td><td class="value">2,021</td><td class="pct-cell">40.42% of total</td></tr>
+      <tr class="highlight-row"><td class="label">Amount comparable (dates matched + both amounts loaded)</td><td class="value">2,018</td><td class="pct-cell">40.36% of total</td></tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="block">
+      <h2>Listing amount comparison — HIQ sale_price vs PropertyReach listing_amount (dates ≤ 45 days apart, n=2,018)</h2>
+      <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--label-clr);">Only records where |sale_date (HIQ) − listing_date (PropertyReach)| ≤ 45 days and both amounts are loaded. Relative difference: 100 × |sale_price − listing_amount| / max(sale_price, listing_amount).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Bucket</th>
+            <th class="num">Count</th>
+            <th class="pct-h">% of total</th>
+            <th class="pct-h">% within window</th>
+            <th class="pct-h">% of amount comparable</th>
+            <th>Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      <tr>
+        <td class="label">Same (diff ≤ 15%)</td>
+        <td class="value">1,895</td>
+        <td class="pct-cell">37.90%</td>
+        <td class="pct-cell">93.77%</td>
+        <td class="pct-cell">93.90%</td>
+        <td class="example-cell">2511 Park Street, Opelika, AL 36801 | AL | pr_listing_date=2024-03-26 | hiq_sale_date=2024-03-26 | pr_listing_amount=$224,899 | hiq_sale_price=$225,000 | diff=0.0%<br>2100 Glenwood Drive, Opelika, AL 36801 | AL | pr_listing_date=2024-06-07 | hiq_sale_date=2024-06-07 | pr_listing_amount=$300,000 | hiq_sale_price=$300,000 | diff=0.0%<br>3437 Suwanee Drive, Montgomery, AL 36108 | AL | pr_listing_date=2024-08-16 | hiq_sale_date=2024-08-02 | pr_listing_amount=$65,000 | hiq_sale_price=$65,000 | diff=0.0%<br>303 Bradford Circle, Trussville, AL 35173 | AL | pr_listing_date=2024-05-13 | hiq_sale_date=2024-05-13 | pr_listing_amount=$493,000 | hiq_sale_price=$493,000 | diff=0.0%<br>7565 Elizabeth Drive, Daphne, AL 36526 | AL | pr_listing_date=2021-12-07 | hiq_sale_date=2021-12-07 | pr_listing_amount=$235,000 | hiq_sale_price=$235,000 | diff=0.0%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 15–30%</td>
+        <td class="value">69</td>
+        <td class="pct-cell">1.38%</td>
+        <td class="pct-cell">3.41%</td>
+        <td class="pct-cell">3.42%</td>
+        <td class="example-cell">3510 Telstar Circle, Anchorage, AK 99517 | AK | pr_listing_date=2016-08-03 | hiq_sale_date=2016-07-28 | pr_listing_amount=$174,746 | hiq_sale_price=$217,668 | diff=19.7%<br>9839 Norlain Avenue, Downey, CA 90240 | CA | pr_listing_date=2021-01-28 | hiq_sale_date=2021-02-04 | pr_listing_amount=$630,000 | hiq_sale_price=$750,000 | diff=16.0%<br>10513 Westcliff Place, Highlands Ranch, CO 80130 | CO | pr_listing_date=2019-07-03 | hiq_sale_date=2019-07-02 | pr_listing_amount=$565,000 | hiq_sale_price=$790,000 | diff=28.5%<br>6370 Glenmoor Road, Boulder, CO 80303 | CO | pr_listing_date=2017-07-31 | hiq_sale_date=2017-07-31 | pr_listing_amount=$1,305,000 | hiq_sale_price=$999,000 | diff=23.4%<br>1132 Coyne Place, Wilmington, DE 19805 | DE | pr_listing_date=2021-08-05 | hiq_sale_date=2021-08-05 | pr_listing_amount=$189,000 | hiq_sale_price=$159,900 | diff=15.4%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 30–50%</td>
+        <td class="value">39</td>
+        <td class="pct-cell">0.78%</td>
+        <td class="pct-cell">1.93%</td>
+        <td class="pct-cell">1.93%</td>
+        <td class="example-cell">1345 County Road 377, Hillsboro, AL 35643 | AL | pr_listing_date=2022-02-18 | hiq_sale_date=2022-02-18 | pr_listing_amount=$372,000 | hiq_sale_price=$550,000 | diff=32.4%<br>256 Pinebrook Court, Windsor, CO 80550 | CO | pr_listing_date=2016-11-21 | hiq_sale_date=2016-11-18 | pr_listing_amount=$300,590 | hiq_sale_price=$500,000 | diff=39.9%<br>10439 Forester Place, Longmont, CO 80504 | CO | pr_listing_date=2023-10-18 | hiq_sale_date=2023-10-18 | pr_listing_amount=$445,000 | hiq_sale_price=$302,500 | diff=32.0%<br>113 Greystone Drive, Guyton, GA 31312 | GA | pr_listing_date=2023-08-21 | hiq_sale_date=2023-08-21 | pr_listing_amount=$390,000 | hiq_sale_price=$259,900 | diff=33.4%<br>3621 Club Drive, Albany, GA 31721 | GA | pr_listing_date=2022-07-19 | hiq_sale_date=2022-07-19 | pr_listing_amount=$192,000 | hiq_sale_price=$130,000 | diff=32.3%</td>
+      </tr>
+
+      <tr>
+        <td class="label">Diff 50–80%</td>
+        <td class="value">9</td>
+        <td class="pct-cell">0.18%</td>
+        <td class="pct-cell">0.45%</td>
+        <td class="pct-cell">0.45%</td>
+        <td class="example-cell">5633 Jellison Street, Arvada, CO 80002 | CO | pr_listing_date=2024-08-09 | hiq_sale_date=2024-08-09 | pr_listing_amount=$635,000 | hiq_sale_price=$254,200 | diff=60.0%<br>3655 Douglas Ridge Trail, Douglasville, GA 30135 | GA | pr_listing_date=2024-05-28 | hiq_sale_date=2024-05-28 | pr_listing_amount=$295,000 | hiq_sale_price=$145,000 | diff=50.8%<br>1130 Pin Oak Court, Cumming, GA 30041 | GA | pr_listing_date=2022-03-11 | hiq_sale_date=2022-03-11 | pr_listing_amount=$510,000 | hiq_sale_price=$230,000 | diff=54.9%<br>4557 Spring Street, Acworth, GA 30101 | GA | pr_listing_date=2023-03-17 | hiq_sale_date=2023-03-17 | pr_listing_amount=$361,000 | hiq_sale_price=$180,000 | diff=50.1%<br>36 Jewell Trail, Douglasville, GA 30134 | GA | pr_listing_date=2023-04-14 | hiq_sale_date=2023-04-14 | pr_listing_amount=$255,000 | hiq_sale_price=$126,000 | diff=50.6%</td>
+      </tr>
+
+      <tr class="red-row">
+        <td class="label">Diff &gt; 80%</td>
+        <td class="value">6</td>
+        <td class="pct-cell">0.12%</td>
+        <td class="pct-cell">0.30%</td>
+        <td class="pct-cell">0.30%</td>
+        <td class="example-cell">4 Pleasantview Rd, Sherman, CT 06784 | CT | pr_listing_date=2024-03-26 | hiq_sale_date=2024-03-22 | pr_listing_amount=$438,089 | hiq_sale_price=$922 | diff=99.8%<br>17313 Caminito Masada, San Diego, CA 92127 | CA | pr_listing_date=2022-03-03 | hiq_sale_date=2022-01-28 | pr_listing_amount=$3,100 | hiq_sale_price=$665,000 | diff=99.5%<br>6720 Oakridge Road, New Market, MD 21774 | MD | pr_listing_date=2024-09-01 | hiq_sale_date=2024-09-01 | pr_listing_amount=$802,483 | hiq_sale_price=$90,000 | diff=88.8%<br>383 Bartlett Street, Manchester, NH 03102 | NH | pr_listing_date=2024-04-12 | hiq_sale_date=2024-04-05 | pr_listing_amount=$1,400 | hiq_sale_price=$395,000 | diff=99.6%<br>4706 Halbrent Avenue, Sherman Oaks, CA 91403 | CA | pr_listing_date=2024-01-16 | hiq_sale_date=2023-12-20 | pr_listing_amount=$6,000 | hiq_sale_price=$1,525,000 | diff=99.6%</td>
+      </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+(function () {
+  var btn = document.getElementById('themeToggle');
+  function applyTheme(t) {
+    if (t === 'light') {
+      document.documentElement.classList.add('light');
+      btn.textContent = 'Dark theme';
+    } else {
+      document.documentElement.classList.remove('light');
+      btn.textContent = 'Light theme';
+    }
+    localStorage.setItem('pre_mover_theme', t);
+  }
+  applyTheme(document.documentElement.classList.contains('light') ? 'light' : 'dark');
+  btn.addEventListener('click', function () { applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light'); });
+})();
+  </script>
+</body>
+</html>
